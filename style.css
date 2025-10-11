@@ -46,7 +46,7 @@ header {
   padding: 1rem 1.5rem;
   position: sticky;
   top: 0;
-  z-index: 1; /* no bloquea el menú */
+  z-index: 1; /* el header queda debajo del drawer */
 }
 
 /* NAV */
@@ -140,6 +140,7 @@ footer {
   text-align: justify;
   margin-bottom: 2.5rem;
   color: #111;
+  z-index: 0;
 }
 
 /* Bloque de ferias */
@@ -273,7 +274,7 @@ footer {
   .about-video { margin-top: 2rem; }
 }
 
-/* === MENÚ MÓVIL CON ANIMACIÓN SUAVE Y FIX DE Z-INDEX === */
+/* === MENÚ MÓVIL CORREGIDO (SIEMPRE ENCIMA) === */
 
 .nav-toggle {
   display: inline-flex;
@@ -281,10 +282,12 @@ footer {
   justify-content: center;
   width: 42px;
   height: 42px;
-  border: 1px solid #000;
   border-radius: 10px;
   background: transparent;
   z-index: 9999;
+  cursor: pointer;
+  border: none;
+  position: relative;
 }
 .nav-toggle .bar {
   position: relative;
@@ -304,27 +307,30 @@ footer {
 .nav-toggle .bar::before { top: -6px; }
 .nav-toggle .bar::after { top: 6px; }
 
-/* Drawer (panel lateral) */
+/* Drawer */
 .mobile-drawer {
   position: fixed;
   inset: 0;
-  display: none;
-  z-index: 9999 !important;
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
 }
 .mobile-drawer.is-open {
-  display: block;
+  opacity: 1;
+  pointer-events: all;
 }
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 10000 !important;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9998;
 }
 .drawer-panel {
   position: fixed;
   top: 0;
   right: 0;
-  height: 100%;
+  height: 100vh;
   width: min(88vw, 360px);
   background: #fff;
   color: #000;
@@ -332,19 +338,30 @@ footer {
   transform: translateX(100%);
   transition: transform 0.35s ease;
   padding: 20px;
-  z-index: 10001 !important;
+  z-index: 9999;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+
+  /* 🔹 Añade estas líneas */
+  isolation: isolate;             /* aísla el contexto del panel */
+  background-blend-mode: normal;  /* evita mezclas con filtros */
+  mix-blend-mode: normal;         /* fuerza opacidad pura */
 }
+
 .mobile-drawer.is-open .drawer-panel {
   transform: translateX(0);
 }
+.mobile-drawer.is-closing .drawer-panel {
+  transform: translateX(100%);
+}
 
-/* Menú móvil */
+/* Menú interno */
 .mobile-nav {
   list-style: none;
   margin: 20px 0 0;
   padding: 0;
   display: grid;
-  gap: 4px;
+  gap: 6px;
 }
 .mobile-nav a {
   display: block;
@@ -352,6 +369,7 @@ footer {
   font-size: 1.1rem;
   color: inherit;
   text-decoration: none;
+  position: static;
 }
 .back-home {
   display: inline-block;
@@ -404,6 +422,12 @@ footer {
 @media (min-width: 900px) {
   nav ul.desktop-nav { display: flex; }
   .nav-toggle, .mobile-drawer { display: none !important; }
+}
+
+/* Asegurar jerarquía correcta */
+main, footer, header {
+  position: relative;
+  z-index: 1;
 }
 
 /* === Otros === */

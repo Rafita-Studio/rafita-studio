@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>About Us - Rafita Studio</title>
+    <title>About Us — Rafita Studio</title>
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
+    <!-- ===== HEADER ===== -->
     <header>
       <a href="index.html" class="logo">
         <img
@@ -17,7 +19,6 @@
       </a>
 
       <nav>
-        <!-- igual que en index: clase desktop-nav -->
         <ul class="desktop-nav">
           <li><a href="index.html#work">Work</a></li>
           <li><a href="catalogo.html">Catálogo</a></li>
@@ -25,24 +26,22 @@
             <a
               href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
               target="_blank"
+              >Shop</a
             >
-              Shop
-            </a>
           </li>
-          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html" class="active">About Us</a></li>
           <li>
             <a
               href="https://instagram.com/rafita.studio"
               target="_blank"
               class="instagram-link"
+              >@rafita.studio</a
             >
-              @rafita.studio
-            </a>
           </li>
         </ul>
       </nav>
 
-      <!-- botón hamburguesa (visible en móvil por CSS) -->
+      <!-- Botón hamburguesa -->
       <button
         class="nav-toggle"
         aria-expanded="false"
@@ -51,38 +50,37 @@
       >
         <span class="bar" aria-hidden="true"></span>
       </button>
-
-      <!-- drawer móvil -->
-      <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
-        <div class="drawer-backdrop" data-close></div>
-        <aside
-          class="drawer-panel"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menú"
-        >
-          <!-- flecha volver (con animación de salida si ya la añadiste en script.js) -->
-          <a href="index.html" class="back-home" aria-label="Volver a inicio"
-            >← Volver</a
-          >
-
-          <nav aria-label="Mobile">
-            <!-- se llenará clonando el menú de escritorio con script.js -->
-            <ul class="mobile-nav" id="mobile-nav-list"></ul>
-          </nav>
-        </aside>
-      </div>
     </header>
 
+    <!-- ===== DRAWER FUERA DEL HEADER ===== -->
+    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+      <div class="drawer-backdrop" data-close></div>
+      <aside
+        class="drawer-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú"
+      >
+        <a href="about.html" class="back-home" aria-label="Volver a inicio"
+          >← Volver</a
+        >
+
+        <nav aria-label="Mobile">
+          <ul class="mobile-nav" id="mobile-nav-list"></ul>
+        </nav>
+      </aside>
+    </div>
+
+    <!-- ===== MAIN ===== -->
     <main>
       <section id="about" class="about-section">
         <div class="about-text">
           <h2>About Us</h2>
-          <p>Bienvenido a Rafita Studio!</p>
+          <p>¡Bienvenido a Rafita Studio!</p>
           <p>
-            Somos un micro estudio de diseño dedicado a la ilustración de
-            perritos. Además diseñamos y creamos nuestros propios productos:
-            prints, stickers, poleras y muchas otras cosas!
+            Somos un microestudio de diseño dedicado a la ilustración de
+            perritos. Además, diseñamos y creamos nuestros propios productos:
+            prints, stickers, poleras y muchas otras cosas hechas con cariño.
           </p>
           <p>
             Puedes encontrar nuestro trabajo en
@@ -91,13 +89,13 @@
               href="https://instagram.com/rafita.studio"
               target="_blank"
               >@rafita.studio</a
-            >
+            >.
           </p>
           <p>
-            contáctanos a
+            Contáctanos en
             <a href="mailto:rafita.estudio@gmail.com"
               >rafita.estudio@gmail.com</a
-            >
+            >.
           </p>
         </div>
 
@@ -113,11 +111,12 @@
       </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer>
       <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- tu JS del menú/clonación y animaciones -->
+    <!-- ===== JS DEL MENÚ ===== -->
     <script src="script.js"></script>
   </body>
 </html>

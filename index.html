@@ -9,6 +9,7 @@
   </head>
 
   <body>
+    <!-- ===== HEADER ===== -->
     <header>
       <a href="index.html" class="logo">
         <img
@@ -48,55 +49,55 @@
       >
         <span class="bar" aria-hidden="true"></span>
       </button>
-
-      <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
-        <div class="drawer-backdrop" data-close></div>
-        <aside
-          class="drawer-panel"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menú"
-        >
-          <a href="index.html" class="back-home" aria-label="Volver a inicio"
-            >← Volver</a
-          >
-          <nav aria-label="Mobile">
-            <ul class="mobile-nav" id="mobile-nav-list"></ul>
-          </nav>
-        </aside>
-      </div>
     </header>
 
+    <!-- ===== DRAWER FUERA DEL HEADER ===== -->
+    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+      <div class="drawer-backdrop" data-close></div>
+      <aside
+        class="drawer-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú"
+      >
+        <a href="index.html" class="back-home" aria-label="Volver a inicio"
+          >← Volver</a
+        >
+        <nav aria-label="Mobile">
+          <ul class="mobile-nav" id="mobile-nav-list"></ul>
+        </nav>
+      </aside>
+    </div>
+
+    <!-- ===== MAIN ===== -->
     <main>
       <section id="work">
-<div class="content-layout">
-  <div class="text-side">
-    <p class="intro-text">
-      En <strong>Rafita Studio</strong> exploramos el cruce entre el diseño gráfico, la ilustración
-      y la experimentación editorial. Participamos en ferias y encuentros de diseño
-      para compartir nuestras ediciones, prints y objetos hechos con cariño.
-    </p>
+        <div class="content-layout">
+          <div class="text-side">
+            <p class="intro-text">
+              En <strong>Rafita Studio</strong> exploramos el cruce entre el
+              diseño gráfico, la ilustración y la experimentación editorial.
+              Participamos en ferias y encuentros de diseño para compartir
+              nuestras ediciones, prints y objetos hechos con cariño.
+            </p>
 
-    <div class="ferias-block">
-      <h1>Ferias de Diseño</h1>
-      <p>Monoraro (x2)</p>
-      <p>Feria Format</p>
-      <p>Culta Fest</p>
-      <p>Somospublica</p>
-    </div>
+            <div class="ferias-block">
+              <h1>Ferias de Diseño</h1>
+              <p>Monoraro (x2)</p>
+              <p>Feria Format</p>
+              <p>Culta Fest</p>
+              <p>Somospublica</p>
+            </div>
 
-    <div class="ferias-block">
-      <h1>Colabs</h1>
-      <p>Findie</p>
-      <p>Amour Perfeito</p>
-      <p>piruetas.xyz</p>
-      <p>Monoraro</p>
-      <p>lab.360 UDP</p>
-    </div>
-  </div>
-
-  <div class="gallery small" id="gallery"></div>
-</div>
+            <div class="ferias-block">
+              <h1>Colabs</h1>
+              <p>Findie</p>
+              <p>Amour Perfeito</p>
+              <p>piruetas.xyz</p>
+              <p>Monoraro</p>
+              <p>lab.360 UDP</p>
+            </div>
+          </div>
 
           <div class="gallery small" id="gallery"></div>
         </div>
@@ -107,6 +108,7 @@
       <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
     <script>
       const FILES = [
         "ilus_01.jpg","ilus_02.jpg","ilus_03.jpg","ilus_04.jpg","ilus_05.jpg",

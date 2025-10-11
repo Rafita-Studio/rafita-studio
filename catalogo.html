@@ -49,6 +49,7 @@
   </head>
 
   <body>
+    <!-- ===== HEADER ===== -->
     <header>
       <a href="index.html" class="logo">
         <img
@@ -89,134 +90,66 @@
       >
         <span class="bar" aria-hidden="true"></span>
       </button>
-
-      <!-- drawer móvil -->
-      <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
-        <div class="drawer-backdrop" data-close></div>
-        <aside
-          class="drawer-panel"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menú"
-        >
-          <!-- flecha volver -->
-          <a href="index.html" class="back-home" aria-label="Volver a inicio"
-            >← Volver</a
-          >
-
-          <nav aria-label="Mobile">
-            <ul class="mobile-nav">
-              <li><a href="index.html#work">Work</a></li>
-              <li><a href="catalogo.html" class="active">Catálogo</a></li>
-              <li>
-                <a
-                  href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
-                  target="_blank"
-                  >Shop</a
-                >
-              </li>
-              <li><a href="about.html">About Us</a></li>
-              <li>
-                <a
-                  href="https://instagram.com/rafita.studio"
-                  target="_blank"
-                  class="instagram-link"
-                  >@rafita.studio</a
-                >
-              </li>
-            </ul>
-          </nav>
-        </aside>
-      </div>
     </header>
 
+    <!-- ===== DRAWER MÓVIL (fuera del header) ===== -->
+    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+      <div class="drawer-backdrop" data-close></div>
+      <aside
+        class="drawer-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú"
+      >
+        <a href="catalogo.html" class="back-home" aria-label="Volver a inicio"
+          >← Volver</a
+        >
+
+        <nav aria-label="Mobile">
+          <ul class="mobile-nav">
+            <li><a href="index.html#work">Work</a></li>
+            <li><a href="catalogo.html" class="active">Catálogo</a></li>
+            <li>
+              <a
+                href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
+                target="_blank"
+                >Shop</a
+              >
+            </li>
+            <li><a href="about.html">About Us</a></li>
+            <li>
+              <a
+                href="https://instagram.com/rafita.studio"
+                target="_blank"
+                class="instagram-link"
+                >@rafita.studio</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+
+    <!-- ===== MAIN ===== -->
     <main>
       <section class="catalogo">
-        <img
-          src="assets/images/catalogo/01.png"
-          alt="Catálogo 01"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/02.jpg"
-          alt="Catálogo 02"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/03.jpg"
-          alt="Catálogo 03"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/04.jpg"
-          alt="Catálogo 04"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/05.jpg"
-          alt="Catálogo 05"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/06.png"
-          alt="Catálogo 06"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/07.png"
-          alt="Catálogo 07"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/08.jpg"
-          alt="Catálogo 08"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/09.jpg"
-          alt="Catálogo 09"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/11.png"
-          alt="Catálogo 11"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/12.png"
-          alt="Catálogo 12"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/13.png"
-          alt="Catálogo 13"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/14.png"
-          alt="Catálogo 14"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/15.jpg"
-          alt="Catálogo 15"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/16.jpg"
-          alt="Catálogo 16"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/17.jpg"
-          alt="Catálogo 17"
-          loading="lazy"
-        />
-        <img
-          src="assets/images/catalogo/18.jpg"
-          alt="Catálogo 18"
-          loading="lazy"
-        />
+        <img src="assets/images/catalogo/01.png" alt="Catálogo 01" loading="lazy" />
+        <img src="assets/images/catalogo/02.jpg" alt="Catálogo 02" loading="lazy" />
+        <img src="assets/images/catalogo/03.jpg" alt="Catálogo 03" loading="lazy" />
+        <img src="assets/images/catalogo/04.jpg" alt="Catálogo 04" loading="lazy" />
+        <img src="assets/images/catalogo/05.jpg" alt="Catálogo 05" loading="lazy" />
+        <img src="assets/images/catalogo/06.png" alt="Catálogo 06" loading="lazy" />
+        <img src="assets/images/catalogo/07.png" alt="Catálogo 07" loading="lazy" />
+        <img src="assets/images/catalogo/08.jpg" alt="Catálogo 08" loading="lazy" />
+        <img src="assets/images/catalogo/09.jpg" alt="Catálogo 09" loading="lazy" />
+        <img src="assets/images/catalogo/11.png" alt="Catálogo 11" loading="lazy" />
+        <img src="assets/images/catalogo/12.png" alt="Catálogo 12" loading="lazy" />
+        <img src="assets/images/catalogo/13.png" alt="Catálogo 13" loading="lazy" />
+        <img src="assets/images/catalogo/14.png" alt="Catálogo 14" loading="lazy" />
+        <img src="assets/images/catalogo/15.jpg" alt="Catálogo 15" loading="lazy" />
+        <img src="assets/images/catalogo/16.jpg" alt="Catálogo 16" loading="lazy" />
+        <img src="assets/images/catalogo/17.jpg" alt="Catálogo 17" loading="lazy" />
+        <img src="assets/images/catalogo/18.jpg" alt="Catálogo 18" loading="lazy" />
       </section>
     </main>
 
@@ -224,7 +157,7 @@
       <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- JS del menú hamburguesa -->
+    <!-- ===== JS DEL MENÚ HAMBURGUESA ===== -->
     <script>
       const navToggle = document.querySelector(".nav-toggle");
       const mobileDrawer = document.getElementById("mobile-drawer");
@@ -238,9 +171,11 @@
             mobileDrawer.classList.remove("is-open", "is-closing");
           }, 300);
           navToggle.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         } else {
           mobileDrawer.classList.add("is-open");
           navToggle.setAttribute("aria-expanded", "true");
+          document.body.classList.add("menu-open");
         }
       });
 
@@ -250,6 +185,7 @@
           mobileDrawer.classList.remove("is-open", "is-closing");
         }, 300);
         navToggle.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("menu-open");
       });
     </script>
   </body>

@@ -29,13 +29,16 @@ main {
 }
 
 .logo img {
-  height: 40px;
+  height: 50px;
   display: block;
   transition: transform 0.2s ease;
+  margin-left: 10px;
+  margin-top: 20px;
 }
 
 header {
-  background-color: #ffbcf2;
+  background-color: transparent; /* 💡 Quitamos el rosado */
+  backdrop-filter: blur(4px); /* opcional: mantiene contraste sutil */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,6 +94,82 @@ footer {
   font-size: 0.7rem;
   color: #a5a5a5;
   border-top: 1px solid #d4d4d4;
+}
+
+/* === Layout de texto y galería === */
+.content-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: start;
+  padding: 0rem 0rem;
+}
+
+.text-side h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0rem;
+  margin-top: 1px;
+}
+
+.text-side p {
+  font-size: 1.1rem;
+  margin: 0.3rem 0;
+  line-height: 1.5rem;
+}
+
+/* Galería más pequeña y ajustada */
+.gallery.small {
+  column-count: 3;
+  column-gap: 10px;
+  padding: 0;
+}
+
+.gallery.small img {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+/* === Texto introductorio === */
+.intro-text {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: justify; /* justificado */
+  margin-bottom: 2.5rem; /* separa el bloque de ferias */
+  color: #111;
+}
+
+/* === Bloque de Ferias de Diseño === */
+.ferias-block {
+  margin-top: 2.5rem; /* baja el bloque respecto al párrafo */
+}
+
+.ferias-block h1 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.ferias-block p {
+  font-size: 1rem;
+  margin: 0.2rem 0;
+  line-height: 1.2rem;
+}
+
+@media (max-width: 1024px) {
+  .content-layout {
+    grid-template-columns: 1fr;
+  }
+  .gallery.small {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery.small {
+    column-count: 1;
+  }
 }
 
 /* Galería con columnas */

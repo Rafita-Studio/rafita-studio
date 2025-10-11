@@ -47,3 +47,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// === Bloquear clic derecho y arrastre en imágenes ===
+document.addEventListener("contextmenu", (e) => {
+  if (e.target.tagName === "IMG") {
+    e.preventDefault();
+  }
+});
+
+document.addEventListener("dragstart", (e) => {
+  if (e.target.tagName === "IMG") {
+    e.preventDefault();
+  }
+});

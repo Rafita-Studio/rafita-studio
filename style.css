@@ -29,7 +29,7 @@ main {
 }
 
 .logo img {
-  height: 50px;
+  height: 70px;
   display: block;
   transition: transform 0.2s ease;
   margin-left: 10px;
@@ -553,4 +553,13 @@ footer {
 
 .instagram-link:hover {
   font-weight: 700;
+}
+
+/* === Desactivar selección y arrastre en imágenes === */
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: auto;
 }

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catálogo — Rafita Studio</title>
+    <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Ajustes específicos solo para el catálogo */
+      .gallery {
+        column-count: 4;
+        column-gap: 6px; /* espacio más pequeño entre columnas */
+        padding: 6px; /* menos margen general */
+      }
+      .gallery img {
+        width: 100%;
+        margin-bottom: 6px; /* menos espacio entre imágenes */
+        border-radius: 4px; /* bordes suaves */
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      .gallery img:hover {
+        transform: scale(1.02);
+      }
+
+      @media (max-width: 1024px) {
+        .gallery {
+          column-count: 3;
+        }
+      }
+      @media (max-width: 768px) {
+        .gallery {
+          column-count: 2;
+        }
+      }
+      @media (max-width: 480px) {
+        .gallery {
+          column-count: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <a href="index.html" class="logo">
+        <img
+          src="assets/images/rafitaStudio_logo2025.png"
+          alt="Rafita Studio Logo"
+        />
+      </a>
+
+      <nav>
+        <ul class="desktop-nav">
+  <li><a href="index.html#work">Work</a></li>
+  <li><a href="catalogo.html">Catálogo</a></li>
+  <li>
+    <a
+      href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
+      target="_blank"
+    >
+      Shop
+    </a>
+  </li>
+  <li><a href="about.html">About Us</a></li>
+  <li>
+    <a
+      href="https://instagram.com/rafita.studio"
+      target="_blank"
+      class="instagram-link"
+    >
+      @rafita.studio
+    </a>
+  </li>
+</ul>
+
+      </nav>
+
+      <!-- botón hamburguesa -->
+      <button
+        class="nav-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+        aria-label="Abrir menú"
+      >
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+
+      <!-- Drawer móvil -->
+      <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+        <div class="drawer-backdrop" data-close></div>
+        <aside
+          class="drawer-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menú"
+        >
+          <a href="index.html" class="back-home" aria-label="Volver a inicio"
+            >← Volver</a
+          >
+          <nav aria-label="Mobile">
+            <ul class="mobile-nav" id="mobile-nav-list"></ul>
+          </nav>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h1 style="margin: 1rem 2rem">Catálogo de prints</h1>
+
+        <div class="gallery" id="printGrid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Script para generar la galería -->
+    <script>
+      const FILES = [
+        "ilus_01.jpg",
+        "ilus_02.jpg",
+        "ilus_03.jpg",
+        "ilus_04.jpg",
+        "ilus_05.jpg",
+        "ilus_06.jpg",
+        "ilus_07.jpg",
+        "ilus_08.jpg",
+        "ilus_09.jpg",
+        "ilus_10.jpg",
+        "ilus_11.png",
+        "ilus_12.png",
+        "ilus_13.png",
+        "ilus_14.PNG",
+        "ilus_15.PNG",
+        "ilus_16.PNG",
+        "ilus_17.JPG",
+        "ilus_18.JPG",
+        "trabajos_new-04.jpg",
+        "trabajos_new-05.jpg",
+        "trabajos_new-06.jpg",
+      ];
+      const BASE = "assets/images/";
+      const grid = document.getElementById("printGrid");
+
+      function renderGallery() {
+        grid.innerHTML = FILES.map(
+          (file) =>
+            `<img src="${
+              BASE + file
+            }" alt="Ilustración Rafita Studio" loading="lazy" />`
+        ).join("");
+      }
+
+      document.addEventListener("DOMContentLoaded", renderGallery);
+    </script>
+
+    <!-- menú móvil -->
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -558,7 +558,6 @@ footer {
 /* === Desactivar selección y arrastre en imágenes === */
 img {
   -webkit-user-drag: none;
-  user-drag: none;
   -webkit-user-select: none;
   user-select: none;
   pointer-events: auto;

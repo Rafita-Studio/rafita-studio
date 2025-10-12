@@ -53,7 +53,7 @@
     <header>
       <a href="index.html" class="logo">
         <img
-          src="assets/images/rafitaStudio_logo2025.png"
+          src="assets/rafitaStudio_logo2025.png"
           alt="Rafita Studio Logo"
         />
       </a>
@@ -133,23 +133,22 @@
     <!-- ===== MAIN ===== -->
     <main>
       <section class="catalogo">
-        <img src="assets/images/catalogo/01.png" alt="Catálogo 01" loading="lazy" />
-        <img src="assets/images/catalogo/02.jpg" alt="Catálogo 02" loading="lazy" />
-        <img src="assets/images/catalogo/03.jpg" alt="Catálogo 03" loading="lazy" />
-        <img src="assets/images/catalogo/04.jpg" alt="Catálogo 04" loading="lazy" />
-        <img src="assets/images/catalogo/05.jpg" alt="Catálogo 05" loading="lazy" />
-        <img src="assets/images/catalogo/06.png" alt="Catálogo 06" loading="lazy" />
-        <img src="assets/images/catalogo/07.png" alt="Catálogo 07" loading="lazy" />
-        <img src="assets/images/catalogo/08.jpg" alt="Catálogo 08" loading="lazy" />
-        <img src="assets/images/catalogo/09.jpg" alt="Catálogo 09" loading="lazy" />
-        <img src="assets/images/catalogo/11.png" alt="Catálogo 11" loading="lazy" />
-        <img src="assets/images/catalogo/12.png" alt="Catálogo 12" loading="lazy" />
-        <img src="assets/images/catalogo/13.png" alt="Catálogo 13" loading="lazy" />
-        <img src="assets/images/catalogo/14.png" alt="Catálogo 14" loading="lazy" />
-        <img src="assets/images/catalogo/15.jpg" alt="Catálogo 15" loading="lazy" />
-        <img src="assets/images/catalogo/16.jpg" alt="Catálogo 16" loading="lazy" />
-        <img src="assets/images/catalogo/17.jpg" alt="Catálogo 17" loading="lazy" />
-        <img src="assets/images/catalogo/18.jpg" alt="Catálogo 18" loading="lazy" />
+        <img src="assets/catalogo/01.png" alt="Catálogo 01" loading="lazy" />
+        <img src="assets/catalogo/02.jpg" alt="Catálogo 02" loading="lazy" />
+        <img src="assets/catalogo/03.jpg" alt="Catálogo 03" loading="lazy" />
+        <img src="assets/catalogo/04.jpg" alt="Catálogo 04" loading="lazy" />
+        <img src="assets/catalogo/05.jpg" alt="Catálogo 05" loading="lazy" />
+        <img src="assets/catalogo/06.png" alt="Catálogo 06" loading="lazy" />
+        <img src="assets/catalogo/07.png" alt="Catálogo 07" loading="lazy" />
+        <img src="assets/catalogo/08.jpg" alt="Catálogo 08" loading="lazy" />
+        <img src="assets/catalogo/09.jpg" alt="Catálogo 09" loading="lazy" />
+        <img src="assets/catalogo/12.png" alt="Catálogo 12" loading="lazy" />
+        <img src="assets/catalogo/13.png" alt="Catálogo 13" loading="lazy" />
+        <img src="assets/catalogo/14.png" alt="Catálogo 14" loading="lazy" />
+        <img src="assets/catalogo/15.jpg" alt="Catálogo 15" loading="lazy" />
+        <img src="assets/catalogo/16.jpg" alt="Catálogo 16" loading="lazy" />
+        <img src="assets/catalogo/17.jpg" alt="Catálogo 17" loading="lazy" />
+        <img src="assets/catalogo/18.jpg" alt="Catálogo 18" loading="lazy" />
       </section>
     </main>
 
@@ -187,6 +186,30 @@
         navToggle.setAttribute("aria-expanded", "false");
         document.body.classList.remove("menu-open");
       });
+
+      // === Protección de imágenes ===
+      document.addEventListener("contextmenu", (e) => {
+        if (e.target.tagName === "IMG") {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener("dragstart", (e) => {
+        if (e.target.tagName === "IMG") {
+          e.preventDefault();
+        }
+      });
     </script>
+
+    <!-- CSS adicional opcional (en caso de no tenerlo en style.css) -->
+    <style>
+      img {
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        user-select: none;
+        pointer-events: auto;
+      }
+    </style>
   </body>
 </html>
+

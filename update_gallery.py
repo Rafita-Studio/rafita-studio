@@ -1,0 +1,51 @@
+import os
+import re
+from pathlib import Path
+
+# === CONFIGURACIÓN ===
+HTML_FILE = "index.html"
+IMAGES_DIR = "assets/images"
+VALID_EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif")
+
+def get_image_files():
+    """Devuelve una lista de nombres de archivo válidos dentro de assets/images"""
+    files = sorted(
+        [f.name for f in Path(IMAGES_DIR).iterdir() if f.suffix.lower() in VALID_EXT]
+    )
+    return files
+
+def update_html():
+    """Reemplaza el bloque FILES = [ ... ] en el index.html"""
+    if not Path(HTML_FILE).exists():
+        print("❌ No se encontró el archivo index.html")
+        return
+
+    with open(HTML_FILE, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    files = get_image_files()
+    files_js = ", ".join([f'"{f}"' for f in files])
+
+    # patrón que detecta el bloque const FILES = [...]
+    pattern = re.compile(r"const FILES\s*=\s*\[.*?\];", re.DOTALL)
+    new_block = f"const FILES = [{files_js}];"
+
+    if pattern.search(html):
+        new_html = pattern.sub(new_block, html)
+        print(f"✅ Bloque FILES reemplazado con {len(files)} archivos.")
+    else:
+        print("⚠️ No se encontró el bloque const FILES = [...] en el HTML.")
+        return
+
+    backup_path = HTML_FILE.replace(".html", "_backup.html")
+    with open(backup_path, "w", encoding="utf-8") as backup:
+        backup.write(html)
+    print(f"💾 Copia de seguridad creada → {backup_path}")
+
+    with open(HTML_FILE, "w", encoding="utf-8") as f:
+        f.write(new_html)
+
+    print("✨ index.html actualizado correctamente.")
+
+if __name__ == "__main__":
+    update_html()

@@ -5,121 +5,737 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rafita Studio</title>
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        overflow-y: auto;
+        background: #f5f5f5;
+        font-family: "liebling", sans-serif;
+      }
+
+      /* ══════════════════════════════════════════
+         HERO
+         ══════════════════════════════════════════ */
+
+      #hero {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background: #ef0d45;
+        overflow: hidden;
+      }
+
+      #hero-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        touch-action: pan-y;
+      }
+
+      #hero-text-container {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      #hero-line-1,
+      #hero-line-2 {
+        position: absolute;
+        font-family: "liebling", sans-serif;
+        font-weight: 700;
+        font-size: clamp(200px, 22vw, 950px);
+        color: #ffffff;
+        white-space: nowrap;
+        line-height: 0.95;
+      }
+
+      #hero-line-1 { top: 8%; left: -2%; transform: rotate(-12deg); }
+      #hero-line-2 { bottom: 10%; left: 8%; transform: rotate(-4deg); }
+
+      #bio-text {
+        position: absolute;
+        top: 30px; left: 40px; right: 40px;
+        font-family: "liebling", sans-serif;
+        font-weight: 500;
+        font-size: 28px;
+        line-height: 1.15;
+        color: #ffbcf2;
+        pointer-events: none;
+        z-index: 5;
+      }
+      #bio-text a { pointer-events: all; }
+
+      #slideshow {
+        position: absolute;
+        top: 48%; left: 49%;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        pointer-events: none;
+        display: none;
+        opacity: 0;
+      }
+      #slideshow.visible { display: block; }
+      #slideshow.fadein { transition: opacity 1s ease; opacity: 1; }
+      #slideshow img {
+        max-height: 55vh;
+        max-width: 55vw;
+        object-fit: contain;
+        display: block;
+        mix-blend-mode: overlay;
+      }
+
+      /* ══════════════════════════════════════════
+         DOG BUILDER
+         ══════════════════════════════════════════ */
+
+      #dog-builder {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      .builder-header {
+        text-align: center;
+        padding: 12px 0 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #bbb;
+        flex-shrink: 0;
+        letter-spacing: 0.02em;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      /* Wrapper gives the visual white bg; the canvas pixel data stays transparent */
+      .canvas-bg {
+        flex: 1;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #dog-canvas {
+        display: block;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        touch-action: none;
+        background: transparent;
+      }
+      #dog-canvas.erasing { cursor: cell; }
+
+      /* ── Bottom toolbar ── */
+      .toolbar {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background: #fff;
+        border-top: 1px solid #f0f0f0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .toolbar-sep {
+        width: 1px; height: 28px;
+        background: #eee; flex-shrink: 0;
+      }
+
+      .color-swatch {
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer; flex-shrink: 0;
+        transition: transform 0.1s; outline: none;
+      }
+      .color-swatch:hover  { transform: scale(1.18); }
+      .color-swatch.active {
+        border-color: #1a1a1a; transform: scale(1.12);
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a1a1a;
+      }
+
+      .toolbar input[type=range] {
+        width: 80px; flex-shrink: 0;
+        accent-color: #1a1a1a; cursor: pointer;
+      }
+
+      .tool-btn {
+        font-family: "liebling", sans-serif;
+        font-weight: 700; font-size: 12px;
+        background: none; border: 2px solid #e0e0e0;
+        border-radius: 6px; padding: 6px 12px;
+        cursor: pointer; white-space: nowrap;
+        flex-shrink: 0; color: #555;
+        transition: background 0.1s, color 0.1s, border-color 0.1s;
+      }
+      .tool-btn:hover,
+      .tool-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+      .tool-btn.danger:hover { background: #ef0d45; border-color: #ef0d45; color: #fff; }
+
+      /* ── Publish bar ── */
+      .publish-bar {
+        flex-shrink: 0;
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 16px;
+        border-top: 1px solid #f0f0f0;
+        background: #fff;
+      }
+      .publish-bar input {
+        flex: 1; min-width: 0;
+        font-family: "liebling", sans-serif;
+        font-weight: 500; font-size: 15px;
+        border: none; border-bottom: 2px solid #e0e0e0;
+        padding: 5px 4px; outline: none;
+        background: transparent; color: #1a1a1a;
+        transition: border-color 0.15s;
+      }
+      .publish-bar input:focus { border-color: #1a1a1a; }
+      .publish-bar input::placeholder { color: #ccc; }
+      .publish-btn {
+        font-family: "liebling", sans-serif;
+        font-weight: 700; font-size: 14px;
+        background: #ef0d45; color: #fff;
+        border: none; border-radius: 8px;
+        padding: 10px 20px; cursor: pointer;
+        white-space: nowrap; flex-shrink: 0;
+        transition: background 0.15s;
+      }
+      .publish-btn:hover { background: #c40a38; }
+
+      /* ══════════════════════════════════════════
+         PARK — perritos flotantes
+         ══════════════════════════════════════════ */
+
+      #park {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+        /* fondo provisional — reemplazable con imagen */
+        background: #f2ede8;
+      }
+
+      #park-empty {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 16px;
+        font-weight: 500;
+        color: #ccc;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .park-dog {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        pointer-events: none;
+        will-change: transform;
+        /* smooth drift */
+      }
+      .park-dog img {
+        display: block;
+        max-width: 160px;
+        max-height: 160px;
+        width: auto;
+        height: auto;
+        background: transparent;
+      }
+      .park-dog .dog-name {
+        font-family: "liebling", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        color: #1a1a1a;
+        margin-top: 4px;
+        white-space: nowrap;
+      }
+    </style>
   </head>
 
   <body>
-    <!-- ===== HEADER ===== -->
-    <header>
-      <a href="index.html" class="logo">
-        <img
-          src="assets/rafitaStudio_logo2025.png"
-          alt="Rafita Studio Logo"
-        />
-      </a>
 
-      <nav>
-        <ul class="desktop-nav">
-          <li><a href="index.html#work">Work</a></li>
-          <li><a href="catalogo.html">Catálogo</a></li>
-          <li>
-            <a
-              href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
-              target="_blank"
-              >Shop</a
-            >
-          </li>
-          <li><a href="about.html">About Us</a></li>
-          <li>
-            <a
-              href="https://instagram.com/rafita.studio"
-              target="_blank"
-              class="instagram-link"
-              >@rafita.studio</a
-            >
-          </li>
-        </ul>
-      </nav>
+    <!-- ══════════════════════════════════════════
+         HERO
+         ══════════════════════════════════════════ -->
+    <section id="hero">
+      <canvas id="hero-canvas"></canvas>
+      <div id="bio-text"></div>
+      <div id="slideshow"><img src="" alt="Rafita Studio" /></div>
+      <div id="hero-text-container">
+        <div id="hero-line-1"></div>
+        <div id="hero-line-2"></div>
+      </div>
+    </section>
 
-      <button
-        class="nav-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-drawer"
-        aria-label="Abrir menú"
-      >
-        <span class="bar" aria-hidden="true"></span>
-      </button>
-    </header>
+    <!-- ══════════════════════════════════════════
+         DOG BUILDER
+         ══════════════════════════════════════════ -->
+    <section id="dog-builder">
 
-    <!-- ===== DRAWER FUERA DEL HEADER ===== -->
-    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
-      <div class="drawer-backdrop" data-close></div>
-      <aside
-        class="drawer-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menú"
-      >
-        <a href="index.html" class="back-home" aria-label="Volver a inicio"
-          >← Volver</a
-        >
-        <nav aria-label="Mobile">
-          <ul class="mobile-nav" id="mobile-nav-list"></ul>
-        </nav>
-      </aside>
-    </div>
+      <p class="builder-header">dibuja tu perrito :)</p>
 
-    <!-- ===== MAIN ===== -->
-    <main>
-      <section id="work">
-        <div class="content-layout">
-          <div class="text-side">
-            <p class="intro-text">
-              En <strong>Rafita Studio</strong> exploramos el cruce entre el
-              diseño gráfico, la ilustración y la experimentación editorial.
-              Participamos en ferias y encuentros de diseño para compartir
-              nuestras ediciones, prints y objetos hechos con cariño.
-            </p>
+      <div class="canvas-bg">
+        <canvas id="dog-canvas"></canvas>
+      </div>
 
-            <div class="ferias-block">
-              <h1>Ferias de Diseño</h1>
-              <p>Monoraro (x2)</p>
-              <p>Feria Format</p>
-              <p>Culta Fest</p>
-              <p>Somospublica</p>
-            </div>
+      <!-- Toolbar: colors + size + tools -->
+      <div class="toolbar" id="toolbar">
+        <div id="colors-row"></div>
+        <div class="toolbar-sep"></div>
+        <input type="range" id="size-slider" min="2" max="40" value="8" />
+        <div class="toolbar-sep"></div>
+        <button class="tool-btn active" id="tool-draw">pincel</button>
+        <button class="tool-btn" id="tool-erase">borrar</button>
+        <button class="tool-btn danger" id="tool-clear">limpiar</button>
+      </div>
 
-            <div class="ferias-block">
-              <h1>Colabs</h1>
-              <p>Findie</p>
-              <p>Amour Perfeito</p>
-              <p>piruetas.xyz</p>
-              <p>Monoraro</p>
-              <p>lab.360 UDP</p>
-            </div>
-          </div>
+      <div class="publish-bar">
+        <input type="text" id="dog-name" placeholder="tu nombre..." maxlength="30" autocomplete="off" />
+        <button class="publish-btn" id="publish-btn">publicar</button>
+      </div>
 
-          <div class="gallery small" id="gallery"></div>
-        </div>
-      </section>
-    </main>
+    </section>
 
-    <footer>
-      <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
-    </footer>
+    <!-- ══════════════════════════════════════════
+         PARK — perritos flotantes
+         ══════════════════════════════════════════ -->
+    <section id="park">
+      <p id="park-empty">todavía no hay perritos,<br>¡sé el primero!</p>
+    </section>
 
-    <!-- ===== SCRIPTS ===== -->
+    <!-- ══════════════════════════════════════════
+         SCRIPTS
+         ══════════════════════════════════════════ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+    <!-- Hero -->
     <script>
-      const FILES = ["06.png", "07.png", "08.jpg", "15.jpg", "16.jpg", "RS_aurora_fondo.png", "ilus_01.jpg", "ilus_02.jpg", "ilus_03.jpg", "ilus_04.jpg", "ilus_05.jpg", "ilus_06.jpg", "ilus_07.jpg", "ilus_08.jpg", "ilus_09.jpg", "ilus_10.jpg", "ilus_11.png", "ilus_12.png", "ilus_13.png", "ilus_14.PNG", "ilus_15.PNG", "ilus_16.PNG", "ilus_17.JPG", "ilus_18.JPG", "trabajos_new-04.jpg", "trabajos_new-05.jpg", "trabajos_new-06.jpg"];
-      const BASE = "assets/images/";
-      const gallery = document.getElementById("gallery");
+      (function () {
+        function typewrite(el, text, delay) {
+          return new Promise(function (resolve) {
+            var i = 0;
+            function next() {
+              if (i < text.length) {
+                var char = text[i++];
+                if (char === "®") {
+                  el.innerHTML += '<span style="font-size:0.45em;vertical-align:super;line-height:0">®</span>';
+                } else if (char === "\n") {
+                  el.appendChild(document.createElement("br"));
+                } else {
+                  el.appendChild(document.createTextNode(char));
+                }
+                setTimeout(next, delay);
+              } else { resolve(); }
+            }
+            next();
+          });
+        }
 
-      gallery.innerHTML = FILES.map(
-        (file) =>
-          `<img src="${BASE + file}" alt="Ilustración Rafita Studio" loading="lazy" />`
-      ).join("");
+        function wait(ms) {
+          return new Promise(function (r) { setTimeout(r, ms); });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          var line1 = document.getElementById("hero-line-1");
+          var line2 = document.getElementById("hero-line-2");
+          var canvas = document.getElementById("hero-canvas");
+          var textContainer = document.getElementById("hero-text-container");
+          var bioText = document.getElementById("bio-text");
+
+          var p1 = typewrite(line1, "RAFITA", 50);
+          var p2 = wait(120).then(function () { return typewrite(line2, "STUDIO®", 50); });
+          Promise.all([p1, p2]).then(function () {
+            startPhysics(line1, line2, canvas, textContainer);
+            setTimeout(function () {
+              var link = document.createElement("a");
+              link.href = "https://instagram.com/rafita.studio";
+              link.target = "_blank";
+              link.style.cssText = "font-weight:700;color:inherit;text-decoration:underline;";
+              typewrite(bioText, "hola! somos dani y mateo, diseñadores e ilustradores. Amamos a los perritos con nuestra alma!\n", 28)
+                .then(function () { bioText.appendChild(link); return typewrite(link, "Rafita Studio", 28); })
+                .then(function () { return typewrite(bioText, " es el lugar donde expresamos ese amor mediante dibujitos y muchas otras cosas <3", 28); });
+            }, 400);
+          });
+        });
+
+        function startPhysics(line1, line2, canvas, textContainer) {
+          var letterData = [];
+
+          function measureLine(lineEl, angleDeg) {
+            var angleRad = (angleDeg * Math.PI) / 180;
+            var text = lineEl.textContent;
+            lineEl.textContent = "";
+            text.split("").forEach(function (char) {
+              var span = document.createElement("span");
+              span.textContent = char;
+              span.style.display = "inline-block";
+              lineEl.appendChild(span);
+            });
+            lineEl.querySelectorAll("span").forEach(function (span) {
+              var rect = span.getBoundingClientRect();
+              letterData.push({ char: span.textContent, x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, width: rect.width, height: rect.height, angle: angleRad });
+            });
+          }
+
+          measureLine(line1, -12);
+          measureLine(line2, -4);
+          textContainer.style.visibility = "hidden";
+          canvas.style.display = "block";
+
+          var Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner;
+          var Bodies = Matter.Bodies, Composite = Matter.Composite, Events = Matter.Events;
+
+          var engine = Engine.create({ gravity: { x: 0, y: 2.2 } });
+          var hero = document.getElementById("hero");
+          var W = hero.offsetWidth, H = hero.offsetHeight;
+
+          var render = Render.create({
+            canvas: canvas, engine: engine,
+            options: { width: W, height: H, background: "transparent", wireframes: false },
+          });
+
+          var letterBodies = letterData.map(function (data) {
+            var body = Bodies.rectangle(data.x, data.y, data.width * 0.45, data.height * 0.55, {
+              restitution: 0.2, friction: 0.4, frictionAir: 0.018, angle: data.angle,
+              render: { fillStyle: "transparent", strokeStyle: "transparent" }, label: "letter",
+            });
+            body.letterChar = data.char; body.letterColor = "#ffffff";
+            return body;
+          });
+
+          var ground    = Bodies.rectangle(W / 2, H + 30, W * 4, 60, { isStatic: true, label: "ground", render: { fillStyle: "transparent" } });
+          var wallLeft  = Bodies.rectangle(-30, H / 2, 60, H * 3, { isStatic: true, render: { fillStyle: "transparent" } });
+          var wallRight = Bodies.rectangle(W + 30, H / 2, 60, H * 3, { isStatic: true, render: { fillStyle: "transparent" } });
+          Composite.add(engine.world, letterBodies.concat([ground, wallLeft, wallRight]));
+
+          var PALETTE = ["#3B5BC8","#E84F8C","#D94040","#4A9FE0","#2E8B4A","#F0E050"];
+          var colorCycling = false, cycleStart = 0, slideshowStarted = false;
+
+          Events.on(engine, "collisionStart", function (event) {
+            event.pairs.forEach(function (pair) {
+              [pair.bodyA, pair.bodyB].forEach(function (body) {
+                if (body.label === "letter" && !colorCycling) body.letterColor = "#ffbcf2";
+              });
+              if ((pair.bodyA.label === "ground" || pair.bodyB.label === "ground") && !colorCycling) {
+                colorCycling = true; cycleStart = Date.now();
+                if (!slideshowStarted) { slideshowStarted = true; setTimeout(startSlideshow, 2000); }
+              }
+            });
+          });
+
+          Events.on(render, "afterRender", function () {
+            var ctx = render.canvas.getContext("2d");
+            var fontSize = Math.min(Math.max(200, W * 0.22), 950);
+            if (colorCycling) {
+              var elapsed = Date.now() - cycleStart;
+              letterBodies.forEach(function (body, i) {
+                body.letterColor = PALETTE[Math.floor((elapsed / 1000 + i * 1.7)) % PALETTE.length];
+              });
+            }
+            letterBodies.forEach(function (body) {
+              ctx.save();
+              ctx.translate(body.position.x, body.position.y);
+              ctx.rotate(body.angle);
+              ctx.fillStyle = body.letterColor;
+              var size = body.letterChar === "®" ? fontSize * 0.45 : fontSize;
+              var offset = body.letterChar === "®" ? -fontSize * 0.22 : 0;
+              ctx.font = '700 ' + size + 'px "liebling", sans-serif';
+              ctx.textAlign = "center"; ctx.textBaseline = "middle";
+              ctx.fillText(body.letterChar, 0, offset);
+              ctx.restore();
+            });
+          });
+
+          var FRAME_MS = 1000 / 40, lastFrame = 0;
+          (function renderLoop(ts) {
+            requestAnimationFrame(renderLoop);
+            if (ts - lastFrame >= FRAME_MS) { lastFrame = ts; Matter.Render.world(render); }
+          })(0);
+          Runner.run(Runner.create(), engine);
+
+          var mouseBall = Bodies.circle(-500, -500, 55, { isStatic: true, label: "mouse", render: { fillStyle: "transparent", strokeStyle: "transparent" } });
+          Composite.add(engine.world, mouseBall);
+
+          render.canvas.addEventListener("mousemove", function (e) {
+            var rect = render.canvas.getBoundingClientRect();
+            Matter.Body.setPosition(mouseBall, { x: e.clientX - rect.left, y: e.clientY - rect.top });
+            Matter.Body.setVelocity(mouseBall, { x: e.movementX * 0.4, y: e.movementY * 0.4 });
+          });
+          render.canvas.addEventListener("mouseleave", function () { Matter.Body.setPosition(mouseBall, { x: -500, y: -500 }); });
+
+          var mouse = Matter.Mouse.create(render.canvas);
+          var mc = Matter.MouseConstraint.create(engine, { mouse: mouse, constraint: { stiffness: 0.18, render: { visible: false } } });
+          Composite.add(engine.world, mc);
+          render.mouse = mouse;
+          render.canvas.removeEventListener("mousewheel", mouse.mousewheel);
+          render.canvas.removeEventListener("DOMMouseScroll", mouse.mousewheel);
+        }
+
+        function startSlideshow() {
+          var IMAGES = ["assets/inicio/inicio_01.png","assets/inicio/inicio_02.png","assets/inicio/inicio_03.png","assets/inicio/inicio_04.png","assets/inicio/inicio_05.png","assets/inicio/inicio_06.png","assets/inicio/inicio_07.png","assets/inicio/inicio_08.png"];
+          var container = document.getElementById("slideshow");
+          var img = container.querySelector("img");
+          var index = 0;
+          function showImage(first) {
+            img.src = IMAGES[index];
+            container.classList.add("visible");
+            if (first) { container.offsetHeight; container.classList.add("fadein"); }
+            index = (index + 1) % IMAGES.length;
+            setTimeout(function () { showImage(false); }, 800);
+          }
+          showImage(true);
+        }
+      })();
     </script>
 
-    <script src="script.js"></script>
+    <!-- Dog Builder + Park -->
+    <script>
+      (function () {
+        var COLORS = [
+          "#1a1a1a","#ef0d45","#ffbcf2",
+          "#3B5BC8","#4A9FE0","#2E8B4A",
+          "#F0E050","#F5A623","#E84F8C",
+          "#9B59B6","#8B4513","#ffffff",
+        ];
+
+        var color     = COLORS[0];
+        var brushSize = 8;
+        var tool      = "draw";
+        var drawing   = false;
+        var lastX     = 0, lastY = 0;
+
+        /* ── Canvas — transparent, white via CSS ── */
+        var canvas = document.getElementById("dog-canvas");
+        var ctx    = canvas.getContext("2d");
+
+        function resizeCanvas() {
+          var wrap = canvas.parentElement;
+          var W = wrap.offsetWidth, H = wrap.offsetHeight;
+          if (!W || !H) return;
+          /* Preserve drawn content */
+          var tmp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          canvas.width  = W;
+          canvas.height = H;
+          /* canvas resets to transparent — redraw old content */
+          if (tmp.width > 0 && tmp.height > 0) ctx.putImageData(tmp, 0, 0);
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        /* ── Color swatches ── */
+        var colorsRow = document.getElementById("colors-row");
+        colorsRow.style.cssText = "display:flex;gap:6px;align-items:center;flex-shrink:0;";
+        COLORS.forEach(function (c, i) {
+          var sw = document.createElement("button");
+          sw.className = "color-swatch" + (i === 0 ? " active" : "");
+          sw.style.background = c;
+          if (c === "#ffffff") sw.style.outline = "1px solid #ddd";
+          sw.addEventListener("click", function () {
+            color = c; tool = "draw";
+            canvas.classList.remove("erasing");
+            document.getElementById("tool-draw").classList.add("active");
+            document.getElementById("tool-erase").classList.remove("active");
+            document.querySelectorAll(".color-swatch").forEach(function (s) { s.classList.remove("active"); });
+            sw.classList.add("active");
+          });
+          colorsRow.appendChild(sw);
+        });
+
+        document.getElementById("size-slider").addEventListener("input", function () {
+          brushSize = parseInt(this.value);
+        });
+
+        document.getElementById("tool-draw").addEventListener("click", function () {
+          tool = "draw"; this.classList.add("active");
+          document.getElementById("tool-erase").classList.remove("active");
+          canvas.classList.remove("erasing");
+        });
+        document.getElementById("tool-erase").addEventListener("click", function () {
+          tool = "erase"; this.classList.add("active");
+          document.getElementById("tool-draw").classList.remove("active");
+          canvas.classList.add("erasing");
+        });
+        document.getElementById("tool-clear").addEventListener("click", function () {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        /* ── Drawing ── */
+        function getPos(e) {
+          var rect = canvas.getBoundingClientRect();
+          var src  = e.touches ? e.touches[0] : e;
+          return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+        }
+
+        function startStroke(pos) {
+          drawing = true; lastX = pos.x; lastY = pos.y;
+          ctx.save();
+          if (tool === "erase") ctx.globalCompositeOperation = "destination-out";
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, brushSize / 2, 0, Math.PI * 2);
+          ctx.fillStyle = tool === "erase" ? "rgba(0,0,0,1)" : color;
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function continueStroke(pos) {
+          if (!drawing) return;
+          ctx.save();
+          if (tool === "erase") ctx.globalCompositeOperation = "destination-out";
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.strokeStyle = tool === "erase" ? "rgba(0,0,0,1)" : color;
+          ctx.lineWidth = brushSize;
+          ctx.lineCap = "round"; ctx.lineJoin = "round";
+          ctx.stroke();
+          ctx.restore();
+          lastX = pos.x; lastY = pos.y;
+        }
+
+        canvas.addEventListener("mousedown",  function (e) { startStroke(getPos(e)); });
+        canvas.addEventListener("mousemove",  function (e) { continueStroke(getPos(e)); });
+        window.addEventListener("mouseup",    function ()  { drawing = false; });
+        canvas.addEventListener("touchstart", function (e) { e.preventDefault(); startStroke(getPos(e)); },    { passive: false });
+        canvas.addEventListener("touchmove",  function (e) { e.preventDefault(); continueStroke(getPos(e)); }, { passive: false });
+        canvas.addEventListener("touchend",   function ()  { drawing = false; });
+
+        /* ── Export: crop transparent PNG to bounding box ── */
+        function cropPNG() {
+          var w = canvas.width, h = canvas.height;
+          var imageData = ctx.getImageData(0, 0, w, h);
+          var data = imageData.data;
+          var minX = w, minY = h, maxX = 0, maxY = 0;
+          var found = false;
+          for (var y = 0; y < h; y++) {
+            for (var x = 0; x < w; x++) {
+              if (data[(y * w + x) * 4 + 3] > 10) {
+                if (x < minX) minX = x; if (x > maxX) maxX = x;
+                if (y < minY) minY = y; if (y > maxY) maxY = y;
+                found = true;
+              }
+            }
+          }
+          if (!found) return null;
+          var pad = 12;
+          minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad);
+          maxX = Math.min(w - 1, maxX + pad); maxY = Math.min(h - 1, maxY + pad);
+          var cw = maxX - minX + 1, ch = maxY - minY + 1;
+          var off = document.createElement("canvas");
+          off.width = cw; off.height = ch;
+          var octx = off.getContext("2d");
+          octx.clearRect(0, 0, cw, ch); /* ensure transparent bg */
+          octx.drawImage(canvas, minX, minY, cw, ch, 0, 0, cw, ch);
+          return off.toDataURL("image/png");
+        }
+
+        /* ── Publish ── */
+        document.getElementById("publish-btn").addEventListener("click", function () {
+          var name = document.getElementById("dog-name").value.trim();
+          if (!name) { document.getElementById("dog-name").focus(); return; }
+          var img = cropPNG();
+          if (!img) { alert("¡dibuja algo primero!"); return; }
+
+          var drawings = JSON.parse(localStorage.getItem("rafita_perritos") || "[]");
+          drawings.unshift({ name: name, img: img, date: Date.now() });
+          if (drawings.length > 80) drawings = drawings.slice(0, 80);
+          localStorage.setItem("rafita_perritos", JSON.stringify(drawings));
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          document.getElementById("dog-name").value = "";
+
+          spawnDog({ name: name, img: img });
+          document.getElementById("park").scrollIntoView({ behavior: "smooth" });
+        });
+
+        /* ══════════════════════════════════════════
+           PARK — perritos flotantes
+           ══════════════════════════════════════════ */
+
+        var parkDogs  = []; /* { el, x, y, vx, vy, w, h } */
+        var parkEl    = document.getElementById("park");
+        var emptyMsg  = document.getElementById("park-empty");
+        var parkW     = 0, parkH = 0;
+
+        function updateParkSize() {
+          parkW = parkEl.offsetWidth;
+          parkH = parkEl.offsetHeight;
+        }
+        updateParkSize();
+        window.addEventListener("resize", updateParkSize);
+
+        function spawnDog(d) {
+          emptyMsg.style.display = "none";
+
+          var div = document.createElement("div");
+          div.className = "park-dog";
+
+          var img = document.createElement("img");
+          img.src = d.img;
+          img.alt = d.name;
+
+          var label = document.createElement("p");
+          label.className = "dog-name";
+          label.textContent = d.name;
+
+          div.appendChild(img); div.appendChild(label);
+          parkEl.appendChild(div);
+
+          /* Random start position */
+          var x = Math.random() * Math.max(0, parkW - 180);
+          var y = Math.random() * Math.max(0, parkH - 180);
+          /* Random slow velocity */
+          var angle = Math.random() * Math.PI * 2;
+          var speed = 0.4 + Math.random() * 0.5;
+          var vx = Math.cos(angle) * speed;
+          var vy = Math.sin(angle) * speed;
+
+          div.style.transform = "translate(" + x + "px," + y + "px)";
+
+          /* Read actual img size after load for bounce bounds */
+          img.onload = function () {
+            var bw = Math.min(img.naturalWidth, 160);
+            var bh = Math.min(img.naturalHeight, 160) + 24;
+            for (var i = 0; i < parkDogs.length; i++) {
+              if (parkDogs[i].el === div) { parkDogs[i].w = bw; parkDogs[i].h = bh; break; }
+            }
+          };
+
+          parkDogs.push({ el: div, x: x, y: y, vx: vx, vy: vy, w: 160, h: 184 });
+        }
+
+        /* Load saved dogs */
+        (function () {
+          var saved = JSON.parse(localStorage.getItem("rafita_perritos") || "[]");
+          if (saved.length === 0) return;
+          saved.forEach(function (d) { spawnDog(d); });
+        })();
+
+        /* Animation loop */
+        function parkLoop() {
+          requestAnimationFrame(parkLoop);
+          parkDogs.forEach(function (dog) {
+            dog.x += dog.vx;
+            dog.y += dog.vy;
+            /* Bounce off edges */
+            if (dog.x < 0)             { dog.x = 0;              dog.vx *= -1; }
+            if (dog.x + dog.w > parkW) { dog.x = parkW - dog.w;  dog.vx *= -1; }
+            if (dog.y < 0)             { dog.y = 0;              dog.vy *= -1; }
+            if (dog.y + dog.h > parkH) { dog.y = parkH - dog.h;  dog.vy *= -1; }
+            dog.el.style.transform = "translate(" + dog.x + "px," + dog.y + "px)";
+          });
+        }
+        parkLoop();
+
+      })();
+    </script>
   </body>
 </html>

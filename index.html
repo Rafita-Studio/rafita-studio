@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rafita Studio</title>
+    <link id="dynamic-favicon" rel="icon" type="image/png" sizes="128x128" href="assets/stickers/Recurso 21.png" />
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
     <style>
       *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,6 +13,19 @@
         overflow-y: auto;
         background: #f5f5f5;
         font-family: "liebling", sans-serif;
+      }
+
+      body.page-loading {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      body.page-loaded {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+          opacity 900ms ease,
+          transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       /* ══════════════════════════════════════════
@@ -35,9 +49,8 @@
         width: 100%;
         height: 100%;
         z-index: 0;
-        opacity: 0.78;
+        opacity: 0.82;
         pointer-events: none;
-        transition: opacity 520ms ease;
       }
 
       .hero-logo {
@@ -206,7 +219,7 @@
 
       #catalog-scroll {
         position: relative;
-        height: 118vh;
+        height: 138vh;
         background: #ecebe6;
         overflow: clip;
       }
@@ -214,7 +227,7 @@
       .catalog-stage {
         position: sticky;
         top: 0;
-        height: 82vh;
+        height: 86vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -223,30 +236,29 @@
 
       .catalog-stack {
         position: relative;
-        width: min(1440px, 112vw);
-        height: min(54vh, 580px);
+        width: min(1640px, 124vw);
+        height: min(60vh, 650px);
       }
 
       .catalog-card {
         position: absolute;
         top: 50%;
         left: var(--x);
-        width: clamp(160px, 20vw, 330px);
+        width: clamp(190px, 24vw, 390px);
         aspect-ratio: 0.707 / 1;
         opacity: 0;
-        transform: translate(-50%, calc(-50% + 88px)) rotate(var(--from-rotate)) scale(0.92);
-        transition:
-          opacity 620ms ease,
-          transform 860ms cubic-bezier(0.16, 1, 0.3, 1),
-          filter 860ms ease;
+        transform: translate(-50%, calc(-50% + 140px)) rotate(var(--from-rotate)) scale(1.08);
         z-index: var(--z);
-        filter: drop-shadow(0 22px 26px rgba(25, 22, 20, 0.16));
-        will-change: transform, opacity;
+        filter: drop-shadow(0 8px 7px rgba(25, 22, 20, 0.13));
+        will-change: transform, opacity, filter;
       }
 
-      .catalog-card.visible {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(var(--rotate)) scale(1);
+      #catalog-scroll.catalog-ready .catalog-card {
+        cursor: zoom-in;
+        transition:
+          transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+          filter 180ms ease,
+          opacity 180ms ease;
       }
 
       .catalog-card img {
@@ -258,30 +270,30 @@
       }
 
       @media (max-width: 720px) {
-        #catalog-scroll { height: 112vh; }
+        #catalog-scroll { height: 130vh; }
         .catalog-stage {
           height: 70vh;
           align-items: flex-start;
         }
         .catalog-stack {
-          width: 112vw;
+          width: 124vw;
           height: 62vh;
           margin-top: 2vh;
         }
         .catalog-card {
           top: var(--mobile-y);
           left: var(--mobile-x);
-          width: clamp(172px, 52vw, 250px);
+          width: clamp(190px, 58vw, 285px);
         }
 
         .catalog-card:nth-child(1) { --mobile-x: 18%; --mobile-y: 34%; }
-        .catalog-card:nth-child(2) { --mobile-x: 42%; --mobile-y: 32%; }
-        .catalog-card:nth-child(3) { --mobile-x: 66%; --mobile-y: 35%; }
-        .catalog-card:nth-child(4) { --mobile-x: 90%; --mobile-y: 33%; }
-        .catalog-card:nth-child(5) { --mobile-x: 16%; --mobile-y: 66%; }
-        .catalog-card:nth-child(6) { --mobile-x: 40%; --mobile-y: 68%; }
-        .catalog-card:nth-child(7) { --mobile-x: 65%; --mobile-y: 65%; }
-        .catalog-card:nth-child(8) { --mobile-x: 89%; --mobile-y: 67%; }
+        .catalog-card:nth-child(2) { --mobile-x: 38%; --mobile-y: 31%; }
+        .catalog-card:nth-child(3) { --mobile-x: 58%; --mobile-y: 35%; }
+        .catalog-card:nth-child(4) { --mobile-x: 78%; --mobile-y: 32%; }
+        .catalog-card:nth-child(5) { --mobile-x: 20%; --mobile-y: 66%; }
+        .catalog-card:nth-child(6) { --mobile-x: 40%; --mobile-y: 69%; }
+        .catalog-card:nth-child(7) { --mobile-x: 60%; --mobile-y: 65%; }
+        .catalog-card:nth-child(8) { --mobile-x: 80%; --mobile-y: 68%; }
       }
 
       /* ══════════════════════════════════════════
@@ -406,7 +418,7 @@
     </style>
   </head>
 
-  <body>
+  <body class="page-loading">
 
     <!-- ══════════════════════════════════════════
          HERO
@@ -430,28 +442,28 @@
     <section id="catalog-scroll" aria-label="Ilustraciones del catalogo">
       <div class="catalog-stage">
         <div class="catalog-stack">
-          <figure class="catalog-card" style="--x: 6%; --rotate: -7deg; --from-rotate: -15deg; --z: 1;">
+          <figure class="catalog-card" style="--x: 8%; --rotate: -7deg; --from-rotate: -18deg; --z: 2;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 18%; --rotate: 5deg; --from-rotate: 13deg; --z: 2;">
+          <figure class="catalog-card" style="--x: 20%; --rotate: 5deg; --from-rotate: 16deg; --z: 6;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 31%; --rotate: -3deg; --from-rotate: -11deg; --z: 3;">
+          <figure class="catalog-card" style="--x: 33%; --rotate: -3deg; --from-rotate: -14deg; --z: 3;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 44%; --rotate: 7deg; --from-rotate: 16deg; --z: 4;">
+          <figure class="catalog-card" style="--x: 45%; --rotate: 7deg; --from-rotate: 20deg; --z: 8;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 57%; --rotate: -5deg; --from-rotate: -14deg; --z: 5;">
+          <figure class="catalog-card" style="--x: 56%; --rotate: -5deg; --from-rotate: -18deg; --z: 4;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 70%; --rotate: 4deg; --from-rotate: 12deg; --z: 6;">
+          <figure class="catalog-card" style="--x: 68%; --rotate: 4deg; --from-rotate: 15deg; --z: 9;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 83%; --rotate: -6deg; --from-rotate: -15deg; --z: 7;">
+          <figure class="catalog-card" style="--x: 80%; --rotate: -6deg; --from-rotate: -19deg; --z: 5;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
-          <figure class="catalog-card" style="--x: 96%; --rotate: 6deg; --from-rotate: 15deg; --z: 8;">
+          <figure class="catalog-card" style="--x: 92%; --rotate: 6deg; --from-rotate: 18deg; --z: 10;">
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
           </figure>
         </div>
@@ -474,6 +486,15 @@
     <!-- ══════════════════════════════════════════
          SCRIPTS
          ══════════════════════════════════════════ -->
+    <script>
+      (function () {
+        requestAnimationFrame(function () {
+          document.body.classList.remove("page-loading");
+          document.body.classList.add("page-loaded");
+        });
+      })();
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <!-- Hero -->
@@ -566,7 +587,69 @@
             });
           }
 
+          initStickerFavicons();
           initStickerPhysics();
+
+          function initStickerFavicons() {
+            var favicon = document.getElementById("dynamic-favicon") || document.querySelector('link[rel~="icon"]');
+            var stickers = [
+              "assets/stickers/Recurso 21.png",
+              "assets/stickers/Recurso 22.png",
+              "assets/stickers/Recurso 23.png",
+              "assets/stickers/Recurso 24.png",
+              "assets/stickers/Recurso 25.png",
+              "assets/stickers/Recurso 26.png"
+            ];
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+            var images = [];
+            var index = 0;
+            var angle = 0;
+
+            if (!favicon) {
+              favicon = document.createElement("link");
+              favicon.id = "dynamic-favicon";
+              favicon.rel = "icon";
+              favicon.type = "image/png";
+              document.head.appendChild(favicon);
+            }
+            favicon.setAttribute("sizes", "128x128");
+
+            canvas.width = 128;
+            canvas.height = 128;
+
+            function updateFavicon(img) {
+              var size = 118;
+              var center = canvas.width / 2;
+              var wobble = Math.sin(angle) * 0.14;
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              ctx.save();
+              ctx.translate(center, center);
+              ctx.rotate(wobble);
+              ctx.drawImage(img, -size / 2, -size / 2, size, size);
+              ctx.restore();
+              favicon.href = canvas.toDataURL("image/png");
+            }
+
+            function rotateFavicon() {
+              if (!images.length) return;
+              angle += 0.9;
+              updateFavicon(images[index % images.length]);
+              index++;
+            }
+
+            stickers.forEach(function (src) {
+              var img = new Image();
+              img.onload = function () {
+                images.push(img);
+                if (images.length === 1) {
+                  rotateFavicon();
+                  setInterval(rotateFavicon, 650);
+                }
+              };
+              img.src = src;
+            });
+          }
 
           function initStickerPhysics() {
             var hero = document.getElementById("hero");
@@ -579,7 +662,9 @@
             var Body = Matter.Body;
             var Composite = Matter.Composite;
             var Events = Matter.Events;
-            var engine = Engine.create({ gravity: { x: 0, y: 0, scale: 0.001 } });
+            var engine = Engine.create({
+              gravity: { x: 0, y: 0, scale: 0.001 }
+            });
             var runner = Runner.create();
             var ctx = canvas.getContext("2d");
             var stickers = [
@@ -594,8 +679,9 @@
             var bodies = [];
             var walls = [];
             var logoBodies = [];
-            var pointer = { x: -1000, y: -1000, active: false };
-            var visible = false;
+            var pointer = { x: -1000, y: -1000, vx: 0, vy: 0, active: false, lastMove: 0 };
+            var started = false;
+            var lastLogoRebuild = 0;
 
             function resizeCanvas() {
               var rect = hero.getBoundingClientRect();
@@ -607,16 +693,16 @@
               ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
               rebuildWalls(rect.width, rect.height);
               rebuildLogoBodies();
-              placeBodies(rect.width, rect.height);
+              keepBodiesInFrame(rect.width, rect.height);
             }
 
             function rebuildWalls(width, height) {
               if (walls.length) Composite.remove(engine.world, walls);
               walls = [
-                Bodies.rectangle(width / 2, -40, width, 80, { isStatic: true }),
-                Bodies.rectangle(width / 2, height + 40, width, 80, { isStatic: true }),
-                Bodies.rectangle(-40, height / 2, 80, height, { isStatic: true }),
-                Bodies.rectangle(width + 40, height / 2, 80, height, { isStatic: true })
+                Bodies.rectangle(width / 2, -48, width, 96, { isStatic: true, restitution: 0.86 }),
+                Bodies.rectangle(width / 2, height + 48, width, 96, { isStatic: true, restitution: 0.78 }),
+                Bodies.rectangle(-48, height / 2, 96, height, { isStatic: true, restitution: 0.86 }),
+                Bodies.rectangle(width + 48, height / 2, 96, height, { isStatic: true, restitution: 0.86 })
               ];
               Composite.add(engine.world, walls);
             }
@@ -633,27 +719,33 @@
                 var y = rect.top - heroRect.top + rect.height / 2;
                 return Bodies.rectangle(x, y, width, height, {
                   isStatic: true,
-                  restitution: 0.58,
-                  friction: 0.08,
+                  restitution: 0.82,
+                  friction: 0.05,
                   render: { visible: false }
                 });
               });
               if (logoBodies.length) Composite.add(engine.world, logoBodies);
             }
 
-            function placeBodies(width, height) {
+            function keepBodiesInFrame(width, height) {
               bodies.forEach(function (body, index) {
-                if (body.orbit) {
-                  body.orbit.cx = width * body.orbit.nx;
-                  body.orbit.cy = height * body.orbit.ny;
-                  body.orbit.rx = width * body.orbit.nrx;
-                  body.orbit.ry = height * body.orbit.nry;
+                var margin = body.stickerSize;
+                if (body.floatTarget) {
+                  body.floatTarget.cx = width * body.floatTarget.nx;
+                  body.floatTarget.cy = height * body.floatTarget.ny;
+                  body.floatTarget.rx = width * body.floatTarget.nrx;
+                  body.floatTarget.ry = height * body.floatTarget.nry;
                 }
-                if (body.position.x > width || body.position.y > height) {
+                if (body.position.x < -margin || body.position.x > width + margin || body.position.y < -margin || body.position.y > height + margin) {
                   Body.setPosition(body, {
-                    x: width * body.orbit.nx,
-                    y: height * body.orbit.ny
+                    x: body.floatTarget ? body.floatTarget.cx : width * (0.15 + (index % 6) * 0.14),
+                    y: body.floatTarget ? body.floatTarget.cy : height * 0.2
                   });
+                  Body.setVelocity(body, {
+                    x: (Math.random() - 0.5) * 4.8,
+                    y: (Math.random() - 0.5) * 4.2
+                  });
+                  Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.18);
                 }
               });
             }
@@ -665,33 +757,33 @@
                 img.src = src;
                 images[index] = img;
 
-                var size = Math.min(Math.max(rect.width * 0.12, 92), 170);
+                var size = Math.min(Math.max(rect.width * 0.12, 94), 176);
                 var nx = 0.12 + Math.random() * 0.76;
-                var ny = 0.16 + Math.random() * 0.68;
+                var ny = 0.14 + Math.random() * 0.68;
                 var tries = 0;
-                while (nx > 0.18 && nx < 0.82 && ny > 0.34 && ny < 0.70 && tries < 16) {
+                while (nx > 0.18 && nx < 0.82 && ny > 0.33 && ny < 0.70 && tries < 16) {
                   nx = 0.12 + Math.random() * 0.76;
-                  ny = 0.16 + Math.random() * 0.68;
+                  ny = 0.14 + Math.random() * 0.68;
                   tries++;
                 }
-                var nrx = 0.08 + Math.random() * 0.12;
-                var nry = 0.07 + Math.random() * 0.11;
+                var nrx = 0.08 + Math.random() * 0.14;
+                var nry = 0.07 + Math.random() * 0.13;
                 var body = Bodies.circle(
                   rect.width * nx,
                   rect.height * ny,
-                  size * 0.42,
+                  size * 0.4,
                   {
-                    restitution: 0.56,
-                    friction: 0.08,
-                    frictionAir: 0.028,
-                    density: 0.0008,
+                    restitution: 0.86,
+                    friction: 0.035,
+                    frictionAir: 0.018,
+                    density: 0.001,
                     render: { visible: false }
                   }
                 );
                 body.stickerIndex = index;
                 body.stickerSize = size;
-                body.lastHit = 0;
-                body.orbit = {
+                body.lastPointerHit = 0;
+                body.floatTarget = {
                   nx: nx,
                   ny: ny,
                   nrx: nrx,
@@ -700,95 +792,88 @@
                   cy: rect.height * ny,
                   rx: rect.width * nrx,
                   ry: rect.height * nry,
-                  speed: 0.45 + Math.random() * 0.55,
+                  speed: 0.38 + Math.random() * 0.58,
                   phase: Math.random() * Math.PI * 2,
-                  driftSpeed: 0.18 + Math.random() * 0.42,
-                  driftPhase: Math.random() * Math.PI * 2,
-                  driftX: (Math.random() - 0.5) * 0.18,
-                  driftY: (Math.random() - 0.5) * 0.18,
-                  force: 0.00012 + Math.random() * 0.00023
+                  force: 0.000002 + Math.random() * 0.0000018,
+                  wanderSpeed: 0.55 + Math.random() * 0.75,
+                  wanderPhase: Math.random() * Math.PI * 2,
+                  nextImpulse: 0.6 + Math.random() * 1.2
                 };
                 Body.setVelocity(body, {
-                  x: (Math.random() - 0.5) * 5.2,
-                  y: (Math.random() - 0.5) * 5.2
+                  x: (Math.random() - 0.5) * 5.4,
+                  y: (Math.random() - 0.5) * 5.4
                 });
-                Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
+                Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.12);
                 bodies.push(body);
               });
               Composite.add(engine.world, bodies);
             }
 
-            function gentlyFloat() {
+            function nudgeStickers() {
               var time = Date.now() * 0.001;
-              engine.gravity.x = Math.sin(time * 0.37) * 0.055;
-              engine.gravity.y = Math.cos(time * 0.31) * 0.055;
+              engine.gravity.x = Math.sin(time * 0.51) * 0.045;
+              engine.gravity.y = Math.cos(time * 0.47) * 0.045;
+              keepBodiesInFrame(canvas.clientWidth, canvas.clientHeight);
+
+              if (time - lastLogoRebuild > 0.45) {
+                rebuildLogoBodies();
+                lastLogoRebuild = time;
+              }
 
               bodies.forEach(function (body, index) {
-                var orbit = body.orbit;
-                var logoRect = logo.getBoundingClientRect();
-                var heroRect = hero.getBoundingClientRect();
-                var logoCenterX = logoRect.left - heroRect.left + logoRect.width / 2;
-                var logoCenterY = logoRect.top - heroRect.top + logoRect.height / 2;
-                var logoDx = body.position.x - logoCenterX;
-                var logoDy = body.position.y - logoCenterY;
-                var logoRangeX = logoRect.width * 0.62;
-                var logoRangeY = logoRect.height * 0.72;
-                var driftingCenterX = orbit.cx + Math.sin(time * orbit.driftSpeed + orbit.driftPhase) * orbit.rx * 0.55;
-                var driftingCenterY = orbit.cy + Math.cos(time * (orbit.driftSpeed * 0.83) + orbit.driftPhase) * orbit.ry * 0.55;
-                var orbitX = driftingCenterX + Math.cos(time * orbit.speed + orbit.phase) * orbit.rx;
-                var orbitY = driftingCenterY + Math.sin(time * (orbit.speed * 1.23) + orbit.phase) * orbit.ry;
+                var target = body.floatTarget;
+                var orbitX = target.cx + Math.cos(time * target.speed + target.phase) * target.rx;
+                var orbitY = target.cy + Math.sin(time * (target.speed * 1.18) + target.phase) * target.ry;
                 var orbitDx = orbitX - body.position.x;
                 var orbitDy = orbitY - body.position.y;
 
                 Body.applyForce(body, body.position, {
-                  x: (Math.sin(time * (1.2 + orbit.driftSpeed) + orbit.phase) + orbit.driftX) * orbit.force,
-                  y: (Math.cos(time * (1.05 + orbit.driftSpeed) + orbit.driftPhase) + orbit.driftY) * orbit.force
-                });
-                Body.applyForce(body, body.position, {
-                  x: orbitDx * 0.00000125,
-                  y: orbitDy * 0.00000125
+                  x: orbitDx * target.force + Math.sin(time * target.wanderSpeed + target.wanderPhase) * 0.00032,
+                  y: orbitDy * target.force + Math.cos(time * (target.wanderSpeed * 1.17) + index) * 0.00032
                 });
 
-                if (Math.abs(logoDx) < logoRangeX && Math.abs(logoDy) < logoRangeY) {
-                  var escapeDistance = Math.max(Math.sqrt(logoDx * logoDx + logoDy * logoDy), 1);
+                if (time > target.nextImpulse) {
                   Body.applyForce(body, body.position, {
-                    x: (logoDx / escapeDistance) * 0.0022,
-                    y: (logoDy / escapeDistance) * 0.0022
+                    x: (Math.random() - 0.5) * 0.007,
+                    y: (Math.random() - 0.5) * 0.007
                   });
+                  Body.setAngularVelocity(body, body.angularVelocity + (Math.random() - 0.5) * 0.07);
+                  target.nextImpulse = time + 0.9 + Math.random() * 1.8;
                 }
 
                 if (pointer.active) {
                   var dx = body.position.x - pointer.x;
                   var dy = body.position.y - pointer.y;
                   var distanceSq = dx * dx + dy * dy;
-                  var radius = 280;
+                  var radius = 210;
                   if (distanceSq < radius * radius && distanceSq > 1) {
                     var distance = Math.sqrt(distanceSq);
-                    var strength = (1 - distance / radius) * 0.0042;
-                    var swirl = strength * 0.42;
+                    var strength = (1 - distance / radius) * 0.00135;
                     Body.applyForce(body, body.position, {
-                      x: (dx / distance) * strength + (-dy / distance) * swirl,
-                      y: (dy / distance) * strength + (dx / distance) * swirl
+                      x: (dx / distance) * strength,
+                      y: (dy / distance) * strength
                     });
-                    Body.setAngularVelocity(body, body.angularVelocity + (dx > 0 ? 0.0035 : -0.0035));
 
-                    if (distance < body.stickerSize * 0.52 && time - body.lastHit > 0.45) {
-                      var hitStrength = 0.045;
+                    if (distance < body.stickerSize * 0.62 && time - body.lastPointerHit > 0.18) {
+                      var pointerSpeed = Math.sqrt(pointer.vx * pointer.vx + pointer.vy * pointer.vy);
+                      var hitPower = Math.min(Math.max(pointerSpeed / 22, 0.004), 0.018);
+                      var hitX = pointerSpeed > 0.5 ? pointer.vx / pointerSpeed : -dx / distance;
+                      var hitY = pointerSpeed > 0.5 ? pointer.vy / pointerSpeed : -dy / distance;
                       Body.applyForce(body, body.position, {
-                        x: (dx / distance) * hitStrength,
-                        y: (dy / distance) * hitStrength
+                        x: hitX * hitPower + (dx / distance) * 0.006,
+                        y: hitY * hitPower + (dy / distance) * 0.006
                       });
-                      Body.setAngularVelocity(body, body.angularVelocity + (dx > 0 ? 0.08 : -0.08));
-                      body.lastHit = time;
+                      Body.setAngularVelocity(body, body.angularVelocity * 0.45 + (hitX * dy - hitY * dx) * 0.00028);
+                      body.lastPointerHit = time;
                     }
                   }
                 }
 
                 var speed = Math.sqrt(body.velocity.x * body.velocity.x + body.velocity.y * body.velocity.y);
-                if (speed > 9) {
+                if (speed > 8.5) {
                   Body.setVelocity(body, {
-                    x: body.velocity.x * 0.94,
-                    y: body.velocity.y * 0.94
+                    x: body.velocity.x * 0.9,
+                    y: body.velocity.y * 0.9
                   });
                 }
               });
@@ -797,44 +882,44 @@
             function drawStickers() {
               var rect = hero.getBoundingClientRect();
               ctx.clearRect(0, 0, rect.width, rect.height);
-              if (!visible) return;
               bodies.forEach(function (body) {
                 var img = images[body.stickerIndex];
                 if (!img || !img.complete) return;
                 ctx.save();
                 ctx.translate(body.position.x, body.position.y);
                 ctx.rotate(body.angle);
-                ctx.globalAlpha = 0.82;
+                ctx.globalAlpha = 0.9;
                 ctx.drawImage(img, -body.stickerSize / 2, -body.stickerSize / 2, body.stickerSize, body.stickerSize);
                 ctx.restore();
               });
             }
 
-            function showStickers() {
-              var wasVisible = visible;
-              visible = true;
+            function kickStickers() {
               rebuildLogoBodies();
-              hero.classList.add("stickers-visible");
-              if (wasVisible) return;
               bodies.forEach(function (body, index) {
                 Body.applyForce(body, body.position, {
-                  x: Math.sin(index * 1.9 + Date.now() * 0.001) * 0.006,
-                  y: Math.cos(index * 1.4 + Date.now() * 0.001) * 0.006
+                  x: Math.sin(Date.now() * 0.001 + index * 1.8) * 0.004,
+                  y: -0.002 - Math.random() * 0.002
                 });
+                Body.setAngularVelocity(body, body.angularVelocity + (Math.random() - 0.5) * 0.08);
               });
-            }
-
-            function hideStickers() {
-              visible = true;
-              hero.classList.add("stickers-visible");
             }
 
             createStickers();
             resizeCanvas();
             Runner.run(runner, engine);
-            showStickers();
+            started = true;
 
-            Events.on(engine, "beforeUpdate", gentlyFloat);
+            Events.on(engine, "beforeUpdate", nudgeStickers);
+            Events.on(engine, "collisionStart", function (event) {
+              event.pairs.forEach(function (pair) {
+                [pair.bodyA, pair.bodyB].forEach(function (body) {
+                  if (typeof body.stickerIndex !== "number") return;
+                  Body.setAngularVelocity(body, body.angularVelocity + (Math.random() - 0.5) * 0.12);
+                });
+              });
+            });
+
             (function renderStickers() {
               requestAnimationFrame(renderStickers);
               drawStickers();
@@ -842,18 +927,29 @@
 
             hero.addEventListener("pointermove", function (event) {
               var rect = hero.getBoundingClientRect();
-              pointer.x = event.clientX - rect.left;
-              pointer.y = event.clientY - rect.top;
+              var now = performance.now();
+              var nextX = event.clientX - rect.left;
+              var nextY = event.clientY - rect.top;
+              var elapsed = Math.max(now - pointer.lastMove, 16);
+              pointer.vx = (nextX - pointer.x) / elapsed * 16;
+              pointer.vy = (nextY - pointer.y) / elapsed * 16;
+              pointer.x = nextX;
+              pointer.y = nextY;
               pointer.active = true;
-              showStickers();
+              pointer.lastMove = now;
             });
             hero.addEventListener("pointerleave", function () {
               pointer.active = false;
+              pointer.vx = 0;
+              pointer.vy = 0;
             });
-            hero.addEventListener("pointerenter", showStickers);
-            logo.addEventListener("pointerenter", showStickers);
-            logo.addEventListener("focusin", showStickers);
+            hero.addEventListener("pointerenter", kickStickers);
+            logo.addEventListener("pointerenter", kickStickers);
+            logo.addEventListener("focusin", kickStickers);
             window.addEventListener("resize", resizeCanvas);
+            setTimeout(function () {
+              if (started) kickStickers();
+            }, 900);
           }
         });
       })();
@@ -866,6 +962,8 @@
           var section = document.getElementById("catalog-scroll");
           var cards = Array.prototype.slice.call(document.querySelectorAll(".catalog-card"));
           var ticking = false;
+          var hoveredCardIndex = -1;
+          var catalogReady = false;
           var verticalImages = [
             "assets/catalogo/A4_dogs.png",
             "assets/catalogo/A4-digitaldoggies.png",
@@ -912,20 +1010,76 @@
 
           function updateCatalog() {
             var rect = section.getBoundingClientRect();
-            var travel = section.offsetHeight - window.innerHeight;
-            var progress = travel > 0 ? clamp(-rect.top / travel, 0, 1) : 1;
+            var startOffset = window.innerHeight * 0.78;
+            var travel = section.offsetHeight + window.innerHeight * 0.12;
+            var progress = travel > 0 ? clamp((startOffset - rect.top) / travel, 0, 1) : 1;
             var isMobile = window.matchMedia("(max-width: 720px)").matches;
+            var layerOrder = [0, 2, 4, 6, 1, 3, 5, 7];
+            var finalStart = (cards.length - 1) * (isMobile ? 0.026 : 0.032);
+            var finalDuration = isMobile ? 0.34 : 0.38;
+            catalogReady = progress >= finalStart + finalDuration * 0.92;
+            section.classList.toggle("catalog-ready", catalogReady);
 
             cards.forEach(function (card, index) {
-              var start = isMobile ? (index < 4 ? 0 : 0.38) : index / (cards.length + 1);
-              if (progress >= start) {
-                card.classList.add("visible");
-              } else {
-                card.classList.remove("visible");
+              var styles = window.getComputedStyle(card);
+              var fromRotate = parseFloat(styles.getPropertyValue("--from-rotate")) || 0;
+              var toRotate = parseFloat(styles.getPropertyValue("--rotate")) || 0;
+              var stageIndex = layerOrder.indexOf(index);
+              var start = isMobile ? stageIndex * 0.026 : stageIndex * 0.032;
+              var duration = isMobile ? 0.34 : 0.38;
+              var raw = clamp((progress - start) / duration, 0, 1);
+              var local = easeOutBack(raw);
+              var settle = smoothstep(raw);
+              var slap = Math.sin(raw * Math.PI) * (1 - raw);
+              var collageX = isMobile
+                ? [-34, -12, 10, 32, -28, -2, 24, 42]
+                : [-52, -26, -6, 26, -36, 6, 34, 58];
+              var collageY = isMobile
+                ? [-24, 20, -16, 24, 24, -26, 30, -18]
+                : [-42, 24, -24, 36, 30, -46, 36, -30];
+              var collageZ = [2, 7, 3, 9, 4, 10, 5, 11];
+              var collageScale = [0.9, 1, 0.92, 1.02, 0.9, 1.03, 0.93, 1.04];
+              var drift = Math.sin(progress * Math.PI * 2.4 + index * 0.9) * 4 * settle;
+              var y = lerp(isMobile ? 122 : 170, collageY[index] + drift, settle) - slap * 26;
+              var x = lerp(slap * (index % 2 ? -10 : 10), collageX[index] + Math.sin(progress * Math.PI * 1.7 + index) * 5, settle);
+              var rotate = lerp(fromRotate, toRotate, local) + slap * (index % 2 ? -6 : 6);
+              var scale = lerp(1.08, collageScale[index], settle) + slap * 0.035;
+              var opacity = clamp(raw * 2.8, 0, 1);
+              var shadowY = lerp(4, 10, settle);
+              var shadowBlur = lerp(4, 8, settle);
+              var shadowAlpha = lerp(0.08, 0.16, settle);
+              var isHovered = catalogReady && hoveredCardIndex === index;
+
+              if (isHovered) {
+                y -= isMobile ? 18 : 24;
+                scale += isMobile ? 0.07 : 0.085;
+                rotate += index % 2 ? -1.6 : 1.6;
+                shadowY += 7;
+                shadowBlur += 9;
+                shadowAlpha = 0.2;
               }
+
+              card.style.opacity = opacity.toFixed(3);
+              card.style.zIndex = String(isHovered ? 40 : collageZ[index] + (raw > 0 && raw < 0.78 ? stageIndex + 2 : 0));
+              card.style.transform = "translate(calc(-50% + " + x.toFixed(2) + "px), calc(-50% + " + y.toFixed(2) + "px)) rotate(" + rotate.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
+              card.style.filter = "drop-shadow(0 " + shadowY.toFixed(2) + "px " + shadowBlur.toFixed(2) + "px rgba(25, 22, 20, " + shadowAlpha.toFixed(3) + "))";
             });
 
             ticking = false;
+          }
+
+          function lerp(from, to, amount) {
+            return from + (to - from) * amount;
+          }
+
+          function smoothstep(value) {
+            return value * value * (3 - 2 * value);
+          }
+
+          function easeOutBack(value) {
+            var c1 = 1.35;
+            var c3 = c1 + 1;
+            return 1 + c3 * Math.pow(value - 1, 3) + c1 * Math.pow(value - 1, 2);
           }
 
           function requestUpdate() {
@@ -936,6 +1090,18 @@
           }
 
           fillCatalogImages();
+          cards.forEach(function (card, index) {
+            card.addEventListener("pointerenter", function () {
+              hoveredCardIndex = index;
+              requestUpdate();
+            });
+            card.addEventListener("pointerleave", function () {
+              if (hoveredCardIndex === index) {
+                hoveredCardIndex = -1;
+                requestUpdate();
+              }
+            });
+          });
           updateCatalog();
           window.addEventListener("scroll", requestUpdate, { passive: true });
           window.addEventListener("resize", requestUpdate);

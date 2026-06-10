@@ -22,241 +22,386 @@
         position: relative;
         width: 100%;
         height: 100vh;
-        background: #ef0d45;
+        background: #ecebe6;
         overflow: hidden;
+        display: grid;
+        place-items: center;
+        padding: clamp(24px, 5vw, 80px);
       }
 
-      #hero-canvas {
+      #sticker-canvas {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        display: none;
-        touch-action: pan-y;
-      }
-
-      #hero-text-container {
-        position: absolute;
-        inset: 0;
+        z-index: 0;
+        opacity: 0.78;
         pointer-events: none;
+        transition: opacity 520ms ease;
       }
 
-      #hero-line-1,
-      #hero-line-2 {
-        position: absolute;
+      .hero-logo {
+        --hero-logo-y: 0px;
+        --hero-logo-x: -1.5vw;
         font-family: "liebling", sans-serif;
         font-weight: 700;
-        font-size: clamp(200px, 22vw, 950px);
-        color: #ffffff;
-        white-space: nowrap;
-        line-height: 0.95;
-      }
-
-      #hero-line-1 { top: 8%; left: -2%; transform: rotate(-12deg); }
-      #hero-line-2 { bottom: 10%; left: 8%; transform: rotate(-4deg); }
-
-      #bio-text {
-        position: absolute;
-        top: 30px; left: 40px; right: 40px;
-        font-family: "liebling", sans-serif;
-        font-weight: 500;
-        font-size: 28px;
-        line-height: 1.15;
-        color: #ffbcf2;
-        pointer-events: none;
-        z-index: 5;
-      }
-      #bio-text a { pointer-events: all; }
-
-      #slideshow {
-        position: absolute;
-        top: 48%; left: 49%;
-        transform: translate(-50%, -50%);
-        z-index: 4;
-        pointer-events: none;
-        display: none;
-        opacity: 0;
-      }
-      #slideshow.visible { display: block; }
-      #slideshow.fadein { transition: opacity 1s ease; opacity: 1; }
-      #slideshow img {
-        max-height: 55vh;
-        max-width: 55vw;
-        object-fit: contain;
-        display: block;
-        mix-blend-mode: overlay;
-      }
-
-      /* ══════════════════════════════════════════
-         DOG BUILDER
-         ══════════════════════════════════════════ */
-
-      #dog-builder {
+        font-size: clamp(92px, 18vw, 310px);
+        line-height: 0.78;
+        color: #363636;
+        text-align: center;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        width: min-content;
+        max-width: 100%;
+        transform: translate(var(--hero-logo-x), var(--hero-logo-y));
+        transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
+        z-index: 2;
+      }
+
+      .hero-logo-line {
+        display: block;
+        white-space: nowrap;
+      }
+
+      .hero-logo-reg {
+        display: inline-block;
+        font-size: 0.42em;
+        line-height: 0;
+        transform: translateY(-0.72em);
+      }
+
+      .hero-info {
+        position: absolute;
+        top: clamp(18px, 3vw, 42px);
+        right: clamp(18px, 3vw, 42px);
+        z-index: 6;
+      }
+
+      .hero-info-star {
+        appearance: none;
+        border: 2px solid #363636;
+        border-radius: 999px;
+        background: #ecebe6;
+        color: #363636;
+        font-family: "liebling", sans-serif;
+        font-weight: 700;
+        font-size: clamp(17px, 1.8vw, 26px);
+        line-height: 1;
+        padding: 10px 16px 12px;
+        cursor: pointer;
+        box-shadow: 0 10px 22px rgba(45, 38, 42, 0.08);
+        transition:
+          background 220ms ease,
+          border-color 220ms ease,
+          color 220ms ease,
+          transform 220ms ease;
+      }
+
+      .hero-info:hover .hero-info-star,
+      .hero-info.bio-open .hero-info-star {
         background: #ffffff;
-        overflow: hidden;
+        border-color: #ff9418;
+        color: #ff9418;
+        transform: rotate(-2deg) scale(1.04);
       }
 
-      .builder-header {
-        text-align: center;
-        padding: 12px 0 8px;
-        font-size: 13px;
+      .hero-info.bio-open ~ .hero-logo {
+        transform: translate(var(--hero-logo-x), calc(var(--hero-logo-y) + clamp(70px, 12vh, 130px))) rotate(-2deg);
+      }
+
+      .hero-bio-blob {
+        position: absolute;
+        top: calc(100% + 14px);
+        right: 0;
+        width: min(620px, calc(100vw - 36px));
+        padding: 42px 52px 48px 66px;
+        background: transparent;
+        color: #2f2f2f;
+        font-family: "liebling", sans-serif;
         font-weight: 500;
-        color: #bbb;
-        flex-shrink: 0;
-        letter-spacing: 0.02em;
+        font-size: clamp(17px, 2vw, 28px);
+        line-height: 1.02;
+        opacity: 0;
+        transform: translateY(-8px) rotate(-4deg) scale(0.92);
+        transform-origin: 90% 0;
         pointer-events: none;
-        user-select: none;
+        transition:
+          opacity 240ms ease,
+          transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
       }
 
-      /* Wrapper gives the visual white bg; the canvas pixel data stays transparent */
-      .canvas-bg {
-        flex: 1;
-        background: #fff;
-        position: relative;
-        overflow: hidden;
-      }
-
-      #dog-canvas {
-        display: block;
+      .hero-bio-blob::before {
+        content: "";
         position: absolute;
         inset: 0;
-        width: 100%;
-        height: 100%;
-        cursor: crosshair;
-        touch-action: none;
-        background: transparent;
-      }
-      #dog-canvas.erasing { cursor: cell; }
-
-      /* ── Bottom toolbar ── */
-      .toolbar {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 16px;
-        background: #fff;
-        border-top: 1px solid #f0f0f0;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-      .toolbar-sep {
-        width: 1px; height: 28px;
-        background: #eee; flex-shrink: 0;
+        z-index: -1;
+        border-radius: 22px;
+        background: #ffbcf2;
+        clip-path: polygon(4% 15%, 18% 7%, 52% 4%, 82% 8%, 98% 19%, 95% 47%, 99% 72%, 82% 91%, 52% 96%, 16% 90%, 3% 70%, 6% 38%);
+        filter: drop-shadow(0 22px 28px rgba(45, 38, 42, 0.16));
       }
 
-      .color-swatch {
-        width: 28px; height: 28px;
-        border-radius: 50%;
-        border: 2px solid transparent;
-        cursor: pointer; flex-shrink: 0;
-        transition: transform 0.1s; outline: none;
-      }
-      .color-swatch:hover  { transform: scale(1.18); }
-      .color-swatch.active {
-        border-color: #1a1a1a; transform: scale(1.12);
-        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a1a1a;
+      .hero-info.bio-open .hero-bio-blob {
+        opacity: 1;
+        transform: translateY(0) rotate(-4deg) scale(1);
+        pointer-events: auto;
       }
 
-      .toolbar input[type=range] {
-        width: 80px; flex-shrink: 0;
-        accent-color: #1a1a1a; cursor: pointer;
+      .hero-bio-blob a {
+        color: inherit;
+        font-weight: 700;
+        text-decoration: underline;
       }
 
-      .tool-btn {
-        font-family: "liebling", sans-serif;
-        font-weight: 700; font-size: 12px;
-        background: none; border: 2px solid #e0e0e0;
-        border-radius: 6px; padding: 6px 12px;
-        cursor: pointer; white-space: nowrap;
-        flex-shrink: 0; color: #555;
-        transition: background 0.1s, color 0.1s, border-color 0.1s;
+      .hover-letter {
+        display: inline-block;
+        transition: color 160ms ease, transform 160ms ease;
       }
-      .tool-btn:hover,
-      .tool-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-      .tool-btn.danger:hover { background: #ef0d45; border-color: #ef0d45; color: #fff; }
 
-      /* ── Publish bar ── */
-      .publish-bar {
-        flex-shrink: 0;
-        display: flex; align-items: center; gap: 10px;
-        padding: 10px 16px;
-        border-top: 1px solid #f0f0f0;
-        background: #fff;
+      .hero-logo .hover-letter {
+        margin: -0.04em -0.025em;
+        padding: 0.04em 0.025em;
       }
-      .publish-bar input {
-        flex: 1; min-width: 0;
-        font-family: "liebling", sans-serif;
-        font-weight: 500; font-size: 15px;
-        border: none; border-bottom: 2px solid #e0e0e0;
-        padding: 5px 4px; outline: none;
-        background: transparent; color: #1a1a1a;
-        transition: border-color 0.15s;
+
+      .hover-letter:hover {
+        color: var(--hover-color, #ff9418);
+        transform: translateY(-0.04em) rotate(-3deg);
       }
-      .publish-bar input:focus { border-color: #1a1a1a; }
-      .publish-bar input::placeholder { color: #ccc; }
-      .publish-btn {
-        font-family: "liebling", sans-serif;
-        font-weight: 700; font-size: 14px;
-        background: #ef0d45; color: #fff;
-        border: none; border-radius: 8px;
-        padding: 10px 20px; cursor: pointer;
-        white-space: nowrap; flex-shrink: 0;
-        transition: background 0.15s;
+
+      @media (max-width: 720px) {
+        #hero {
+          height: 58svh;
+          min-height: 430px;
+          padding: 18px;
+          place-items: center;
+        }
+
+        .hero-logo {
+          --hero-logo-y: 0;
+          --hero-logo-x: -2vw;
+          font-size: clamp(76px, 24vw, 150px);
+        }
+
+        .hero-info {
+          top: 16px;
+          right: 18px;
+        }
+
+        .hero-bio-blob {
+          width: min(420px, calc(100vw - 28px));
+          padding: 34px 34px 38px 46px;
+          font-size: clamp(17px, 5vw, 24px);
+          line-height: 1.02;
+        }
+
+        .hero-info.bio-open ~ .hero-logo {
+          transform: translate(var(--hero-logo-x), calc(var(--hero-logo-y) + 92px)) rotate(-2deg);
+        }
       }
-      .publish-btn:hover { background: #c40a38; }
 
       /* ══════════════════════════════════════════
-         PARK — perritos flotantes
+         CATALOG
          ══════════════════════════════════════════ */
 
-      #park {
+      #catalog-scroll {
         position: relative;
-        height: 100vh;
-        overflow: hidden;
-        /* fondo provisional — reemplazable con imagen */
-        background: #f2ede8;
+        height: 118vh;
+        background: #ecebe6;
+        overflow: clip;
       }
 
-      #park-empty {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 16px;
-        font-weight: 500;
-        color: #ccc;
-        text-align: center;
-        pointer-events: none;
-      }
-
-      .park-dog {
-        position: absolute;
+      .catalog-stage {
+        position: sticky;
+        top: 0;
+        height: 82vh;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        pointer-events: none;
-        will-change: transform;
-        /* smooth drift */
+        justify-content: center;
+        overflow: hidden;
       }
-      .park-dog img {
+
+      .catalog-stack {
+        position: relative;
+        width: min(1440px, 112vw);
+        height: min(54vh, 580px);
+      }
+
+      .catalog-card {
+        position: absolute;
+        top: 50%;
+        left: var(--x);
+        width: clamp(160px, 20vw, 330px);
+        aspect-ratio: 0.707 / 1;
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + 88px)) rotate(var(--from-rotate)) scale(0.92);
+        transition:
+          opacity 620ms ease,
+          transform 860ms cubic-bezier(0.16, 1, 0.3, 1),
+          filter 860ms ease;
+        z-index: var(--z);
+        filter: drop-shadow(0 22px 26px rgba(25, 22, 20, 0.16));
+        will-change: transform, opacity;
+      }
+
+      .catalog-card.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--rotate)) scale(1);
+      }
+
+      .catalog-card img {
         display: block;
-        max-width: 160px;
-        max-height: 160px;
-        width: auto;
-        height: auto;
-        background: transparent;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #ffffff;
       }
-      .park-dog .dog-name {
-        font-family: "liebling", sans-serif;
-        font-weight: 700;
-        font-size: 13px;
-        color: #1a1a1a;
-        margin-top: 4px;
+
+      @media (max-width: 720px) {
+        #catalog-scroll { height: 112vh; }
+        .catalog-stage {
+          height: 70vh;
+          align-items: flex-start;
+        }
+        .catalog-stack {
+          width: 112vw;
+          height: 62vh;
+          margin-top: 2vh;
+        }
+        .catalog-card {
+          top: var(--mobile-y);
+          left: var(--mobile-x);
+          width: clamp(172px, 52vw, 250px);
+        }
+
+        .catalog-card:nth-child(1) { --mobile-x: 18%; --mobile-y: 34%; }
+        .catalog-card:nth-child(2) { --mobile-x: 42%; --mobile-y: 32%; }
+        .catalog-card:nth-child(3) { --mobile-x: 66%; --mobile-y: 35%; }
+        .catalog-card:nth-child(4) { --mobile-x: 90%; --mobile-y: 33%; }
+        .catalog-card:nth-child(5) { --mobile-x: 16%; --mobile-y: 66%; }
+        .catalog-card:nth-child(6) { --mobile-x: 40%; --mobile-y: 68%; }
+        .catalog-card:nth-child(7) { --mobile-x: 65%; --mobile-y: 65%; }
+        .catalog-card:nth-child(8) { --mobile-x: 89%; --mobile-y: 67%; }
+      }
+
+      /* ══════════════════════════════════════════
+         TYPE POSTER
+         ══════════════════════════════════════════ */
+
+      #type-poster {
+        min-height: 68vh;
+        background: #ecebe6;
+        color: #363636;
+        display: flex;
+        align-items: flex-start;
+        overflow: hidden;
+        padding: clamp(4px, 1.2vw, 18px) clamp(24px, 5vw, 82px) clamp(48px, 6vw, 92px);
+      }
+
+      .type-poster-inner {
+        width: 100%;
+        max-width: 1480px;
+        margin: 0 auto;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .type-line {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        font-size: clamp(46px, 7vw, 126px);
+        line-height: 0.98;
         white-space: nowrap;
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          color 260ms ease,
+          opacity 420ms ease,
+          transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      #type-poster.poster-visible .type-line {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .type-line:nth-child(1) { margin-left: 0; transition-delay: 0ms; }
+      .type-line:nth-child(2) { margin-left: min(18vw, 260px); transition-delay: 120ms; }
+      .type-line:nth-child(3) { margin-left: auto; transition-delay: 240ms; }
+      .type-line:nth-child(4) { margin-left: min(24vw, 340px); transition-delay: 360ms; }
+
+      .type-line:nth-child(1) { color: #ff9418; }
+      .type-line:nth-child(2) { color: #0d73c8; }
+      .type-line:nth-child(3) { color: #099947; }
+      .type-line:nth-child(4) { color: #f193c9; }
+
+      #type-poster:hover .type-line { transition-delay: 0ms; }
+
+      .type-glyph {
+        display: inline-block;
+        font-weight: 500;
+        transform: translateY(0.02em);
+      }
+
+      @media (max-width: 720px) {
+        #type-poster {
+          min-height: 36vh;
+          padding: 0 18px 12px;
+        }
+
+        .type-line {
+          width: 100%;
+          font-size: clamp(34px, 11vw, 62px);
+          line-height: 1.02;
+          text-align: center;
+        }
+
+        .type-line:nth-child(1) { margin-left: 0; }
+        .type-line:nth-child(2) { margin-left: 0; }
+        .type-line:nth-child(3) { margin-left: 0; }
+        .type-line:nth-child(4) { margin-left: 0; }
+      }
+
+      /* ══════════════════════════════════════════
+         FOOTER
+         ══════════════════════════════════════════ */
+
+      #site-footer {
+        background: #f7f1f8;
+        padding: 28px 24px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #site-footer.footer-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      #site-footer p {
+        margin: 0 auto;
+        max-width: 720px;
+        font-family: "liebling", sans-serif;
+        font-size: 14px;
+        color: #5d4c63;
+      }
+      #site-footer .copyright-mark {
+        display: inline-block;
+        margin: 0 5px;
+        opacity: 0;
+        transform: translateY(8px) rotate(-12deg) scale(0.4);
+      }
+      #site-footer.footer-visible .copyright-mark {
+        animation: copyright-pop 700ms cubic-bezier(0.2, 1.35, 0.35, 1) 180ms forwards;
+      }
+
+      @keyframes copyright-pop {
+        0% { opacity: 0; transform: translateY(8px) rotate(-12deg) scale(0.4); }
+        70% { opacity: 1; transform: translateY(-2px) rotate(8deg) scale(1.16); }
+        100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
       }
     </style>
   </head>
@@ -267,50 +412,64 @@
          HERO
          ══════════════════════════════════════════ -->
     <section id="hero">
-      <canvas id="hero-canvas"></canvas>
-      <div id="bio-text"></div>
-      <div id="slideshow"><img src="" alt="Rafita Studio" /></div>
-      <div id="hero-text-container">
-        <div id="hero-line-1"></div>
-        <div id="hero-line-2"></div>
+      <canvas id="sticker-canvas"></canvas>
+      <div class="hero-info">
+        <button class="hero-info-star" type="button" aria-label="Ver bio">about us :)</button>
+        <p class="hero-bio-blob">
+          hola! somos dani y mateo, diseñadores e ilustradores. Amamos a los perritos con nuestra alma!
+          <a href="https://instagram.com/rafita.studio" target="_blank">Rafita Studio</a>
+          es el lugar donde expresamos ese amor mediante dibujitos y muchas otras cosas &lt;3
+        </p>
+      </div>
+      <div class="hero-logo" aria-label="Rafita Studio">
+        <span class="hero-logo-line" data-hero-scramble="RAFITA"></span>
+        <span class="hero-logo-line" data-hero-scramble="STUDIO®"></span>
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════
-         DOG BUILDER
-         ══════════════════════════════════════════ -->
-    <section id="dog-builder">
-
-      <p class="builder-header">dibuja tu perrito :)</p>
-
-      <div class="canvas-bg">
-        <canvas id="dog-canvas"></canvas>
+    <section id="catalog-scroll" aria-label="Ilustraciones del catalogo">
+      <div class="catalog-stage">
+        <div class="catalog-stack">
+          <figure class="catalog-card" style="--x: 6%; --rotate: -7deg; --from-rotate: -15deg; --z: 1;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 18%; --rotate: 5deg; --from-rotate: 13deg; --z: 2;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 31%; --rotate: -3deg; --from-rotate: -11deg; --z: 3;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 44%; --rotate: 7deg; --from-rotate: 16deg; --z: 4;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 57%; --rotate: -5deg; --from-rotate: -14deg; --z: 5;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 70%; --rotate: 4deg; --from-rotate: 12deg; --z: 6;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 83%; --rotate: -6deg; --from-rotate: -15deg; --z: 7;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+          <figure class="catalog-card" style="--x: 96%; --rotate: 6deg; --from-rotate: 15deg; --z: 8;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Ilustracion Rafita Studio" loading="lazy" />
+          </figure>
+        </div>
       </div>
-
-      <!-- Toolbar: colors + size + tools -->
-      <div class="toolbar" id="toolbar">
-        <div id="colors-row"></div>
-        <div class="toolbar-sep"></div>
-        <input type="range" id="size-slider" min="2" max="40" value="8" />
-        <div class="toolbar-sep"></div>
-        <button class="tool-btn active" id="tool-draw">pincel</button>
-        <button class="tool-btn" id="tool-erase">borrar</button>
-        <button class="tool-btn danger" id="tool-clear">limpiar</button>
-      </div>
-
-      <div class="publish-bar">
-        <input type="text" id="dog-name" placeholder="tu nombre..." maxlength="30" autocomplete="off" />
-        <button class="publish-btn" id="publish-btn">publicar</button>
-      </div>
-
     </section>
 
-    <!-- ══════════════════════════════════════════
-         PARK — perritos flotantes
-         ══════════════════════════════════════════ -->
-    <section id="park">
-      <p id="park-empty">todavía no hay perritos,<br>¡sé el primero!</p>
+    <section id="type-poster" aria-label="Servicios Rafita Studio">
+      <div class="type-poster-inner">
+        <span class="type-line" data-scramble="DISEÑAMOS ☻"></span>
+        <span class="type-line" data-scramble="ILUSTRAMOS ✱"></span>
+        <span class="type-line" data-scramble="Y AMAMOS A"></span>
+        <span class="type-line" data-scramble="LOS PERRITOS &lt;3"></span>
+      </div>
     </section>
+
+    <footer id="site-footer">
+      <p>rafita studio <span class="copyright-mark" aria-label="copyright">&copy;</span> 2026 hecho con amor, sobretodo amor a los perritos <3</p>
+    </footer>
 
     <!-- ══════════════════════════════════════════
          SCRIPTS
@@ -320,422 +479,622 @@
     <!-- Hero -->
     <script>
       (function () {
-        function typewrite(el, text, delay) {
-          return new Promise(function (resolve) {
-            var i = 0;
-            function next() {
-              if (i < text.length) {
-                var char = text[i++];
-                if (char === "®") {
-                  el.innerHTML += '<span style="font-size:0.45em;vertical-align:super;line-height:0">®</span>';
-                } else if (char === "\n") {
-                  el.appendChild(document.createElement("br"));
-                } else {
-                  el.appendChild(document.createTextNode(char));
-                }
-                setTimeout(next, delay);
-              } else { resolve(); }
-            }
-            next();
-          });
-        }
-
-        function wait(ms) {
-          return new Promise(function (r) { setTimeout(r, ms); });
-        }
-
         document.addEventListener("DOMContentLoaded", function () {
-          var line1 = document.getElementById("hero-line-1");
-          var line2 = document.getElementById("hero-line-2");
-          var canvas = document.getElementById("hero-canvas");
-          var textContainer = document.getElementById("hero-text-container");
-          var bioText = document.getElementById("bio-text");
+          var lines = Array.prototype.slice.call(document.querySelectorAll("[data-hero-scramble]"));
+          var logo = document.querySelector(".hero-logo");
+          var heroInfo = document.querySelector(".hero-info");
+          var heroInfoButton = document.querySelector(".hero-info-star");
+          var glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*+/#@!?%&<>☻✱";
+          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
 
-          var p1 = typewrite(line1, "RAFITA", 50);
-          var p2 = wait(120).then(function () { return typewrite(line2, "STUDIO®", 50); });
-          Promise.all([p1, p2]).then(function () {
-            startPhysics(line1, line2, canvas, textContainer);
-            setTimeout(function () {
-              var link = document.createElement("a");
-              link.href = "https://instagram.com/rafita.studio";
-              link.target = "_blank";
-              link.style.cssText = "font-weight:700;color:inherit;text-decoration:underline;";
-              typewrite(bioText, "hola! somos dani y mateo, diseñadores e ilustradores. Amamos a los perritos con nuestra alma!\n", 28)
-                .then(function () { bioText.appendChild(link); return typewrite(link, "Rafita Studio", 28); })
-                .then(function () { return typewrite(bioText, " es el lugar donde expresamos ese amor mediante dibujitos y muchas otras cosas <3", 28); });
-            }, 400);
-          });
-        });
-
-        function startPhysics(line1, line2, canvas, textContainer) {
-          var letterData = [];
-
-          function measureLine(lineEl, angleDeg) {
-            var angleRad = (angleDeg * Math.PI) / 180;
-            var text = lineEl.textContent;
-            lineEl.textContent = "";
-            text.split("").forEach(function (char) {
-              var span = document.createElement("span");
-              span.textContent = char;
-              span.style.display = "inline-block";
-              lineEl.appendChild(span);
-            });
-            lineEl.querySelectorAll("span").forEach(function (span) {
-              var rect = span.getBoundingClientRect();
-              letterData.push({ char: span.textContent, x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, width: rect.width, height: rect.height, angle: angleRad });
-            });
+          function pickColor() {
+            return palette[Math.floor(Math.random() * palette.length)];
           }
 
-          measureLine(line1, -12);
-          measureLine(line2, -4);
-          textContainer.style.visibility = "hidden";
-          canvas.style.display = "block";
+          function randomizeText(text) {
+            var output = "";
+            for (var i = 0; i < text.length; i++) {
+              output += text[i] === " " ? " " : glyphs[Math.floor(Math.random() * glyphs.length)];
+            }
+            return output;
+          }
 
-          var Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner;
-          var Bodies = Matter.Bodies, Composite = Matter.Composite, Events = Matter.Events;
+          function renderLogoText(line, text) {
+            line.textContent = "";
+            for (var i = 0; i < text.length; i++) {
+              if (text[i] === "®") {
+                var reg = document.createElement("span");
+                reg.className = "hero-logo-reg hover-letter";
+                reg.style.setProperty("--hover-color", pickColor());
+                reg.textContent = "®";
+                line.appendChild(reg);
+              } else if (text[i] === " ") {
+                line.appendChild(document.createTextNode(" "));
+              } else {
+                var letter = document.createElement("span");
+                letter.className = "hover-letter";
+                letter.style.setProperty("--hover-color", pickColor());
+                letter.textContent = text[i];
+                line.appendChild(letter);
+              }
+            }
+          }
 
-          var engine = Engine.create({ gravity: { x: 0, y: 2.2 } });
-          var hero = document.getElementById("hero");
-          var W = hero.offsetWidth, H = hero.offsetHeight;
+          function scrambleLine(line, delay) {
+            var target = line.getAttribute("data-hero-scramble") || "";
+            var frame = 0;
+            var maxFrames = target.length + 30;
 
-          var render = Render.create({
-            canvas: canvas, engine: engine,
-            options: { width: W, height: H, background: "transparent", wireframes: false },
+            setTimeout(function () {
+              var timer = setInterval(function () {
+                var output = "";
+                for (var i = 0; i < target.length; i++) {
+                  if (frame > i * 2 + 14) {
+                    output += target[i];
+                  } else {
+                    output += glyphs[Math.floor(Math.random() * glyphs.length)];
+                  }
+                }
+                renderLogoText(line, output);
+                frame++;
+                if (frame > maxFrames) {
+                  renderLogoText(line, target);
+                  clearInterval(timer);
+                }
+              }, 48);
+            }, delay);
+          }
+
+          lines.forEach(function (line, index) {
+            renderLogoText(line, randomizeText(line.getAttribute("data-hero-scramble") || ""));
+            scrambleLine(line, index * 360);
           });
 
-          var letterBodies = letterData.map(function (data) {
-            var body = Bodies.rectangle(data.x, data.y, data.width * 0.45, data.height * 0.55, {
-              restitution: 0.2, friction: 0.4, frictionAir: 0.018, angle: data.angle,
-              render: { fillStyle: "transparent", strokeStyle: "transparent" }, label: "letter",
-            });
-            body.letterChar = data.char; body.letterColor = "#ffffff";
-            return body;
-          });
-
-          var ground    = Bodies.rectangle(W / 2, H + 30, W * 4, 60, { isStatic: true, label: "ground", render: { fillStyle: "transparent" } });
-          var wallLeft  = Bodies.rectangle(-30, H / 2, 60, H * 3, { isStatic: true, render: { fillStyle: "transparent" } });
-          var wallRight = Bodies.rectangle(W + 30, H / 2, 60, H * 3, { isStatic: true, render: { fillStyle: "transparent" } });
-          Composite.add(engine.world, letterBodies.concat([ground, wallLeft, wallRight]));
-
-          var PALETTE = ["#3B5BC8","#E84F8C","#D94040","#4A9FE0","#2E8B4A","#F0E050"];
-          var colorCycling = false, cycleStart = 0, slideshowStarted = false;
-
-          Events.on(engine, "collisionStart", function (event) {
-            event.pairs.forEach(function (pair) {
-              [pair.bodyA, pair.bodyB].forEach(function (body) {
-                if (body.label === "letter" && !colorCycling) body.letterColor = "#ffbcf2";
-              });
-              if ((pair.bodyA.label === "ground" || pair.bodyB.label === "ground") && !colorCycling) {
-                colorCycling = true; cycleStart = Date.now();
-                if (!slideshowStarted) { slideshowStarted = true; setTimeout(startSlideshow, 2000); }
+          if (logo) {
+            logo.addEventListener("pointerover", function (event) {
+              if (event.target.classList.contains("hover-letter")) {
+                event.target.style.setProperty("--hover-color", pickColor());
               }
             });
-          });
+          }
 
-          Events.on(render, "afterRender", function () {
-            var ctx = render.canvas.getContext("2d");
-            var fontSize = Math.min(Math.max(200, W * 0.22), 950);
-            if (colorCycling) {
-              var elapsed = Date.now() - cycleStart;
-              letterBodies.forEach(function (body, i) {
-                body.letterColor = PALETTE[Math.floor((elapsed / 1000 + i * 1.7)) % PALETTE.length];
+          if (heroInfo && heroInfoButton) {
+            heroInfoButton.setAttribute("aria-expanded", "false");
+            heroInfoButton.addEventListener("click", function () {
+              var isOpen = heroInfo.classList.toggle("bio-open");
+              heroInfoButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            });
+          }
+
+          initStickerPhysics();
+
+          function initStickerPhysics() {
+            var hero = document.getElementById("hero");
+            var canvas = document.getElementById("sticker-canvas");
+            if (!hero || !canvas || !logo || !window.Matter) return;
+
+            var Engine = Matter.Engine;
+            var Runner = Matter.Runner;
+            var Bodies = Matter.Bodies;
+            var Body = Matter.Body;
+            var Composite = Matter.Composite;
+            var Events = Matter.Events;
+            var engine = Engine.create({ gravity: { x: 0, y: 0, scale: 0.001 } });
+            var runner = Runner.create();
+            var ctx = canvas.getContext("2d");
+            var stickers = [
+              "assets/stickers/Recurso 21.png",
+              "assets/stickers/Recurso 22.png",
+              "assets/stickers/Recurso 23.png",
+              "assets/stickers/Recurso 24.png",
+              "assets/stickers/Recurso 25.png",
+              "assets/stickers/Recurso 26.png"
+            ];
+            var images = [];
+            var bodies = [];
+            var walls = [];
+            var logoBodies = [];
+            var pointer = { x: -1000, y: -1000, active: false };
+            var visible = false;
+
+            function resizeCanvas() {
+              var rect = hero.getBoundingClientRect();
+              var dpr = window.devicePixelRatio || 1;
+              canvas.width = Math.floor(rect.width * dpr);
+              canvas.height = Math.floor(rect.height * dpr);
+              canvas.style.width = rect.width + "px";
+              canvas.style.height = rect.height + "px";
+              ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+              rebuildWalls(rect.width, rect.height);
+              rebuildLogoBodies();
+              placeBodies(rect.width, rect.height);
+            }
+
+            function rebuildWalls(width, height) {
+              if (walls.length) Composite.remove(engine.world, walls);
+              walls = [
+                Bodies.rectangle(width / 2, -40, width, 80, { isStatic: true }),
+                Bodies.rectangle(width / 2, height + 40, width, 80, { isStatic: true }),
+                Bodies.rectangle(-40, height / 2, 80, height, { isStatic: true }),
+                Bodies.rectangle(width + 40, height / 2, 80, height, { isStatic: true })
+              ];
+              Composite.add(engine.world, walls);
+            }
+
+            function rebuildLogoBodies() {
+              var heroRect = hero.getBoundingClientRect();
+              var logoLines = Array.prototype.slice.call(logo.querySelectorAll(".hero-logo-line"));
+              if (logoBodies.length) Composite.remove(engine.world, logoBodies);
+              logoBodies = logoLines.map(function (line) {
+                var rect = line.getBoundingClientRect();
+                var width = Math.max(rect.width * 0.94, 10);
+                var height = Math.max(rect.height * 0.58, 10);
+                var x = rect.left - heroRect.left + rect.width / 2;
+                var y = rect.top - heroRect.top + rect.height / 2;
+                return Bodies.rectangle(x, y, width, height, {
+                  isStatic: true,
+                  restitution: 0.58,
+                  friction: 0.08,
+                  render: { visible: false }
+                });
+              });
+              if (logoBodies.length) Composite.add(engine.world, logoBodies);
+            }
+
+            function placeBodies(width, height) {
+              bodies.forEach(function (body, index) {
+                if (body.orbit) {
+                  body.orbit.cx = width * body.orbit.nx;
+                  body.orbit.cy = height * body.orbit.ny;
+                  body.orbit.rx = width * body.orbit.nrx;
+                  body.orbit.ry = height * body.orbit.nry;
+                }
+                if (body.position.x > width || body.position.y > height) {
+                  Body.setPosition(body, {
+                    x: width * body.orbit.nx,
+                    y: height * body.orbit.ny
+                  });
+                }
               });
             }
-            letterBodies.forEach(function (body) {
-              ctx.save();
-              ctx.translate(body.position.x, body.position.y);
-              ctx.rotate(body.angle);
-              ctx.fillStyle = body.letterColor;
-              var size = body.letterChar === "®" ? fontSize * 0.45 : fontSize;
-              var offset = body.letterChar === "®" ? -fontSize * 0.22 : 0;
-              ctx.font = '700 ' + size + 'px "liebling", sans-serif';
-              ctx.textAlign = "center"; ctx.textBaseline = "middle";
-              ctx.fillText(body.letterChar, 0, offset);
-              ctx.restore();
+
+            function createStickers() {
+              var rect = hero.getBoundingClientRect();
+              stickers.forEach(function (src, index) {
+                var img = new Image();
+                img.src = src;
+                images[index] = img;
+
+                var size = Math.min(Math.max(rect.width * 0.12, 92), 170);
+                var nx = 0.12 + Math.random() * 0.76;
+                var ny = 0.16 + Math.random() * 0.68;
+                var tries = 0;
+                while (nx > 0.18 && nx < 0.82 && ny > 0.34 && ny < 0.70 && tries < 16) {
+                  nx = 0.12 + Math.random() * 0.76;
+                  ny = 0.16 + Math.random() * 0.68;
+                  tries++;
+                }
+                var nrx = 0.08 + Math.random() * 0.12;
+                var nry = 0.07 + Math.random() * 0.11;
+                var body = Bodies.circle(
+                  rect.width * nx,
+                  rect.height * ny,
+                  size * 0.42,
+                  {
+                    restitution: 0.56,
+                    friction: 0.08,
+                    frictionAir: 0.028,
+                    density: 0.0008,
+                    render: { visible: false }
+                  }
+                );
+                body.stickerIndex = index;
+                body.stickerSize = size;
+                body.lastHit = 0;
+                body.orbit = {
+                  nx: nx,
+                  ny: ny,
+                  nrx: nrx,
+                  nry: nry,
+                  cx: rect.width * nx,
+                  cy: rect.height * ny,
+                  rx: rect.width * nrx,
+                  ry: rect.height * nry,
+                  speed: 0.45 + Math.random() * 0.55,
+                  phase: Math.random() * Math.PI * 2,
+                  driftSpeed: 0.18 + Math.random() * 0.42,
+                  driftPhase: Math.random() * Math.PI * 2,
+                  driftX: (Math.random() - 0.5) * 0.18,
+                  driftY: (Math.random() - 0.5) * 0.18,
+                  force: 0.00012 + Math.random() * 0.00023
+                };
+                Body.setVelocity(body, {
+                  x: (Math.random() - 0.5) * 5.2,
+                  y: (Math.random() - 0.5) * 5.2
+                });
+                Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
+                bodies.push(body);
+              });
+              Composite.add(engine.world, bodies);
+            }
+
+            function gentlyFloat() {
+              var time = Date.now() * 0.001;
+              engine.gravity.x = Math.sin(time * 0.37) * 0.055;
+              engine.gravity.y = Math.cos(time * 0.31) * 0.055;
+
+              bodies.forEach(function (body, index) {
+                var orbit = body.orbit;
+                var logoRect = logo.getBoundingClientRect();
+                var heroRect = hero.getBoundingClientRect();
+                var logoCenterX = logoRect.left - heroRect.left + logoRect.width / 2;
+                var logoCenterY = logoRect.top - heroRect.top + logoRect.height / 2;
+                var logoDx = body.position.x - logoCenterX;
+                var logoDy = body.position.y - logoCenterY;
+                var logoRangeX = logoRect.width * 0.62;
+                var logoRangeY = logoRect.height * 0.72;
+                var driftingCenterX = orbit.cx + Math.sin(time * orbit.driftSpeed + orbit.driftPhase) * orbit.rx * 0.55;
+                var driftingCenterY = orbit.cy + Math.cos(time * (orbit.driftSpeed * 0.83) + orbit.driftPhase) * orbit.ry * 0.55;
+                var orbitX = driftingCenterX + Math.cos(time * orbit.speed + orbit.phase) * orbit.rx;
+                var orbitY = driftingCenterY + Math.sin(time * (orbit.speed * 1.23) + orbit.phase) * orbit.ry;
+                var orbitDx = orbitX - body.position.x;
+                var orbitDy = orbitY - body.position.y;
+
+                Body.applyForce(body, body.position, {
+                  x: (Math.sin(time * (1.2 + orbit.driftSpeed) + orbit.phase) + orbit.driftX) * orbit.force,
+                  y: (Math.cos(time * (1.05 + orbit.driftSpeed) + orbit.driftPhase) + orbit.driftY) * orbit.force
+                });
+                Body.applyForce(body, body.position, {
+                  x: orbitDx * 0.00000125,
+                  y: orbitDy * 0.00000125
+                });
+
+                if (Math.abs(logoDx) < logoRangeX && Math.abs(logoDy) < logoRangeY) {
+                  var escapeDistance = Math.max(Math.sqrt(logoDx * logoDx + logoDy * logoDy), 1);
+                  Body.applyForce(body, body.position, {
+                    x: (logoDx / escapeDistance) * 0.0022,
+                    y: (logoDy / escapeDistance) * 0.0022
+                  });
+                }
+
+                if (pointer.active) {
+                  var dx = body.position.x - pointer.x;
+                  var dy = body.position.y - pointer.y;
+                  var distanceSq = dx * dx + dy * dy;
+                  var radius = 280;
+                  if (distanceSq < radius * radius && distanceSq > 1) {
+                    var distance = Math.sqrt(distanceSq);
+                    var strength = (1 - distance / radius) * 0.0042;
+                    var swirl = strength * 0.42;
+                    Body.applyForce(body, body.position, {
+                      x: (dx / distance) * strength + (-dy / distance) * swirl,
+                      y: (dy / distance) * strength + (dx / distance) * swirl
+                    });
+                    Body.setAngularVelocity(body, body.angularVelocity + (dx > 0 ? 0.0035 : -0.0035));
+
+                    if (distance < body.stickerSize * 0.52 && time - body.lastHit > 0.45) {
+                      var hitStrength = 0.045;
+                      Body.applyForce(body, body.position, {
+                        x: (dx / distance) * hitStrength,
+                        y: (dy / distance) * hitStrength
+                      });
+                      Body.setAngularVelocity(body, body.angularVelocity + (dx > 0 ? 0.08 : -0.08));
+                      body.lastHit = time;
+                    }
+                  }
+                }
+
+                var speed = Math.sqrt(body.velocity.x * body.velocity.x + body.velocity.y * body.velocity.y);
+                if (speed > 9) {
+                  Body.setVelocity(body, {
+                    x: body.velocity.x * 0.94,
+                    y: body.velocity.y * 0.94
+                  });
+                }
+              });
+            }
+
+            function drawStickers() {
+              var rect = hero.getBoundingClientRect();
+              ctx.clearRect(0, 0, rect.width, rect.height);
+              if (!visible) return;
+              bodies.forEach(function (body) {
+                var img = images[body.stickerIndex];
+                if (!img || !img.complete) return;
+                ctx.save();
+                ctx.translate(body.position.x, body.position.y);
+                ctx.rotate(body.angle);
+                ctx.globalAlpha = 0.82;
+                ctx.drawImage(img, -body.stickerSize / 2, -body.stickerSize / 2, body.stickerSize, body.stickerSize);
+                ctx.restore();
+              });
+            }
+
+            function showStickers() {
+              var wasVisible = visible;
+              visible = true;
+              rebuildLogoBodies();
+              hero.classList.add("stickers-visible");
+              if (wasVisible) return;
+              bodies.forEach(function (body, index) {
+                Body.applyForce(body, body.position, {
+                  x: Math.sin(index * 1.9 + Date.now() * 0.001) * 0.006,
+                  y: Math.cos(index * 1.4 + Date.now() * 0.001) * 0.006
+                });
+              });
+            }
+
+            function hideStickers() {
+              visible = true;
+              hero.classList.add("stickers-visible");
+            }
+
+            createStickers();
+            resizeCanvas();
+            Runner.run(runner, engine);
+            showStickers();
+
+            Events.on(engine, "beforeUpdate", gentlyFloat);
+            (function renderStickers() {
+              requestAnimationFrame(renderStickers);
+              drawStickers();
+            })();
+
+            hero.addEventListener("pointermove", function (event) {
+              var rect = hero.getBoundingClientRect();
+              pointer.x = event.clientX - rect.left;
+              pointer.y = event.clientY - rect.top;
+              pointer.active = true;
+              showStickers();
             });
-          });
-
-          var FRAME_MS = 1000 / 40, lastFrame = 0;
-          (function renderLoop(ts) {
-            requestAnimationFrame(renderLoop);
-            if (ts - lastFrame >= FRAME_MS) { lastFrame = ts; Matter.Render.world(render); }
-          })(0);
-          Runner.run(Runner.create(), engine);
-
-          var mouseBall = Bodies.circle(-500, -500, 55, { isStatic: true, label: "mouse", render: { fillStyle: "transparent", strokeStyle: "transparent" } });
-          Composite.add(engine.world, mouseBall);
-
-          render.canvas.addEventListener("mousemove", function (e) {
-            var rect = render.canvas.getBoundingClientRect();
-            Matter.Body.setPosition(mouseBall, { x: e.clientX - rect.left, y: e.clientY - rect.top });
-            Matter.Body.setVelocity(mouseBall, { x: e.movementX * 0.4, y: e.movementY * 0.4 });
-          });
-          render.canvas.addEventListener("mouseleave", function () { Matter.Body.setPosition(mouseBall, { x: -500, y: -500 }); });
-
-          var mouse = Matter.Mouse.create(render.canvas);
-          var mc = Matter.MouseConstraint.create(engine, { mouse: mouse, constraint: { stiffness: 0.18, render: { visible: false } } });
-          Composite.add(engine.world, mc);
-          render.mouse = mouse;
-          render.canvas.removeEventListener("mousewheel", mouse.mousewheel);
-          render.canvas.removeEventListener("DOMMouseScroll", mouse.mousewheel);
-        }
-
-        function startSlideshow() {
-          var IMAGES = ["assets/inicio/inicio_01.png","assets/inicio/inicio_02.png","assets/inicio/inicio_03.png","assets/inicio/inicio_04.png","assets/inicio/inicio_05.png","assets/inicio/inicio_06.png","assets/inicio/inicio_07.png","assets/inicio/inicio_08.png"];
-          var container = document.getElementById("slideshow");
-          var img = container.querySelector("img");
-          var index = 0;
-          function showImage(first) {
-            img.src = IMAGES[index];
-            container.classList.add("visible");
-            if (first) { container.offsetHeight; container.classList.add("fadein"); }
-            index = (index + 1) % IMAGES.length;
-            setTimeout(function () { showImage(false); }, 800);
+            hero.addEventListener("pointerleave", function () {
+              pointer.active = false;
+            });
+            hero.addEventListener("pointerenter", showStickers);
+            logo.addEventListener("pointerenter", showStickers);
+            logo.addEventListener("focusin", showStickers);
+            window.addEventListener("resize", resizeCanvas);
           }
-          showImage(true);
-        }
+        });
       })();
     </script>
 
-    <!-- Dog Builder + Park -->
+    <!-- Catalog -->
     <script>
       (function () {
-        var COLORS = [
-          "#1a1a1a","#ef0d45","#ffbcf2",
-          "#3B5BC8","#4A9FE0","#2E8B4A",
-          "#F0E050","#F5A623","#E84F8C",
-          "#9B59B6","#8B4513","#ffffff",
-        ];
+        document.addEventListener("DOMContentLoaded", function () {
+          var section = document.getElementById("catalog-scroll");
+          var cards = Array.prototype.slice.call(document.querySelectorAll(".catalog-card"));
+          var ticking = false;
+          var verticalImages = [
+            "assets/catalogo/A4_dogs.png",
+            "assets/catalogo/A4-digitaldoggies.png",
+            "assets/catalogo/03.jpg",
+            "assets/catalogo/04.jpg",
+            "assets/catalogo/05.jpg",
+            "assets/catalogo/06.png",
+            "assets/catalogo/07.png",
+            "assets/catalogo/08.jpg",
+            "assets/catalogo/09.jpg",
+            "assets/catalogo/15.jpg",
+            "assets/catalogo/16.jpg",
+            "assets/catalogo/17.jpg"
+          ];
 
-        var color     = COLORS[0];
-        var brushSize = 8;
-        var tool      = "draw";
-        var drawing   = false;
-        var lastX     = 0, lastY = 0;
+          if (!section || cards.length === 0) return;
 
-        /* ── Canvas — transparent, white via CSS ── */
-        var canvas = document.getElementById("dog-canvas");
-        var ctx    = canvas.getContext("2d");
+          function clamp(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+          }
 
-        function resizeCanvas() {
-          var wrap = canvas.parentElement;
-          var W = wrap.offsetWidth, H = wrap.offsetHeight;
-          if (!W || !H) return;
-          /* Preserve drawn content */
-          var tmp = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          canvas.width  = W;
-          canvas.height = H;
-          /* canvas resets to transparent — redraw old content */
-          if (tmp.width > 0 && tmp.height > 0) ctx.putImageData(tmp, 0, 0);
-        }
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
+          function shuffle(items) {
+            var shuffled = items.slice();
+            for (var i = shuffled.length - 1; i > 0; i--) {
+              var j = Math.floor(Math.random() * (i + 1));
+              var temp = shuffled[i];
+              shuffled[i] = shuffled[j];
+              shuffled[j] = temp;
+            }
+            return shuffled;
+          }
 
-        /* ── Color swatches ── */
-        var colorsRow = document.getElementById("colors-row");
-        colorsRow.style.cssText = "display:flex;gap:6px;align-items:center;flex-shrink:0;";
-        COLORS.forEach(function (c, i) {
-          var sw = document.createElement("button");
-          sw.className = "color-swatch" + (i === 0 ? " active" : "");
-          sw.style.background = c;
-          if (c === "#ffffff") sw.style.outline = "1px solid #ddd";
-          sw.addEventListener("click", function () {
-            color = c; tool = "draw";
-            canvas.classList.remove("erasing");
-            document.getElementById("tool-draw").classList.add("active");
-            document.getElementById("tool-erase").classList.remove("active");
-            document.querySelectorAll(".color-swatch").forEach(function (s) { s.classList.remove("active"); });
-            sw.classList.add("active");
+          function fillCatalogImages() {
+            var selected = shuffle(verticalImages);
+            cards.forEach(function (card, index) {
+              var img = card.querySelector("img");
+              var src = selected[index % selected.length];
+              var name = src.split("/").pop().replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
+              if (!img) return;
+              img.src = src;
+              img.alt = "Ilustracion Rafita Studio " + name;
+            });
+          }
+
+          function updateCatalog() {
+            var rect = section.getBoundingClientRect();
+            var travel = section.offsetHeight - window.innerHeight;
+            var progress = travel > 0 ? clamp(-rect.top / travel, 0, 1) : 1;
+            var isMobile = window.matchMedia("(max-width: 720px)").matches;
+
+            cards.forEach(function (card, index) {
+              var start = isMobile ? (index < 4 ? 0 : 0.38) : index / (cards.length + 1);
+              if (progress >= start) {
+                card.classList.add("visible");
+              } else {
+                card.classList.remove("visible");
+              }
+            });
+
+            ticking = false;
+          }
+
+          function requestUpdate() {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(updateCatalog);
+            }
+          }
+
+          fillCatalogImages();
+          updateCatalog();
+          window.addEventListener("scroll", requestUpdate, { passive: true });
+          window.addEventListener("resize", requestUpdate);
+        });
+      })();
+    </script>
+
+    <!-- Type Poster -->
+    <script>
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var poster = document.getElementById("type-poster");
+          var lines = Array.prototype.slice.call(document.querySelectorAll("[data-scramble]"));
+          var glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*+/#@!?%&<>☻✱";
+          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
+          var active = false;
+          var timers = [];
+
+          if (!poster || lines.length === 0) return;
+
+          poster.addEventListener("pointerover", function (event) {
+            if (event.target.classList.contains("hover-letter")) {
+              event.target.style.setProperty("--hover-color", palette[Math.floor(Math.random() * palette.length)]);
+            }
           });
-          colorsRow.appendChild(sw);
-        });
 
-        document.getElementById("size-slider").addEventListener("input", function () {
-          brushSize = parseInt(this.value);
-        });
+          function clearTimers() {
+            timers.forEach(function (timer) {
+              if (timer.type === "timeout") clearTimeout(timer.id);
+              if (timer.type === "interval") clearInterval(timer.id);
+            });
+            timers = [];
+          }
 
-        document.getElementById("tool-draw").addEventListener("click", function () {
-          tool = "draw"; this.classList.add("active");
-          document.getElementById("tool-erase").classList.remove("active");
-          canvas.classList.remove("erasing");
-        });
-        document.getElementById("tool-erase").addEventListener("click", function () {
-          tool = "erase"; this.classList.add("active");
-          document.getElementById("tool-draw").classList.remove("active");
-          canvas.classList.add("erasing");
-        });
-        document.getElementById("tool-clear").addEventListener("click", function () {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        });
-
-        /* ── Drawing ── */
-        function getPos(e) {
-          var rect = canvas.getBoundingClientRect();
-          var src  = e.touches ? e.touches[0] : e;
-          return { x: src.clientX - rect.left, y: src.clientY - rect.top };
-        }
-
-        function startStroke(pos) {
-          drawing = true; lastX = pos.x; lastY = pos.y;
-          ctx.save();
-          if (tool === "erase") ctx.globalCompositeOperation = "destination-out";
-          ctx.beginPath();
-          ctx.arc(pos.x, pos.y, brushSize / 2, 0, Math.PI * 2);
-          ctx.fillStyle = tool === "erase" ? "rgba(0,0,0,1)" : color;
-          ctx.fill();
-          ctx.restore();
-        }
-
-        function continueStroke(pos) {
-          if (!drawing) return;
-          ctx.save();
-          if (tool === "erase") ctx.globalCompositeOperation = "destination-out";
-          ctx.beginPath();
-          ctx.moveTo(lastX, lastY);
-          ctx.lineTo(pos.x, pos.y);
-          ctx.strokeStyle = tool === "erase" ? "rgba(0,0,0,1)" : color;
-          ctx.lineWidth = brushSize;
-          ctx.lineCap = "round"; ctx.lineJoin = "round";
-          ctx.stroke();
-          ctx.restore();
-          lastX = pos.x; lastY = pos.y;
-        }
-
-        canvas.addEventListener("mousedown",  function (e) { startStroke(getPos(e)); });
-        canvas.addEventListener("mousemove",  function (e) { continueStroke(getPos(e)); });
-        window.addEventListener("mouseup",    function ()  { drawing = false; });
-        canvas.addEventListener("touchstart", function (e) { e.preventDefault(); startStroke(getPos(e)); },    { passive: false });
-        canvas.addEventListener("touchmove",  function (e) { e.preventDefault(); continueStroke(getPos(e)); }, { passive: false });
-        canvas.addEventListener("touchend",   function ()  { drawing = false; });
-
-        /* ── Export: crop transparent PNG to bounding box ── */
-        function cropPNG() {
-          var w = canvas.width, h = canvas.height;
-          var imageData = ctx.getImageData(0, 0, w, h);
-          var data = imageData.data;
-          var minX = w, minY = h, maxX = 0, maxY = 0;
-          var found = false;
-          for (var y = 0; y < h; y++) {
-            for (var x = 0; x < w; x++) {
-              if (data[(y * w + x) * 4 + 3] > 10) {
-                if (x < minX) minX = x; if (x > maxX) maxX = x;
-                if (y < minY) minY = y; if (y > maxY) maxY = y;
-                found = true;
+          function setLineText(line, text) {
+            line.textContent = "";
+            for (var i = 0; i < text.length; i++) {
+              if (text[i] === " ") {
+                line.appendChild(document.createTextNode(" "));
+              } else {
+                var letter = document.createElement("span");
+                letter.className = "hover-letter";
+                letter.style.setProperty("--hover-color", palette[Math.floor(Math.random() * palette.length)]);
+                letter.textContent = text[i];
+                line.appendChild(letter);
               }
             }
           }
-          if (!found) return null;
-          var pad = 12;
-          minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad);
-          maxX = Math.min(w - 1, maxX + pad); maxY = Math.min(h - 1, maxY + pad);
-          var cw = maxX - minX + 1, ch = maxY - minY + 1;
-          var off = document.createElement("canvas");
-          off.width = cw; off.height = ch;
-          var octx = off.getContext("2d");
-          octx.clearRect(0, 0, cw, ch); /* ensure transparent bg */
-          octx.drawImage(canvas, minX, minY, cw, ch, 0, 0, cw, ch);
-          return off.toDataURL("image/png");
-        }
 
-        /* ── Publish ── */
-        document.getElementById("publish-btn").addEventListener("click", function () {
-          var name = document.getElementById("dog-name").value.trim();
-          if (!name) { document.getElementById("dog-name").focus(); return; }
-          var img = cropPNG();
-          if (!img) { alert("¡dibuja algo primero!"); return; }
-
-          var drawings = JSON.parse(localStorage.getItem("rafita_perritos") || "[]");
-          drawings.unshift({ name: name, img: img, date: Date.now() });
-          if (drawings.length > 80) drawings = drawings.slice(0, 80);
-          localStorage.setItem("rafita_perritos", JSON.stringify(drawings));
-
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          document.getElementById("dog-name").value = "";
-
-          spawnDog({ name: name, img: img });
-          document.getElementById("park").scrollIntoView({ behavior: "smooth" });
-        });
-
-        /* ══════════════════════════════════════════
-           PARK — perritos flotantes
-           ══════════════════════════════════════════ */
-
-        var parkDogs  = []; /* { el, x, y, vx, vy, w, h } */
-        var parkEl    = document.getElementById("park");
-        var emptyMsg  = document.getElementById("park-empty");
-        var parkW     = 0, parkH = 0;
-
-        function updateParkSize() {
-          parkW = parkEl.offsetWidth;
-          parkH = parkEl.offsetHeight;
-        }
-        updateParkSize();
-        window.addEventListener("resize", updateParkSize);
-
-        function spawnDog(d) {
-          emptyMsg.style.display = "none";
-
-          var div = document.createElement("div");
-          div.className = "park-dog";
-
-          var img = document.createElement("img");
-          img.src = d.img;
-          img.alt = d.name;
-
-          var label = document.createElement("p");
-          label.className = "dog-name";
-          label.textContent = d.name;
-
-          div.appendChild(img); div.appendChild(label);
-          parkEl.appendChild(div);
-
-          /* Random start position */
-          var x = Math.random() * Math.max(0, parkW - 180);
-          var y = Math.random() * Math.max(0, parkH - 180);
-          /* Random slow velocity */
-          var angle = Math.random() * Math.PI * 2;
-          var speed = 0.4 + Math.random() * 0.5;
-          var vx = Math.cos(angle) * speed;
-          var vy = Math.sin(angle) * speed;
-
-          div.style.transform = "translate(" + x + "px," + y + "px)";
-
-          /* Read actual img size after load for bounce bounds */
-          img.onload = function () {
-            var bw = Math.min(img.naturalWidth, 160);
-            var bh = Math.min(img.naturalHeight, 160) + 24;
-            for (var i = 0; i < parkDogs.length; i++) {
-              if (parkDogs[i].el === div) { parkDogs[i].w = bw; parkDogs[i].h = bh; break; }
+          function randomizeText(text) {
+            var output = "";
+            for (var i = 0; i < text.length; i++) {
+              output += text[i] === " " ? " " : glyphs[Math.floor(Math.random() * glyphs.length)];
             }
-          };
+            return output;
+          }
 
-          parkDogs.push({ el: div, x: x, y: y, vx: vx, vy: vy, w: 160, h: 184 });
-        }
+          function scrambleLine(line, delay) {
+            var target = line.getAttribute("data-scramble") || "";
+            var frame = 0;
+            var maxFrames = target.length + 16;
 
-        /* Load saved dogs */
-        (function () {
-          var saved = JSON.parse(localStorage.getItem("rafita_perritos") || "[]");
-          if (saved.length === 0) return;
-          saved.forEach(function (d) { spawnDog(d); });
-        })();
+            var timeout = setTimeout(function () {
+              var timer = setInterval(function () {
+                var output = "";
 
-        /* Animation loop */
-        function parkLoop() {
-          requestAnimationFrame(parkLoop);
-          parkDogs.forEach(function (dog) {
-            dog.x += dog.vx;
-            dog.y += dog.vy;
-            /* Bounce off edges */
-            if (dog.x < 0)             { dog.x = 0;              dog.vx *= -1; }
-            if (dog.x + dog.w > parkW) { dog.x = parkW - dog.w;  dog.vx *= -1; }
-            if (dog.y < 0)             { dog.y = 0;              dog.vy *= -1; }
-            if (dog.y + dog.h > parkH) { dog.y = parkH - dog.h;  dog.vy *= -1; }
-            dog.el.style.transform = "translate(" + dog.x + "px," + dog.y + "px)";
+                for (var i = 0; i < target.length; i++) {
+                  if (target[i] === " ") {
+                    output += " ";
+                  } else if (frame > i + 8) {
+                    output += target[i];
+                  } else {
+                    output += glyphs[Math.floor(Math.random() * glyphs.length)];
+                  }
+                }
+
+                setLineText(line, output);
+                frame++;
+
+                if (frame > maxFrames) {
+                  setLineText(line, target);
+                  clearInterval(timer);
+                }
+              }, 34);
+              timers.push({ id: timer, type: "interval" });
+            }, delay);
+            timers.push({ id: timeout, type: "timeout" });
+          }
+
+          function startPoster() {
+            if (active) return;
+            active = true;
+            clearTimers();
+            poster.classList.add("poster-visible");
+            lines.forEach(function (line, index) {
+              scrambleLine(line, index * 170);
+            });
+          }
+
+          function resetPoster() {
+            if (!active) return;
+            active = false;
+            clearTimers();
+            poster.classList.remove("poster-visible");
+            lines.forEach(function (line) {
+              setLineText(line, randomizeText(line.getAttribute("data-scramble") || ""));
+            });
+          }
+
+          resetPoster();
+          lines.forEach(function (line) {
+            setLineText(line, randomizeText(line.getAttribute("data-scramble") || ""));
           });
-        }
-        parkLoop();
 
+          if (!("IntersectionObserver" in window)) {
+            startPoster();
+            return;
+          }
+
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                startPoster();
+              } else {
+                resetPoster();
+              }
+            });
+          }, { threshold: 0.35 });
+
+          observer.observe(poster);
+        });
       })();
     </script>
+
+    <!-- Footer -->
+    <script>
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var footer = document.getElementById("site-footer");
+          if (!footer) return;
+
+          if (!("IntersectionObserver" in window)) {
+            footer.classList.add("footer-visible");
+            return;
+          }
+
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                footer.classList.add("footer-visible");
+                observer.unobserve(footer);
+              }
+            });
+          }, { threshold: 0.35 });
+
+          observer.observe(footer);
+        });
+      })();
+    </script>
+
   </body>
 </html>

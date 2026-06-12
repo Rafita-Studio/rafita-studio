@@ -13,15 +13,6 @@ body {
 
 body {
   flex: 1;
-  cursor: url("assets/cursor_02.png") 32 5, auto !important;
-}
-
-body,
-a,
-button,
-img,
-* {
-  cursor: url("assets/cursor_02.png") 32 5, auto !important;
 }
 
 main {

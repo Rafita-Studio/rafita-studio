@@ -301,13 +301,13 @@
          ══════════════════════════════════════════ */
 
       #type-poster {
-        min-height: 68vh;
+        min-height: 58vh;
         background: #ecebe6;
         color: #363636;
         display: flex;
         align-items: flex-start;
         overflow: hidden;
-        padding: clamp(4px, 1.2vw, 18px) clamp(24px, 5vw, 82px) clamp(48px, 6vw, 92px);
+        padding: clamp(4px, 1.2vw, 18px) clamp(24px, 5vw, 82px) clamp(28px, 4vw, 62px);
       }
 
       .type-poster-inner {
@@ -378,6 +378,98 @@
       }
 
       /* ══════════════════════════════════════════
+         LINK BLOCK
+         ══════════════════════════════════════════ */
+
+      #link-block {
+        background: #ecebe6;
+        color: #363636;
+        padding: 0 clamp(24px, 5vw, 82px) clamp(58px, 7vw, 108px);
+      }
+
+      .link-block-inner {
+        width: 100%;
+        max-width: 1480px;
+        margin: 0 auto;
+        border-top: 2px solid rgba(54, 54, 54, 0.42);
+        padding-top: clamp(26px, 3.6vw, 54px);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .link-row {
+        display: flex;
+        align-items: center;
+        gap: clamp(12px, 1.8vw, 28px);
+        width: fit-content;
+        max-width: 100%;
+        font-size: clamp(42px, 7.2vw, 132px);
+        line-height: 0.98;
+      }
+
+      .link-row + .link-row {
+        margin-top: clamp(4px, 0.7vw, 12px);
+      }
+
+      .link-row:nth-child(even) {
+        margin-left: auto;
+      }
+
+      .link-row-number {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 999px;
+        background: #363636;
+        color: #ecebe6;
+        font-size: 0.3em;
+        line-height: 1;
+      }
+
+      .link-row-text {
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+        white-space: nowrap;
+        transform: rotate(0deg);
+        transition:
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .link-row-text:hover,
+      .link-row-text:focus-visible {
+        color: var(--link-hover-color, #ff9418);
+        transform: rotate(var(--link-hover-rotate, -2deg));
+      }
+
+      @media (max-width: 720px) {
+        #link-block {
+          padding: 0 18px 42px;
+        }
+
+        .link-block-inner {
+          padding-top: 24px;
+        }
+
+        .link-row {
+          width: 100%;
+          gap: 10px;
+          font-size: clamp(30px, 8vw, 54px);
+          line-height: 1.02;
+        }
+
+        .link-row:nth-child(even) {
+          margin-left: auto;
+          width: fit-content;
+        }
+      }
+
+      /* ══════════════════════════════════════════
          FOOTER
          ══════════════════════════════════════════ */
 
@@ -440,6 +532,7 @@
     </section>
 
     <section id="catalog-scroll" aria-label="Ilustraciones del catalogo">
+      <span id="work" aria-hidden="true"></span>
       <div class="catalog-stage">
         <div class="catalog-stack">
           <figure class="catalog-card" style="--x: 8%; --rotate: -7deg; --from-rotate: -18deg; --z: 2;">
@@ -476,6 +569,31 @@
         <span class="type-line" data-scramble="ILUSTRAMOS ✱"></span>
         <span class="type-line" data-scramble="Y AMAMOS A"></span>
         <span class="type-line" data-scramble="LOS PERRITOS &lt;3"></span>
+      </div>
+    </section>
+
+    <section id="link-block" aria-label="Navegacion Rafita Studio">
+      <div class="link-block-inner">
+        <div class="link-row">
+          <span class="link-row-number">1</span>
+          <a class="link-row-text" href="index.html#work">proyectos</a>
+        </div>
+        <div class="link-row">
+          <span class="link-row-number">2</span>
+          <a class="link-row-text" href="catalogo.html">ilustraciones</a>
+        </div>
+        <div class="link-row">
+          <span class="link-row-number">3</span>
+          <a class="link-row-text" href="about.html">nosotros</a>
+        </div>
+        <div class="link-row">
+          <span class="link-row-number">4</span>
+          <a class="link-row-text" href="https://piruetasxyz.myshopify.com/collections/rafita-studio" target="_blank" rel="noopener">kiosco &lt;3</a>
+        </div>
+        <div class="link-row">
+          <span class="link-row-number">5</span>
+          <a class="link-row-text" href="contact.html">contacto :)</a>
+        </div>
       </div>
     </section>
 
@@ -1232,6 +1350,30 @@
           }, { threshold: 0.35 });
 
           observer.observe(poster);
+        });
+      })();
+    </script>
+
+    <!-- Link block hover -->
+    <script>
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var items = Array.prototype.slice.call(document.querySelectorAll(".link-row-text"));
+          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
+
+          function randomHover(item) {
+            var color = palette[Math.floor(Math.random() * palette.length)];
+            var rotate = (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2.4);
+            item.style.setProperty("--link-hover-color", color);
+            item.style.setProperty("--link-hover-rotate", rotate.toFixed(2) + "deg");
+          }
+
+          items.forEach(function (item) {
+            randomHover(item);
+            item.addEventListener("mouseenter", function () {
+              randomHover(item);
+            });
+          });
         });
       })();
     </script>

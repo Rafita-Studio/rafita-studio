@@ -3,213 +3,308 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Catálogo — Rafita Studio</title>
+    <title>Ilustraciones — Rafita Studio</title>
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
     <link rel="stylesheet" href="style.css" />
-
     <style>
-      /* === CATÁLOGO === */
-      .catalogo {
-        column-count: 4;
-        column-gap: 1rem;
-        padding: 2rem;
-        max-width: 1400px;
+      :root {
+        --paper: #ecebe6;
+        --ink: #363636;
+        --orange: #ff9418;
+        --blue: #0d73c8;
+        --green: #099947;
+        --pink: #f193c9;
+        --red: #ff3122;
+        --yellow: #ffc21a;
+        --violet: #5833a3;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body.catalog-page {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "liebling", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .catalog-main {
+        background: var(--paper);
+      }
+
+      .catalog-home {
+        display: inline-grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        margin: clamp(22px, 3vw, 42px) clamp(18px, 5vw, 82px) 0;
+        color: var(--ink);
+        text-decoration: none;
+        transition:
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .catalog-home svg {
+        display: block;
+        width: 34px;
+        height: 34px;
+        fill: currentColor;
+      }
+
+      .catalog-home:hover {
+        color: var(--link-hover-color, var(--orange));
+        transform: rotate(var(--link-hover-rotate, -2deg));
+      }
+
+      .catalog-gallery {
+        width: min(1320px, calc(100% - clamp(36px, 8vw, 132px)));
         margin: 0 auto;
+        padding: clamp(28px, 4vw, 58px) 0 clamp(58px, 7vw, 108px);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 18vw, 260px), 1fr));
+        column-gap: clamp(4px, 2vw, 34px);
+        row-gap: clamp(2px, 2vw, 42px);
+        align-items: center;
+        overflow: visible;
       }
 
-      .catalogo img {
+      .catalog-card {
+        --item-x: 0px;
+        --item-y: 0px;
+        --item-rotate: 0deg;
+        --item-scale: 1;
+        --reveal-y: 42px;
+        display: grid;
+        place-items: center;
         width: 100%;
+        min-height: clamp(132px, 20vw, 310px);
+        margin: 0;
+        opacity: 0;
+        position: relative;
+        z-index: var(--item-z, 1);
+        transform:
+          translate3d(var(--item-x), calc(var(--item-y) + var(--reveal-y)), 0)
+          rotate(var(--item-rotate))
+          scale(var(--item-scale));
+        transition:
+          opacity 620ms ease,
+          transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+
+      .catalog-card.is-visible {
+        --reveal-y: 0px;
+        opacity: 1;
+      }
+
+      .catalog-card img {
+        display: block;
+        width: min(100%, var(--item-width, 100%));
         height: auto;
-        border-radius: 12px;
-        display: inline-block;
-        margin-bottom: 1rem;
-        break-inside: avoid;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.25s ease, filter 0.25s ease;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        transition:
+          filter 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
       }
 
-      .catalogo img:hover {
-        transform: scale(1.02);
-        filter: brightness(1.1);
+      .catalog-card:hover img {
+        filter: drop-shadow(0 16px 18px rgba(45, 38, 42, 0.16));
+        transform: rotate(var(--link-hover-rotate, -1deg)) translateY(-3px);
       }
 
-      @media (max-width: 900px) {
-        .catalogo {
-          column-count: 3;
+      .catalog-card.is-hovered {
+        z-index: 30;
+      }
+
+      .catalog-page footer {
+        background: #f7f1f8;
+        border-top: 0;
+        color: #5d4c63;
+        padding: 28px 24px;
+        font-family: "liebling", sans-serif;
+        font-size: 14px;
+      }
+
+      @media (max-width: 720px) {
+        .catalog-home {
+          margin: 20px 18px 0;
         }
-      }
 
-      @media (max-width: 600px) {
-        .catalogo {
-          column-count: 2;
-          padding: 1rem;
+        .catalog-gallery {
+          width: calc(100% - 36px);
+        }
+
+        .catalog-gallery {
+          padding-top: 30px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          column-gap: 8px;
+          row-gap: 10px;
+        }
+
+        .catalog-card {
+          grid-column: auto !important;
+          min-height: 150px;
         }
       }
     </style>
   </head>
 
-  <body>
-    <!-- ===== HEADER ===== -->
-    <header>
-      <a href="index.html" class="logo">
-        <img
-          src="assets/rafitaStudio_logo2025.png"
-          alt="Rafita Studio Logo"
-        />
+  <body class="catalog-page">
+    <main class="catalog-main">
+      <a class="catalog-home" href="index.html" aria-label="Volver al inicio">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M15.18 4.16a1.25 1.25 0 0 1 1.64 0l12.55 10.96a1.28 1.28 0 0 1 .12 1.8l-.82.94a1.28 1.28 0 0 1-1.8.12L16 8.49 5.13 17.98a1.28 1.28 0 0 1-1.8-.12l-.82-.94a1.28 1.28 0 0 1 .12-1.8L15.18 4.16Z" />
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.8 16.15 16 8.1l9.2 8.05V27a1.4 1.4 0 0 1-1.4 1.4h-6.25v-5.9a3.55 3.55 0 0 0-7.1 0v5.9H8.2A1.4 1.4 0 0 1 6.8 27V16.15Z" />
+          <path d="M22.5 6.6a1.25 1.25 0 0 1 1.25-1.25h2.15a1.25 1.25 0 0 1 1.25 1.25v7.86L22.5 10.4V6.6Z" />
+        </svg>
       </a>
 
-      <nav>
-        <ul class="desktop-nav">
-          <li><a href="index.html#work">Work</a></li>
-          <li><a href="catalogo.html" class="active">Catálogo</a></li>
-          <li>
-            <a
-              href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
-              target="_blank"
-              >Shop</a
-            >
-          </li>
-          <li><a href="about.html">About Us</a></li>
-          <li>
-            <a
-              href="https://instagram.com/rafita.studio"
-              target="_blank"
-              class="instagram-link"
-              >@rafita.studio</a
-            >
-          </li>
-        </ul>
-      </nav>
-
-      <!-- botón hamburguesa -->
-      <button
-        class="nav-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-drawer"
-        aria-label="Abrir menú"
-      >
-        <span class="bar" aria-hidden="true"></span>
-      </button>
-    </header>
-
-    <!-- ===== DRAWER MÓVIL (fuera del header) ===== -->
-    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
-      <div class="drawer-backdrop" data-close></div>
-      <aside
-        class="drawer-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menú"
-      >
-        <a href="catalogo.html" class="back-home" aria-label="Volver a inicio"
-          >← Volver</a
-        >
-
-        <nav aria-label="Mobile">
-          <ul class="mobile-nav">
-            <li><a href="index.html#work">Work</a></li>
-            <li><a href="catalogo.html" class="active">Catálogo</a></li>
-            <li>
-              <a
-                href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
-                target="_blank"
-                >Shop</a
-              >
-            </li>
-            <li><a href="about.html">About Us</a></li>
-            <li>
-              <a
-                href="https://instagram.com/rafita.studio"
-                target="_blank"
-                class="instagram-link"
-                >@rafita.studio</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </aside>
-    </div>
-
-    <!-- ===== MAIN ===== -->
-    <main>
-      <section class="catalogo">
-        <img src="assets/catalogo/01.png" alt="Catálogo 01" loading="lazy" />
-        <img src="assets/catalogo/02.jpg" alt="Catálogo 02" loading="lazy" />
-        <img src="assets/catalogo/03.jpg" alt="Catálogo 03" loading="lazy" />
-        <img src="assets/catalogo/04.jpg" alt="Catálogo 04" loading="lazy" />
-        <img src="assets/catalogo/05.jpg" alt="Catálogo 05" loading="lazy" />
-        <img src="assets/catalogo/06.png" alt="Catálogo 06" loading="lazy" />
-        <img src="assets/catalogo/07.png" alt="Catálogo 07" loading="lazy" />
-        <img src="assets/catalogo/08.jpg" alt="Catálogo 08" loading="lazy" />
-        <img src="assets/catalogo/09.jpg" alt="Catálogo 09" loading="lazy" />
-        <img src="assets/catalogo/12.png" alt="Catálogo 12" loading="lazy" />
-        <img src="assets/catalogo/13.png" alt="Catálogo 13" loading="lazy" />
-        <img src="assets/catalogo/14.png" alt="Catálogo 14" loading="lazy" />
-        <img src="assets/catalogo/15.jpg" alt="Catálogo 15" loading="lazy" />
-        <img src="assets/catalogo/16.jpg" alt="Catálogo 16" loading="lazy" />
-        <img src="assets/catalogo/17.jpg" alt="Catálogo 17" loading="lazy" />
-        <img src="assets/catalogo/18.jpg" alt="Catálogo 18" loading="lazy" />
+      <section class="catalog-gallery" aria-label="Galería de ilustraciones y stickers">
+        <figure class="catalog-card"><img src="assets/catalogo/02.jpg" alt="Ilustración Rafita Studio 02" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/03.jpg" alt="Ilustración Rafita Studio 03" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/04.jpg" alt="Ilustración Rafita Studio 04" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/05.jpg" alt="Ilustración Rafita Studio 05" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/06.png" alt="Ilustración Rafita Studio 06" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/07.png" alt="Ilustración Rafita Studio 07" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/08.jpg" alt="Ilustración Rafita Studio 08" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/09.jpg" alt="Ilustración Rafita Studio 09" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/10.png" alt="Ilustración Rafita Studio 10" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/12.png" alt="Ilustración Rafita Studio 12" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/13.png" alt="Ilustración Rafita Studio 13" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/14.png" alt="Ilustración Rafita Studio 14" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/15.jpg" alt="Ilustración Rafita Studio 15" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/16.jpg" alt="Ilustración Rafita Studio 16" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/17.jpg" alt="Ilustración Rafita Studio 17" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/18.jpg" alt="Ilustración Rafita Studio 18" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/A4-digitaldoggies.png" alt="Print Digital Doggies Rafita Studio" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/A4_dogs.png" alt="Print Dogs Rafita Studio" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/sticker_01.png" alt="Sticker Rafita Studio 01" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/sticker_02.png" alt="Sticker Rafita Studio 02" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/sticker_03.png" alt="Sticker Rafita Studio 03" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/catalogo/sticker_04.png" alt="Sticker Rafita Studio 04" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/stickers/Recurso 21.png" alt="Sticker Rafita Studio Recurso 21" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/stickers/Recurso 22.png" alt="Sticker Rafita Studio Recurso 22" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/stickers/Recurso 23.png" alt="Sticker Rafita Studio Recurso 23" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/stickers/Recurso 24.png" alt="Sticker Rafita Studio Recurso 24" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/stickers/Recurso 25.png" alt="Sticker Rafita Studio Recurso 25" loading="lazy" /></figure>
+        <figure class="catalog-card"><img src="assets/stickers/Recurso 26.png" alt="Sticker Rafita Studio Recurso 26" loading="lazy" /></figure>
       </section>
     </main>
 
     <footer>
-      <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
+      <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos &lt;3</p>
     </footer>
 
-    <!-- ===== JS DEL MENÚ HAMBURGUESA ===== -->
     <script>
-      const navToggle = document.querySelector(".nav-toggle");
-      const mobileDrawer = document.getElementById("mobile-drawer");
-      const backdrop = document.querySelector(".drawer-backdrop");
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var items = Array.prototype.slice.call(document.querySelectorAll(".catalog-home, .catalog-card"));
+          var cards = Array.prototype.slice.call(document.querySelectorAll(".catalog-card"));
+          var gallery = document.querySelector(".catalog-gallery");
+          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
 
-      navToggle.addEventListener("click", () => {
-        const isOpen = mobileDrawer.classList.contains("is-open");
-        if (isOpen) {
-          mobileDrawer.classList.add("is-closing");
-          setTimeout(() => {
-            mobileDrawer.classList.remove("is-open", "is-closing");
-          }, 300);
-          navToggle.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        } else {
-          mobileDrawer.classList.add("is-open");
-          navToggle.setAttribute("aria-expanded", "true");
-          document.body.classList.add("menu-open");
+          function randomHover(item) {
+            var color = palette[Math.floor(Math.random() * palette.length)];
+            var rotate = (Math.random() < 0.5 ? -1 : 1) * (0.6 + Math.random() * 1.8);
+            item.style.setProperty("--link-hover-color", color);
+            item.style.setProperty("--link-hover-rotate", rotate.toFixed(2) + "deg");
+          }
+
+          items.forEach(function (item) {
+            randomHover(item);
+            item.addEventListener("mouseenter", function () {
+              randomHover(item);
+              if (item.classList.contains("catalog-card")) {
+                item.classList.add("is-hovered");
+              }
+            });
+            item.addEventListener("mouseleave", function () {
+              item.classList.remove("is-hovered");
+            });
+            item.addEventListener("focus", function () {
+              randomHover(item);
+              if (item.classList.contains("catalog-card")) {
+                item.classList.add("is-hovered");
+              }
+            });
+            item.addEventListener("blur", function () {
+              item.classList.remove("is-hovered");
+            });
+          });
+
+          for (var i = cards.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
+          }
+
+          if (gallery) {
+            cards.forEach(function (card) {
+              gallery.appendChild(card);
+            });
+          }
+
+          cards.forEach(function (card, index) {
+            var isFeature = index % 7 === 0 || Math.random() < 0.18;
+            var x = ((Math.random() * 2 - 1) * (isFeature ? 82 : 54)).toFixed(2);
+            var y = ((Math.random() * 2 - 1) * (isFeature ? 76 : 46)).toFixed(2);
+            var rotate = ((Math.random() * 2 - 1) * (isFeature ? 15 : 11)).toFixed(2);
+            var scale = (isFeature ? 1.02 + Math.random() * 0.2 : 0.88 + Math.random() * 0.26).toFixed(3);
+            var width = (isFeature ? 94 + Math.random() * 24 : 84 + Math.random() * 24).toFixed(2);
+            var z = Math.floor(1 + Math.random() * 8);
+
+            card.style.setProperty("--item-x", x + "px");
+            card.style.setProperty("--item-y", y + "px");
+            card.style.setProperty("--item-rotate", rotate + "deg");
+            card.style.setProperty("--item-scale", scale);
+            card.style.setProperty("--item-width", width + "%");
+            card.style.setProperty("--item-z", z);
+            card.style.gridColumn = isFeature ? "span 2" : "span 1";
+            card.style.transitionDelay = (index % 5 * 70) + "ms";
+          });
+
+          if ("IntersectionObserver" in window) {
+            var revealObserver = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("is-visible");
+                  revealObserver.unobserve(entry.target);
+                }
+              });
+            }, { rootMargin: "0px 0px -8% 0px", threshold: 0.18 });
+
+            cards.forEach(function (card) {
+              revealObserver.observe(card);
+            });
+          } else {
+            cards.forEach(function (card) {
+              card.classList.add("is-visible");
+            });
+          }
+        });
+      })();
+    </script>
+
+    <script>
+      document.addEventListener("contextmenu", function (event) {
+        if (event.target.tagName === "IMG") {
+          event.preventDefault();
         }
       });
 
-      backdrop.addEventListener("click", () => {
-        mobileDrawer.classList.add("is-closing");
-        setTimeout(() => {
-          mobileDrawer.classList.remove("is-open", "is-closing");
-        }, 300);
-        navToggle.setAttribute("aria-expanded", "false");
-        document.body.classList.remove("menu-open");
-      });
-
-      // === Protección de imágenes ===
-      document.addEventListener("contextmenu", (e) => {
-        if (e.target.tagName === "IMG") {
-          e.preventDefault();
-        }
-      });
-
-      document.addEventListener("dragstart", (e) => {
-        if (e.target.tagName === "IMG") {
-          e.preventDefault();
+      document.addEventListener("dragstart", function (event) {
+        if (event.target.tagName === "IMG") {
+          event.preventDefault();
         }
       });
     </script>
-
-    <!-- CSS adicional opcional (en caso de no tenerlo en style.css) -->
-    <style>
-      img {
-        -webkit-user-drag: none;
-        -webkit-user-select: none;
-        user-select: none;
-        pointer-events: auto;
-      }
-    </style>
   </body>
 </html>
-

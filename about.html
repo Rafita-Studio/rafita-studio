@@ -3,120 +3,256 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>About Us — Rafita Studio</title>
+    <title>Nosotros — Rafita Studio</title>
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      :root {
+        --paper: #ecebe6;
+        --ink: #363636;
+        --orange: #ff9418;
+        --blue: #0d73c8;
+        --green: #099947;
+        --pink: #f193c9;
+        --red: #ff3122;
+        --yellow: #ffc21a;
+        --violet: #5833a3;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body.about-page {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "liebling", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .about-main {
+        background: var(--paper);
+      }
+
+      .about-home {
+        display: inline-grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        margin: clamp(22px, 3vw, 42px) clamp(18px, 5vw, 82px) 0;
+        color: var(--ink);
+        text-decoration: none;
+        transition:
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .about-home svg {
+        display: block;
+        width: 34px;
+        height: 34px;
+        fill: currentColor;
+      }
+
+      .about-home:hover {
+        color: var(--link-hover-color, var(--orange));
+        transform: rotate(var(--link-hover-rotate, -2deg));
+      }
+
+      .about-hero {
+        position: relative;
+        width: min(1320px, calc(100% - clamp(36px, 8vw, 132px)));
+        margin: 0 auto;
+        padding: clamp(48px, 8vw, 104px) 0 clamp(54px, 8vw, 112px);
+        display: grid;
+        grid-template-columns: minmax(0, 1.22fr) minmax(260px, 380px);
+        gap: clamp(34px, 7vw, 92px);
+        align-items: center;
+      }
+
+      .about-title {
+        --title-x: 0px;
+        --title-y: 0px;
+        --title-rotate: 0deg;
+        margin: 0;
+        max-width: 760px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        font-size: clamp(48px, 8.8vw, 128px);
+        line-height: 0.88;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        color: var(--orange);
+        transform: translate3d(var(--title-x), var(--title-y), 0) rotate(var(--title-rotate));
+        transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+        animation: title-palette 8s steps(8, end) infinite;
+        will-change: transform;
+      }
+
+      .about-intro {
+        max-width: 860px;
+        margin: clamp(24px, 3.2vw, 42px) 0 0;
+        font-size: clamp(19px, 2vw, 28px);
+        line-height: 1.12;
+      }
+
+      @keyframes title-palette {
+        0% { color: var(--orange); }
+        12.5% { color: #66b6e9; }
+        25% { color: var(--green); }
+        37.5% { color: var(--pink); }
+        50% { color: var(--red); }
+        62.5% { color: var(--yellow); }
+        75% { color: var(--blue); }
+        87.5% { color: var(--violet); }
+        100% { color: var(--orange); }
+      }
+
+      .about-media {
+        align-self: center;
+      }
+
+      .about-video-shell {
+        position: relative;
+        width: min(100%, 380px);
+        margin-left: auto;
+      }
+
+      .about-video-shell video {
+        display: block;
+        width: 100%;
+        aspect-ratio: 0.72;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid var(--ink);
+        box-shadow: 0 16px 28px rgba(45, 38, 42, 0.1);
+      }
+
+      .about-page footer {
+        background: #f7f1f8;
+        border-top: 0;
+        color: #5d4c63;
+        padding: 28px 24px;
+        font-family: "liebling", sans-serif;
+        font-size: 14px;
+      }
+
+      @media (max-width: 920px) {
+        .about-hero {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+
+        .about-video-shell {
+          width: min(70vw, 360px);
+          margin: 10px 0 0;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .about-home {
+          margin: 20px 18px 0;
+        }
+
+        .about-hero {
+          width: calc(100% - 36px);
+          padding: 42px 0 58px;
+          gap: 34px;
+        }
+
+        .about-title {
+          font-size: clamp(50px, 16vw, 86px);
+        }
+
+        .about-intro {
+          font-size: clamp(19px, 5.5vw, 26px);
+        }
+
+        .about-video-shell {
+          width: min(82vw, 320px);
+        }
+      }
+    </style>
   </head>
 
-  <body>
-    <!-- ===== HEADER ===== -->
-    <header>
-      <a href="index.html" class="logo">
-        <img
-          src="assets/rafitaStudio_logo2025.png"
-          alt="Rafita Studio Logo"
-        />
+  <body class="about-page">
+    <main class="about-main">
+      <a class="about-home" href="index.html" aria-label="Volver al inicio">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M15.18 4.16a1.25 1.25 0 0 1 1.64 0l12.55 10.96a1.28 1.28 0 0 1 .12 1.8l-.82.94a1.28 1.28 0 0 1-1.8.12L16 8.49 5.13 17.98a1.28 1.28 0 0 1-1.8-.12l-.82-.94a1.28 1.28 0 0 1 .12-1.8L15.18 4.16Z" />
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.8 16.15 16 8.1l9.2 8.05V27a1.4 1.4 0 0 1-1.4 1.4h-6.25v-5.9a3.55 3.55 0 0 0-7.1 0v5.9H8.2A1.4 1.4 0 0 1 6.8 27V16.15Z" />
+          <path d="M22.5 6.6a1.25 1.25 0 0 1 1.25-1.25h2.15a1.25 1.25 0 0 1 1.25 1.25v7.86L22.5 10.4V6.6Z" />
+        </svg>
       </a>
-
-      <nav>
-        <ul class="desktop-nav">
-          <li><a href="index.html#work">Work</a></li>
-          <li><a href="catalogo.html">Catálogo</a></li>
-          <li>
-            <a
-              href="https://piruetasxyz.myshopify.com/collections/rafita-studio"
-              target="_blank"
-              >Shop</a
-            >
-          </li>
-          <li><a href="about.html" class="active">About Us</a></li>
-          <li>
-            <a
-              href="https://instagram.com/rafita.studio"
-              target="_blank"
-              class="instagram-link"
-              >@rafita.studio</a
-            >
-          </li>
-        </ul>
-      </nav>
-
-      <!-- Botón hamburguesa -->
-      <button
-        class="nav-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-drawer"
-        aria-label="Abrir menú"
-      >
-        <span class="bar" aria-hidden="true"></span>
-      </button>
-    </header>
-
-    <!-- ===== DRAWER FUERA DEL HEADER ===== -->
-    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
-      <div class="drawer-backdrop" data-close></div>
-      <aside
-        class="drawer-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menú"
-      >
-        <a href="about.html" class="back-home" aria-label="Volver a inicio"
-          >← Volver</a
-        >
-
-        <nav aria-label="Mobile">
-          <ul class="mobile-nav" id="mobile-nav-list"></ul>
-        </nav>
-      </aside>
-    </div>
-
-    <!-- ===== MAIN ===== -->
-    <main>
-      <section id="about" class="about-section">
-        <div class="about-text">
-          <h2>About Us</h2>
-          <p>¡Bienvenido a Rafita Studio!</p>
-          <p>
-            Somos un microestudio de diseño dedicado a la ilustración de
-            perritos. Además, diseñamos y creamos nuestros propios productos:
-            prints, stickers, poleras y muchas otras cosas hechas con cariño.
-          </p>
-          <p>
-            Puedes encontrar nuestro trabajo en
-            <a
-              class="instagram-link"
-              href="https://instagram.com/rafita.studio"
-              target="_blank"
-              >@rafita.studio</a
-            >.
-          </p>
-          <p>
-            Contáctanos en
-            <a href="mailto:rafita.estudio@gmail.com"
-              >rafita.estudio@gmail.com</a
-            >.
+      <section class="about-hero" aria-labelledby="about-title">
+        <div class="about-copy">
+          <h1 class="about-title" id="about-title">nosotros</h1>
+          <p class="about-intro">
+            Somos Dani y Mateo, diseñadores e ilustradores. Hacemos dibujitos,
+            productos y piezas gráficas para celebrar a los perritos como se
+            merecen: con humor, ternura y mucho color.
           </p>
         </div>
 
-        <div class="about-video">
-          <video autoplay muted loop playsinline>
-            <source
-              src="assets/Rafita Pokemon Card.mp4"
-              type="video/mp4"
-            />
-            Tu navegador no soporta la reproducción de video.
-          </video>
+        <div class="about-media">
+          <div class="about-video-shell">
+            <video autoplay muted loop playsinline>
+              <source src="assets/Rafita Pokemon Card.mp4" type="video/mp4" />
+              Tu navegador no soporta la reproducción de video.
+            </video>
+          </div>
         </div>
       </section>
+
     </main>
 
-    <!-- ===== FOOTER ===== -->
     <footer>
-      <p>© 2025 Rafita Studio. Todos los derechos reservados.</p>
+      <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos &lt;3</p>
     </footer>
 
-    <!-- ===== JS DEL MENÚ ===== -->
-    <script src="script.js"></script>
+    <script>
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var items = Array.prototype.slice.call(document.querySelectorAll(".about-home"));
+          var title = document.querySelector(".about-title");
+          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
+
+          function randomHover(item) {
+            var color = palette[Math.floor(Math.random() * palette.length)];
+            var rotate = (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2.4);
+            item.style.setProperty("--link-hover-color", color);
+            item.style.setProperty("--link-hover-rotate", rotate.toFixed(2) + "deg");
+          }
+
+          items.forEach(function (item) {
+            randomHover(item);
+            item.addEventListener("mouseenter", function () {
+              randomHover(item);
+            });
+            item.addEventListener("focus", function () {
+              randomHover(item);
+            });
+          });
+
+          if (!title) return;
+
+          window.addEventListener("mousemove", function (event) {
+            var x = (event.clientX / window.innerWidth - 0.5) * 2;
+            var y = (event.clientY / window.innerHeight - 0.5) * 2;
+
+            title.style.setProperty("--title-x", (x * 14).toFixed(2) + "px");
+            title.style.setProperty("--title-y", (y * 10).toFixed(2) + "px");
+            title.style.setProperty("--title-rotate", (x * 1.8).toFixed(2) + "deg");
+          });
+
+          window.addEventListener("mouseleave", function () {
+            title.style.setProperty("--title-x", "0px");
+            title.style.setProperty("--title-y", "0px");
+            title.style.setProperty("--title-rotate", "0deg");
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

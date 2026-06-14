@@ -26,6 +26,11 @@ El CMS externo escribira en:
 
 `content/settings/site.yml` contiene ajustes generales no privados del sitio.
 
+Los proyectos se escriben como Markdown con frontmatter YAML en `content/projects/`. El build estatico los transforma en:
+
+- `data/projects.json`, usado por `pages/proyectos.html`.
+- `pages/proyectos/[slug].html`, una pagina publica por proyecto.
+
 ## Imagenes
 
 Las imagenes subidas desde el CMS deberian guardarse en:
@@ -59,7 +64,14 @@ Una migracion posterior podria mover proyectos a `content/projects/`, ilustracio
 
 ## Desarrollo local
 
-No hay build system configurado. Puedes abrir `index.html` directamente en el navegador o servir el sitio con un servidor estatico simple:
+Instala dependencias y genera los proyectos desde Markdown:
+
+```sh
+npm install
+npm run build
+```
+
+Despues puedes abrir `index.html` directamente en el navegador o servir el sitio con un servidor estatico simple:
 
 ```sh
 python3 -m http.server 8000
@@ -69,6 +81,24 @@ Luego abre `http://localhost:8000`.
 
 Tambien funciona una extension como Live Server de VS Code.
 
+## Build automático de proyectos
+
+Cuando el CMS crea o edita archivos en `content/projects/`, GitHub Actions ejecuta el build de proyectos. El build genera:
+
+- `data/projects.json`
+- `pages/proyectos/[slug].html`
+
+La Action hace commit automatico solo de esos archivos generados usando `GITHUB_TOKEN`. Tambien se puede correr manualmente desde GitHub en `Actions` -> `Build project pages` -> `Run workflow`.
+
+Para correr el mismo flujo localmente:
+
+```sh
+npm install
+npm run build
+```
+
 ## GitHub Pages
 
-El sitio esta pensado para publicarse en GitHub Pages como sitio estatico. Mantener rutas relativas ayuda a que funcione tanto en local como publicado.
+El sitio esta pensado para publicarse en GitHub Pages como sitio estatico. El workflow `.github/workflows/pages.yml` ejecuta `npm run build` en cada push a `main` para regenerar `data/projects.json` y las paginas individuales antes de publicar.
+
+Mantener rutas relativas ayuda a que funcione tanto en local como publicado. En produccion con `https://rafita-studio.cl/`, las rutas absolutas tipo `/assets/images/uploads/archivo.jpg` funcionan desde la raiz del dominio.

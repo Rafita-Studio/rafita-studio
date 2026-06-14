@@ -1,0 +1,54 @@
+name: Build project pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - content/projects/**
+      - scripts/build-projects.js
+      - package.json
+      - package-lock.json
+      - pages/proyectos.html
+      - styles/**
+      - scripts/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-projects:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Build generated project files
+        run: npm run build
+
+      - name: Commit generated project files
+        run: |
+          if [ -z "$(git status --porcelain -- data/projects.json pages/proyectos)" ]; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/projects.json pages/proyectos/
+          git commit -m "build: update generated project pages [skip ci]"
+          git push

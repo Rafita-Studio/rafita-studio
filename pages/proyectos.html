@@ -139,6 +139,7 @@
         color: #171717;
         cursor: default;
         isolation: isolate;
+        text-decoration: none;
       }
 
       .project-card::after {
@@ -224,6 +225,15 @@
         text-align: right;
       }
 
+      .projects-gallery-message {
+        grid-column: 1 / -1;
+        width: min(760px, calc(100% - 36px));
+        margin: clamp(24px, 4vw, 58px) auto;
+        font-size: clamp(19px, 2vw, 28px);
+        line-height: 1.12;
+        text-align: center;
+      }
+
       .project-card:hover .project-title,
       .project-card:hover .project-meta,
       .project-card:focus-visible .project-title,
@@ -293,87 +303,87 @@
         </div>
       </section>
 
-      <section class="projects-gallery" aria-label="Galeria de proyectos Rafita Studio">
-        <article class="project-card" tabindex="0" aria-label="Proyecto Digital Doggies">
+      <section class="projects-gallery" data-projects-grid aria-label="Galeria de proyectos Rafita Studio">
+        <a class="project-card" href="./proyectos/digital-doggies.html" aria-label="Proyecto Digital Doggies">
           <img src="../assets/catalogo/A4-digitaldoggies.png" alt="Digital Doggies" loading="lazy" />
           <h2 class="project-title">Digital Doggies</h2>
           <div class="project-meta"><span>2026</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Perritos A4">
+        </a>
+        <a class="project-card" href="./proyectos/perritos-a4.html" aria-label="Proyecto Perritos A4">
           <img src="../assets/catalogo/A4_dogs.png" alt="Perritos A4" loading="lazy" />
           <h2 class="project-title">Perritos A4</h2>
           <div class="project-meta"><span>2026</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Sticker Club">
+        </a>
+        <a class="project-card" href="./proyectos/sticker-club.html" aria-label="Proyecto Sticker Club">
           <img src="../assets/catalogo/sticker_01.png" alt="Sticker Club" loading="lazy" />
           <h2 class="project-title">Sticker Club</h2>
           <div class="project-meta"><span>2026</span><span class="project-client">Piruetas</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Aurora">
+        </a>
+        <a class="project-card" href="./proyectos/aurora.html" aria-label="Proyecto Aurora">
           <img src="../assets/images/RS_aurora_fondo.png" alt="Aurora" loading="lazy" />
           <h2 class="project-title">Aurora</h2>
           <div class="project-meta"><span>2025</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Doggies Pack">
+        </a>
+        <a class="project-card" href="./proyectos/doggies-pack.html" aria-label="Proyecto Doggies Pack">
           <img src="../assets/images/trabajos_new-04.jpg" alt="Doggies Pack" loading="lazy" />
           <h2 class="project-title">Doggies Pack</h2>
           <div class="project-meta"><span>2025</span><span class="project-client">Piruetas</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Rafita Prints">
+        </a>
+        <a class="project-card" href="./proyectos/rafita-prints.html" aria-label="Proyecto Rafita Prints">
           <img src="../assets/images/trabajos_new-05.jpg" alt="Rafita Prints" loading="lazy" />
           <h2 class="project-title">Rafita Prints</h2>
           <div class="project-meta"><span>2025</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Mini Posters">
+        </a>
+        <a class="project-card" href="./proyectos/mini-posters.html" aria-label="Proyecto Mini Posters">
           <img src="../assets/images/trabajos_new-06.jpg" alt="Mini Posters" loading="lazy" />
           <h2 class="project-title">Mini Posters</h2>
           <div class="project-meta"><span>2025</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Perrito Azul">
+        </a>
+        <a class="project-card" href="./proyectos/perrito-azul.html" aria-label="Proyecto Perrito Azul">
           <img src="../assets/catalogo/08.jpg" alt="Perrito Azul" loading="lazy" />
           <h2 class="project-title">Perrito Azul</h2>
           <div class="project-meta"><span>2024</span><span class="project-client">Mascotas</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Amistad">
+        </a>
+        <a class="project-card" href="./proyectos/amistad.html" aria-label="Proyecto Amistad">
           <img src="../assets/catalogo/09.jpg" alt="Amistad" loading="lazy" />
           <h2 class="project-title">Amistad</h2>
           <div class="project-meta"><span>2024</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Kiosco">
+        </a>
+        <a class="project-card" href="./proyectos/kiosco.html" aria-label="Proyecto Kiosco">
           <img src="../assets/catalogo/10.png" alt="Kiosco" loading="lazy" />
           <h2 class="project-title">Kiosco</h2>
           <div class="project-meta"><span>2024</span><span class="project-client">Piruetas</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Mascota Feliz">
+        </a>
+        <a class="project-card" href="./proyectos/mascota-feliz.html" aria-label="Proyecto Mascota Feliz">
           <img src="../assets/catalogo/12.png" alt="Mascota Feliz" loading="lazy" />
           <h2 class="project-title">Mascota Feliz</h2>
           <div class="project-meta"><span>2024</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Casa Rafita">
+        </a>
+        <a class="project-card" href="./proyectos/casa-rafita.html" aria-label="Proyecto Casa Rafita">
           <img src="../assets/catalogo/13.png" alt="Casa Rafita" loading="lazy" />
           <h2 class="project-title">Casa Rafita</h2>
           <div class="project-meta"><span>2024</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Patitas">
+        </a>
+        <a class="project-card" href="./proyectos/patitas.html" aria-label="Proyecto Patitas">
           <img src="../assets/catalogo/14.png" alt="Patitas" loading="lazy" />
           <h2 class="project-title">Patitas</h2>
           <div class="project-meta"><span>2023</span><span class="project-client">Mascotas</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Retratos">
+        </a>
+        <a class="project-card" href="./proyectos/retratos.html" aria-label="Proyecto Retratos">
           <img src="../assets/catalogo/15.jpg" alt="Retratos" loading="lazy" />
           <h2 class="project-title">Retratos</h2>
           <div class="project-meta"><span>2023</span><span class="project-client">Rafita Studio</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Peludos">
+        </a>
+        <a class="project-card" href="./proyectos/peludos.html" aria-label="Proyecto Peludos">
           <img src="../assets/catalogo/16.jpg" alt="Peludos" loading="lazy" />
           <h2 class="project-title">Peludos</h2>
           <div class="project-meta"><span>2023</span><span class="project-client">Piruetas</span></div>
-        </article>
-        <article class="project-card" tabindex="0" aria-label="Proyecto Amigos">
+        </a>
+        <a class="project-card" href="./proyectos/amigos.html" aria-label="Proyecto Amigos">
           <img src="../assets/catalogo/17.jpg" alt="Amigos" loading="lazy" />
           <h2 class="project-title">Amigos</h2>
           <div class="project-meta"><span>2023</span><span class="project-client">Rafita Studio</span></div>
-        </article>
+        </a>
       </section>
     </main>
 
@@ -381,49 +391,6 @@
       <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos &lt;3</p>
     </footer>
 
-    <script>
-      (function () {
-        document.addEventListener("DOMContentLoaded", function () {
-          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
-          var rowPalettes = [
-            ["#66b6e9","#0d73c8","#099947","#ff9418"],
-            ["#ff3122","#5833a3","#ffc21a","#f193c9"]
-          ];
-          var items = Array.prototype.slice.call(document.querySelectorAll(".projects-home, .project-card"));
-          var cards = Array.prototype.slice.call(document.querySelectorAll(".project-card"));
-
-          function randomHover(item) {
-            var color = palette[Math.floor(Math.random() * palette.length)];
-            var rotate = (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2.4);
-            item.style.setProperty("--link-hover-color", color);
-            item.style.setProperty("--link-hover-rotate", rotate.toFixed(2) + "deg");
-          }
-
-          function paintProjectCards() {
-            var columns = window.matchMedia("(max-width: 720px)").matches ? 2 : 4;
-            cards.forEach(function (card, index) {
-              var row = Math.floor(index / columns);
-              var column = index % columns;
-              var rowColors = rowPalettes[row % rowPalettes.length];
-              var color = rowColors[column % rowColors.length];
-              card.style.setProperty("--card-color", color);
-            });
-          }
-
-          paintProjectCards();
-          window.addEventListener("resize", paintProjectCards);
-
-          items.forEach(function (item) {
-            randomHover(item);
-            item.addEventListener("mouseenter", function () {
-              randomHover(item);
-            });
-            item.addEventListener("focus", function () {
-              randomHover(item);
-            });
-          });
-        });
-      })();
-    </script>
+    <script src="../scripts/projects-gallery.js"></script>
   </body>
 </html>

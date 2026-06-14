@@ -1,0 +1,13 @@
+{
+  "name": "rafita-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:projects": "node scripts/build-projects.js",
+    "build": "node scripts/build-projects.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^13.0.3"
+  }
+}

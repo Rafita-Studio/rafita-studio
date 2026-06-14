@@ -25,11 +25,12 @@ const images = [
 
 // Selecciona el contenedor
 const gallery = document.getElementById("gallery");
+const imageBase = new URL("../assets/images/", document.currentScript.src);
 
 // Inserta las imágenes
 images.forEach((file, index) => {
   const img = document.createElement("img");
-  img.src = `assets/images/${file}`;
+  img.src = new URL(file, imageBase).href;
   img.alt = `Ilustración ${index + 1}`;
   gallery.appendChild(img);
 });

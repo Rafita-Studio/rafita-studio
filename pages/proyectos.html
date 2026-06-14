@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proyectos — Rafita Studio</title>
+    <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <style>
+      :root {
+        --paper: #ecebe6;
+        --ink: #363636;
+        --orange: #ff9418;
+        --blue: #0d73c8;
+        --green: #099947;
+        --pink: #f193c9;
+        --red: #ff3122;
+        --yellow: #ffc21a;
+        --violet: #5833a3;
+        --sky: #66b6e9;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body.projects-page {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "liebling", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .projects-main {
+        background: var(--paper);
+      }
+
+      .projects-home {
+        display: inline-grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        margin: clamp(22px, 3vw, 42px) clamp(18px, 5vw, 82px) 0;
+        color: var(--ink);
+        text-decoration: none;
+        transition:
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .projects-home svg {
+        display: block;
+        width: 34px;
+        height: 34px;
+        fill: currentColor;
+      }
+
+      .projects-home:hover {
+        color: var(--link-hover-color, var(--orange));
+        transform: rotate(var(--link-hover-rotate, -2deg));
+      }
+
+      .projects-intro {
+        width: min(1480px, calc(100% - clamp(36px, 8vw, 132px)));
+        margin: 0 auto;
+        padding: clamp(18px, 3vw, 42px) 0 clamp(18px, 2.4vw, 34px);
+      }
+
+      .projects-title {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        font-size: clamp(56px, 10vw, 168px);
+        line-height: 0.86;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        color: var(--orange);
+        animation: title-palette 8s steps(8, end) infinite;
+      }
+
+      .projects-description {
+        max-width: 1000px;
+        margin: clamp(12px, 1.6vw, 22px) 0 0;
+        font-size: clamp(19px, 2vw, 28px);
+        line-height: 1.12;
+      }
+
+      .projects-filters {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: clamp(14px, 1.8vw, 24px);
+      }
+
+      .projects-filter {
+        border: 1.5px solid var(--ink);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink);
+        padding: 8px 16px 10px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: clamp(13px, 1vw, 16px);
+        font-weight: 400;
+        line-height: 1;
+        text-transform: lowercase;
+      }
+
+      @keyframes title-palette {
+        0% { color: var(--orange); }
+        12.5% { color: var(--sky); }
+        25% { color: var(--green); }
+        37.5% { color: var(--pink); }
+        50% { color: var(--red); }
+        62.5% { color: var(--yellow); }
+        75% { color: var(--blue); }
+        87.5% { color: var(--violet); }
+        100% { color: var(--orange); }
+      }
+
+      .projects-gallery {
+        width: 100%;
+        margin: 0;
+        padding: 0 0 clamp(64px, 8vw, 118px);
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+      }
+
+      .project-card {
+        --card-color: var(--orange);
+        position: relative;
+        display: block;
+        margin: 0;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        background: var(--card-color);
+        color: #171717;
+        cursor: default;
+        isolation: isolate;
+      }
+
+      .project-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0);
+        transition: background 180ms ease;
+      }
+
+      .project-card img {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        filter: saturate(1.08) contrast(1.02);
+        transform: scale(1.04);
+        transition:
+          opacity 180ms ease,
+          transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .project-card:hover img,
+      .project-card:focus-visible img {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .project-card:hover,
+      .project-card:focus-visible {
+        color: #ffffff;
+        outline: 0;
+      }
+
+      .project-card:hover::after,
+      .project-card:focus-visible::after {
+        background: rgba(0, 0, 0, 0.22);
+      }
+
+      .project-title,
+      .project-meta {
+        position: absolute;
+        z-index: 3;
+        transition:
+          color 180ms ease,
+          text-shadow 180ms ease;
+      }
+
+      .project-title {
+        top: clamp(10px, 1.2vw, 18px);
+        left: 12px;
+        right: 12px;
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        text-align: center;
+        font-size: clamp(26px, 2.6vw, 54px);
+        font-weight: 400;
+        line-height: 0.86;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .project-meta {
+        left: 12px;
+        right: 12px;
+        bottom: clamp(10px, 1vw, 15px);
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 8px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: clamp(14px, 1.2vw, 22px);
+        font-weight: 400;
+        line-height: 1;
+      }
+
+      .project-client {
+        text-align: right;
+      }
+
+      .project-card:hover .project-title,
+      .project-card:hover .project-meta,
+      .project-card:focus-visible .project-title,
+      .project-card:focus-visible .project-meta {
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.52);
+      }
+
+      .projects-page footer {
+        background: #f7f1f8;
+        border-top: 0;
+        color: #5d4c63;
+        padding: 28px 24px;
+        font-family: "liebling", sans-serif;
+        font-size: 14px;
+      }
+
+      @media (max-width: 720px) {
+        .projects-home {
+          margin: 20px 18px 0;
+        }
+
+        .projects-intro {
+          width: calc(100% - 36px);
+        }
+
+        .projects-intro {
+          padding: 24px 0 22px;
+        }
+
+        .projects-title {
+          font-size: clamp(50px, 15vw, 86px);
+        }
+
+        .projects-description {
+          font-size: clamp(19px, 5.5vw, 26px);
+        }
+
+        .projects-gallery {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          padding-bottom: 58px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="projects-page">
+    <main class="projects-main">
+      <a class="projects-home" href="../index.html" aria-label="Volver al inicio">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M15.18 4.16a1.25 1.25 0 0 1 1.64 0l12.55 10.96a1.28 1.28 0 0 1 .12 1.8l-.82.94a1.28 1.28 0 0 1-1.8.12L16 8.49 5.13 17.98a1.28 1.28 0 0 1-1.8-.12l-.82-.94a1.28 1.28 0 0 1 .12-1.8L15.18 4.16Z" />
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.8 16.15 16 8.1l9.2 8.05V27a1.4 1.4 0 0 1-1.4 1.4h-6.25v-5.9a3.55 3.55 0 0 0-7.1 0v5.9H8.2A1.4 1.4 0 0 1 6.8 27V16.15Z" />
+          <path d="M22.5 6.6a1.25 1.25 0 0 1 1.25-1.25h2.15a1.25 1.25 0 0 1 1.25 1.25v7.86L22.5 10.4V6.6Z" />
+        </svg>
+      </a>
+
+      <section class="projects-intro" aria-labelledby="projects-title">
+        <h1 class="projects-title" id="projects-title">proyectos <span aria-hidden="true">☻</span></h1>
+        <p class="projects-description">
+          Selección de trabajos de ilustración, identidad, productos y piezas
+          gráficas hechas con humor, color y mucho amor <3
+        </p>
+        <div class="projects-filters" aria-label="Tipos de proyectos">
+          <span class="projects-filter">branding</span>
+          <span class="projects-filter">ilustración</span>
+          <span class="projects-filter">web</span>
+          <span class="projects-filter">editorial</span>
+        </div>
+      </section>
+
+      <section class="projects-gallery" aria-label="Galeria de proyectos Rafita Studio">
+        <article class="project-card" tabindex="0" aria-label="Proyecto Digital Doggies">
+          <img src="../assets/catalogo/A4-digitaldoggies.png" alt="Digital Doggies" loading="lazy" />
+          <h2 class="project-title">Digital Doggies</h2>
+          <div class="project-meta"><span>2026</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Perritos A4">
+          <img src="../assets/catalogo/A4_dogs.png" alt="Perritos A4" loading="lazy" />
+          <h2 class="project-title">Perritos A4</h2>
+          <div class="project-meta"><span>2026</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Sticker Club">
+          <img src="../assets/catalogo/sticker_01.png" alt="Sticker Club" loading="lazy" />
+          <h2 class="project-title">Sticker Club</h2>
+          <div class="project-meta"><span>2026</span><span class="project-client">Piruetas</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Aurora">
+          <img src="../assets/images/RS_aurora_fondo.png" alt="Aurora" loading="lazy" />
+          <h2 class="project-title">Aurora</h2>
+          <div class="project-meta"><span>2025</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Doggies Pack">
+          <img src="../assets/images/trabajos_new-04.jpg" alt="Doggies Pack" loading="lazy" />
+          <h2 class="project-title">Doggies Pack</h2>
+          <div class="project-meta"><span>2025</span><span class="project-client">Piruetas</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Rafita Prints">
+          <img src="../assets/images/trabajos_new-05.jpg" alt="Rafita Prints" loading="lazy" />
+          <h2 class="project-title">Rafita Prints</h2>
+          <div class="project-meta"><span>2025</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Mini Posters">
+          <img src="../assets/images/trabajos_new-06.jpg" alt="Mini Posters" loading="lazy" />
+          <h2 class="project-title">Mini Posters</h2>
+          <div class="project-meta"><span>2025</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Perrito Azul">
+          <img src="../assets/catalogo/08.jpg" alt="Perrito Azul" loading="lazy" />
+          <h2 class="project-title">Perrito Azul</h2>
+          <div class="project-meta"><span>2024</span><span class="project-client">Mascotas</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Amistad">
+          <img src="../assets/catalogo/09.jpg" alt="Amistad" loading="lazy" />
+          <h2 class="project-title">Amistad</h2>
+          <div class="project-meta"><span>2024</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Kiosco">
+          <img src="../assets/catalogo/10.png" alt="Kiosco" loading="lazy" />
+          <h2 class="project-title">Kiosco</h2>
+          <div class="project-meta"><span>2024</span><span class="project-client">Piruetas</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Mascota Feliz">
+          <img src="../assets/catalogo/12.png" alt="Mascota Feliz" loading="lazy" />
+          <h2 class="project-title">Mascota Feliz</h2>
+          <div class="project-meta"><span>2024</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Casa Rafita">
+          <img src="../assets/catalogo/13.png" alt="Casa Rafita" loading="lazy" />
+          <h2 class="project-title">Casa Rafita</h2>
+          <div class="project-meta"><span>2024</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Patitas">
+          <img src="../assets/catalogo/14.png" alt="Patitas" loading="lazy" />
+          <h2 class="project-title">Patitas</h2>
+          <div class="project-meta"><span>2023</span><span class="project-client">Mascotas</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Retratos">
+          <img src="../assets/catalogo/15.jpg" alt="Retratos" loading="lazy" />
+          <h2 class="project-title">Retratos</h2>
+          <div class="project-meta"><span>2023</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Peludos">
+          <img src="../assets/catalogo/16.jpg" alt="Peludos" loading="lazy" />
+          <h2 class="project-title">Peludos</h2>
+          <div class="project-meta"><span>2023</span><span class="project-client">Piruetas</span></div>
+        </article>
+        <article class="project-card" tabindex="0" aria-label="Proyecto Amigos">
+          <img src="../assets/catalogo/17.jpg" alt="Amigos" loading="lazy" />
+          <h2 class="project-title">Amigos</h2>
+          <div class="project-meta"><span>2023</span><span class="project-client">Rafita Studio</span></div>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos &lt;3</p>
+    </footer>
+
+    <script>
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
+          var rowPalettes = [
+            ["#66b6e9","#0d73c8","#099947","#ff9418"],
+            ["#ff3122","#5833a3","#ffc21a","#f193c9"]
+          ];
+          var items = Array.prototype.slice.call(document.querySelectorAll(".projects-home, .project-card"));
+          var cards = Array.prototype.slice.call(document.querySelectorAll(".project-card"));
+
+          function randomHover(item) {
+            var color = palette[Math.floor(Math.random() * palette.length)];
+            var rotate = (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2.4);
+            item.style.setProperty("--link-hover-color", color);
+            item.style.setProperty("--link-hover-rotate", rotate.toFixed(2) + "deg");
+          }
+
+          function paintProjectCards() {
+            var columns = window.matchMedia("(max-width: 720px)").matches ? 2 : 4;
+            cards.forEach(function (card, index) {
+              var row = Math.floor(index / columns);
+              var column = index % columns;
+              var rowColors = rowPalettes[row % rowPalettes.length];
+              var color = rowColors[column % rowColors.length];
+              card.style.setProperty("--card-color", color);
+            });
+          }
+
+          paintProjectCards();
+          window.addEventListener("resize", paintProjectCards);
+
+          items.forEach(function (item) {
+            randomHover(item);
+            item.addEventListener("mouseenter", function () {
+              randomHover(item);
+            });
+            item.addEventListener("focus", function () {
+              randomHover(item);
+            });
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

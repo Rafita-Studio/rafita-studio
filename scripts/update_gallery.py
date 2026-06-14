@@ -3,8 +3,10 @@ import re
 from pathlib import Path
 
 # === CONFIGURACIÓN ===
-HTML_FILE = "index.html"
-IMAGES_DIR = "assets/images"
+ROOT_DIR = Path(__file__).resolve().parents[1]
+HTML_FILE = ROOT_DIR / "index.html"
+BACKUP_FILE = ROOT_DIR / "pages" / "index_backup.html"
+IMAGES_DIR = ROOT_DIR / "assets" / "images"
 VALID_EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif")
 
 def get_image_files():
@@ -16,7 +18,7 @@ def get_image_files():
 
 def update_html():
     """Reemplaza el bloque FILES = [ ... ] en el index.html"""
-    if not Path(HTML_FILE).exists():
+    if not HTML_FILE.exists():
         print("❌ No se encontró el archivo index.html")
         return
 
@@ -37,10 +39,9 @@ def update_html():
         print("⚠️ No se encontró el bloque const FILES = [...] en el HTML.")
         return
 
-    backup_path = HTML_FILE.replace(".html", "_backup.html")
-    with open(backup_path, "w", encoding="utf-8") as backup:
+    with open(BACKUP_FILE, "w", encoding="utf-8") as backup:
         backup.write(html)
-    print(f"💾 Copia de seguridad creada → {backup_path}")
+    print(f"💾 Copia de seguridad creada → {BACKUP_FILE.relative_to(ROOT_DIR)}")
 
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(new_html)

@@ -78,6 +78,14 @@ function normalizeGallery(gallery, title) {
     .filter(Boolean);
 }
 
+function normalizeBoolean(value, defaultValue = false) {
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") {
+    return value.trim().toLowerCase() === "true";
+  }
+  return defaultValue;
+}
+
 function normalizeProject(filePath) {
   const raw = fs.readFileSync(filePath, "utf8");
   const parsed = matter(raw);
@@ -102,7 +110,8 @@ function normalizeProject(filePath) {
     order: data.order === undefined || data.order === null || data.order === "" ? null : Number(data.order),
     body,
     bodyHtml: marked.parse(body),
-    published: data.published !== false,
+    published: normalizeBoolean(data.published, true),
+    featured: normalizeBoolean(data.featured, false),
   };
 }
 
@@ -135,6 +144,7 @@ function renderProjectPage(project) {
   const metaDescription = escapeHtml(project.description || `Proyecto ${project.title} de Rafita Studio.`);
   const cover = pathForProjectPage(project.cover);
   const metaItems = [
+    project.featured ? "Proyecto destacado" : "",
     project.category,
     project.client,
   ].filter(Boolean);
@@ -448,7 +458,7 @@ function main() {
     .filter((project) => project.published)
     .sort(sortProjects);
 
-  const jsonProjects = projects.map(({ body, bodyHtml, published, ...project }) => project);
+  const jsonProjects = projects.map(({ body, bodyHtml, ...project }) => project);
 
   fs.writeFileSync(outputJsonPath, `${JSON.stringify(jsonProjects, null, 2)}\n`);
   cleanGeneratedProjectPages();

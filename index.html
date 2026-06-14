@@ -311,13 +311,15 @@
          ══════════════════════════════════════════ */
 
       #type-poster {
-        min-height: 58vh;
+        position: relative;
+        z-index: 1;
+        min-height: 0;
         background: #ecebe6;
         color: #363636;
         display: flex;
         align-items: flex-start;
-        overflow: hidden;
-        padding: clamp(4px, 1.2vw, 18px) clamp(24px, 5vw, 82px) clamp(28px, 4vw, 62px);
+        overflow: visible;
+        padding: clamp(4px, 1.2vw, 18px) clamp(24px, 5vw, 82px) 0;
       }
 
       .type-poster-inner {
@@ -370,8 +372,8 @@
 
       @media (max-width: 720px) {
         #type-poster {
-          min-height: 36vh;
-          padding: 0 18px 12px;
+          min-height: 0;
+          padding: 5px 10px;
         }
 
         .type-line {
@@ -481,6 +483,164 @@
       }
 
       /* ══════════════════════════════════════════
+         FEATURED PROJECTS
+         ══════════════════════════════════════════ */
+
+      #featured-projects {
+        position: relative;
+        z-index: 3;
+        margin-top: clamp(-72px, -5vw, -28px);
+        background: #ecebe6;
+        color: #363636;
+        padding: clamp(8px, 1.4vw, 18px) 0 clamp(18px, 3vw, 42px);
+        overflow: clip;
+        overflow-clip-margin: 12px;
+      }
+
+      .featured-projects-inner {
+        --featured-height: 840px;
+        position: relative;
+        width: 100%;
+        max-width: none;
+        min-height: var(--featured-height);
+        margin: 0 auto;
+      }
+
+      .featured-projects-stage {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+
+      .featured-project-thumb {
+        --x: 50%;
+        --y: 120px;
+        --w: 25vw;
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        z-index: var(--z, 2);
+        display: block;
+        width: clamp(190px, var(--w), 430px);
+        aspect-ratio: 4 / 5;
+        color: #363636;
+        text-decoration: none;
+        opacity: 1;
+        transform: translate(-50%, -50%);
+        filter: drop-shadow(0 5px 5px rgba(54, 54, 54, 0.18));
+        transition:
+          filter 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .featured-project-thumb img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 2px solid rgba(54, 54, 54, 0.12);
+        background: #ecebe6;
+        object-fit: cover;
+      }
+
+      .featured-project-thumb:hover,
+      .featured-project-thumb:focus-visible {
+        outline: 0;
+        transform: translate(-50%, -50%) scale(1.035);
+        filter: drop-shadow(0 15px 14px rgba(54, 54, 54, 0.25));
+      }
+
+      .featured-project-thumb:hover img,
+      .featured-project-thumb:focus-visible img {
+        border-color: #ff9418;
+      }
+
+      .featured-project-caption {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        bottom: 9px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 8px;
+        color: #ffffff;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: clamp(13px, 1.05vw, 18px);
+        line-height: 1;
+        text-transform: lowercase;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.54);
+        opacity: 0;
+        transition: opacity 180ms ease;
+      }
+
+      .featured-project-thumb:hover .featured-project-caption,
+      .featured-project-thumb:focus-visible .featured-project-caption {
+        opacity: 1;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .featured-project-thumb {
+          transition: none;
+        }
+      }
+
+      .featured-projects-all {
+        position: absolute;
+        left: 50%;
+        bottom: clamp(31px, 3vw, 42px);
+        z-index: 20;
+        transform: translateX(-50%);
+        border: 1.5px solid #363636;
+        border-radius: 999px;
+        background: #ecebe6;
+        color: #363636;
+        padding: 10px 18px 12px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: clamp(14px, 1.1vw, 18px);
+        line-height: 1;
+        text-decoration: none;
+        text-transform: lowercase;
+        box-shadow: 0 10px 20px rgba(54, 54, 54, 0.08);
+        transition:
+          border-color 180ms ease,
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .featured-projects-all:hover,
+      .featured-projects-all:focus-visible {
+        color: #ff9418;
+        border-color: currentColor;
+        outline: 0;
+        transform: translateX(-50%) rotate(-1.5deg);
+      }
+
+      @media (max-width: 720px) {
+        #featured-projects {
+          margin-top: 0;
+          padding: 4px 18px 18px;
+        }
+
+        .featured-projects-inner {
+          --featured-height: 720px;
+        }
+
+        .featured-project-thumb {
+          width: clamp(210px, var(--mobile-w, var(--w)), 360px);
+        }
+
+        .featured-project-caption {
+          opacity: 1;
+          font-size: 13px;
+        }
+
+        .featured-projects-all {
+          left: 50%;
+          padding: 9px 14px 10px;
+        }
+      }
+
+      /* ══════════════════════════════════════════
          FOOTER
          ══════════════════════════════════════════ */
 
@@ -583,6 +743,13 @@
       </div>
     </section>
 
+    <section id="featured-projects" class="featured-projects-section" aria-label="Proyectos destacados" hidden>
+      <div class="featured-projects-inner">
+        <div id="featured-projects-stage" class="featured-projects-stage"></div>
+        <a class="featured-projects-all" href="pages/proyectos.html">ver todos los proyectos</a>
+      </div>
+    </section>
+
     <section id="link-block" aria-label="Navegacion Rafita Studio">
       <div class="link-block-inner">
         <div class="link-row">
@@ -623,6 +790,8 @@
         });
       })();
     </script>
+
+    <script src="scripts/featured-projects.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 

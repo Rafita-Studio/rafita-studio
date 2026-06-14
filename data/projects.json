@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "title": "Epica Audio - Plugins design",
+    "slug": "epica-audio",
+    "url": "/pages/proyectos/epica-audio.html",
+    "client": "Epica Audio",
+    "year": 2026,
+    "category": "Web",
+    "description": "Diseño de plugins",
+    "cover": "/assets/images/uploads/andesecho.png",
+    "gallery": [
+      {
+        "image": "/assets/images/uploads/drivedown_demo2.jpg",
+        "alt": "Epica Audio - Plugins design 1"
+      }
+    ],
+    "order": 1
+  }
+]

@@ -40,6 +40,14 @@
     });
   }
 
+  function normalizeCategory(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
+
   function sortProjects(a, b) {
     var aOrder = Number(a.order);
     var bOrder = Number(b.order);
@@ -99,12 +107,59 @@
     grid.appendChild(notice);
   }
 
+  function setActiveFilter(filters, activeFilter) {
+    filters.forEach(function (button) {
+      var filterValue = button.getAttribute("data-project-filter") || "all";
+      var normalizedFilter = filterValue === "all" ? "all" : normalizeCategory(filterValue);
+      var isActive = normalizedFilter === activeFilter;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function projectsForFilter(projects, activeFilter) {
+    if (activeFilter === "all") return projects;
+    return projects.filter(function (project) {
+      return normalizeCategory(project.category) === activeFilter;
+    });
+  }
+
+  function renderProjects(grid, projects, activeFilter) {
+    var filteredProjects = projectsForFilter(projects, activeFilter);
+    grid.innerHTML = "";
+
+    if (filteredProjects.length === 0) {
+      showMessage(grid, "No hay proyectos en este filtro por ahora.");
+      return;
+    }
+
+    filteredProjects.forEach(function (project) {
+      grid.appendChild(renderCard(project));
+    });
+    hydrateInteractions();
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     var grid = document.querySelector("[data-projects-grid]");
+    var filters = Array.prototype.slice.call(document.querySelectorAll("[data-project-filter]"));
+    var activeFilter = "all";
+    var loadedProjects = [];
     if (!grid) return;
 
     hydrateInteractions();
     window.addEventListener("resize", paintProjectCards);
+
+    filters.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var filterValue = button.getAttribute("data-project-filter") || "all";
+        activeFilter = filterValue === "all" ? "all" : normalizeCategory(filterValue);
+        setActiveFilter(filters, activeFilter);
+
+        if (loadedProjects.length > 0) {
+          renderProjects(grid, loadedProjects, activeFilter);
+        }
+      });
+    });
 
     fetch("../data/projects.json", { cache: "no-cache" })
       .then(function (response) {
@@ -122,11 +177,8 @@
 
         if (visibleProjects.length === 0) return;
 
-        grid.innerHTML = "";
-        visibleProjects.forEach(function (project) {
-          grid.appendChild(renderCard(project));
-        });
-        hydrateInteractions();
+        loadedProjects = visibleProjects;
+        renderProjects(grid, loadedProjects, activeFilter);
       })
       .catch(function () {
         if (!grid.children.length) {

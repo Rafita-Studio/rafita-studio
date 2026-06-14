@@ -135,13 +135,19 @@ function renderProjectPage(project) {
   const metaDescription = escapeHtml(project.description || `Proyecto ${project.title} de Rafita Studio.`);
   const cover = pathForProjectPage(project.cover);
   const metaItems = [
-    project.year,
     project.category,
     project.client,
   ].filter(Boolean);
-  const gallery = project.gallery
+  const mediaItems = [
+    cover ? { image: cover, alt: project.title } : null,
+    ...project.gallery.map((item) => ({
+      image: pathForProjectPage(item.image),
+      alt: item.alt || project.title,
+    })),
+  ].filter((item, index, items) => item && items.findIndex((candidate) => candidate.image === item.image) === index);
+  const gallery = mediaItems
     .map((item) => {
-      const src = escapeHtml(pathForProjectPage(item.image));
+      const src = escapeHtml(item.image);
       const alt = escapeHtml(item.alt || project.title);
       return `<figure class="project-detail-image"><img src="${src}" alt="${alt}" loading="lazy" /></figure>`;
     })
@@ -233,24 +239,39 @@ ${generatedMarker}
         transform: rotate(-2deg);
       }
 
-      .project-detail-hero,
-      .project-detail-content,
-      .project-detail-gallery {
+      .project-detail-layout {
         width: min(1480px, calc(100% - clamp(36px, 8vw, 132px)));
         margin: 0 auto;
       }
 
-      .project-detail-hero {
-        padding: clamp(28px, 5vw, 78px) 0 clamp(24px, 4vw, 62px);
+      .project-detail-layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+        gap: clamp(24px, 4.5vw, 72px);
+        align-items: start;
+        padding: clamp(28px, 5vw, 78px) 0 clamp(64px, 8vw, 118px);
+      }
+
+      .project-detail-copy {
+        padding: 0 0 clamp(18px, 3vw, 42px);
+        position: sticky;
+        top: clamp(18px, 3vw, 42px);
+      }
+
+      .project-detail-kicker {
+        margin: 0 0 clamp(12px, 1.8vw, 24px);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: clamp(16px, 1.2vw, 22px);
+        line-height: 1;
+        text-transform: lowercase;
       }
 
       .project-detail-title {
-        max-width: 1160px;
         margin: 0;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 400;
-        font-size: clamp(54px, 9vw, 154px);
-        line-height: 0.86;
+        font-size: clamp(34px, 5.8vw, 86px);
+        line-height: 0.92;
         letter-spacing: 0;
         text-transform: uppercase;
         color: var(--orange);
@@ -274,33 +295,23 @@ ${generatedMarker}
       }
 
       .project-detail-description {
-        max-width: 960px;
         margin: clamp(16px, 2vw, 28px) 0 0;
         font-size: clamp(20px, 2vw, 31px);
         line-height: 1.08;
       }
 
-      .project-detail-cover {
-        width: 100%;
-        margin: 0;
-        background: var(--orange);
-      }
-
-      .project-detail-cover img {
-        display: block;
-        width: 100%;
-        max-height: 82vh;
-        object-fit: cover;
-      }
-
       .project-detail-content {
-        padding: clamp(34px, 5vw, 78px) 0;
+        margin-top: clamp(28px, 4vw, 58px);
         font-size: clamp(19px, 1.75vw, 28px);
         line-height: 1.18;
       }
 
-      .project-detail-content > * {
-        max-width: 900px;
+      .project-detail-content > :first-child {
+        margin-top: 0;
+      }
+
+      .project-detail-content > :last-child {
+        margin-bottom: 0;
       }
 
       .project-detail-content a {
@@ -309,15 +320,15 @@ ${generatedMarker}
       }
 
       .project-detail-gallery {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: clamp(12px, 2vw, 28px);
-        padding: 0 0 clamp(64px, 8vw, 118px);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(14px, 2vw, 30px);
       }
 
       .project-detail-image {
         margin: 0;
         background: var(--sky);
+        min-height: clamp(340px, 72vh, 860px);
       }
 
       .project-detail-image img {
@@ -338,18 +349,28 @@ ${generatedMarker}
 
       @media (max-width: 720px) {
         .project-detail-nav,
-        .project-detail-hero,
-        .project-detail-content,
-        .project-detail-gallery {
+        .project-detail-layout {
           width: calc(100% - 36px);
         }
 
-        .project-detail-title {
-          font-size: clamp(48px, 14vw, 82px);
+        .project-detail-layout {
+          display: flex;
+          flex-direction: column;
+          gap: 28px;
+          padding-top: 28px;
         }
 
-        .project-detail-gallery {
-          grid-template-columns: 1fr;
+        .project-detail-copy {
+          position: static;
+        }
+
+        .project-detail-title {
+          font-size: clamp(38px, 11vw, 64px);
+        }
+
+        .project-detail-image {
+          min-height: auto;
+          aspect-ratio: 4 / 5;
         }
       }
     </style>
@@ -367,24 +388,25 @@ ${generatedMarker}
         <a class="project-detail-back" href="../proyectos.html">volver a proyectos</a>
       </nav>
 
-      <section class="project-detail-hero" aria-labelledby="project-title">
-        <h1 class="project-detail-title" id="project-title">${title}</h1>
-        ${metaItems.length ? `<div class="project-detail-meta">${metaItems.map((item) => `<span class="project-detail-chip">${escapeHtml(item)}</span>`).join("")}</div>` : ""}
-        ${project.description ? `<p class="project-detail-description">${escapeHtml(project.description)}</p>` : ""}
-      </section>
+      <section class="project-detail-layout" aria-labelledby="project-title">
+        <div class="project-detail-copy">
+          ${project.year ? `<p class="project-detail-kicker">${escapeHtml(project.year)}</p>` : ""}
+          <h1 class="project-detail-title" id="project-title">${title}</h1>
+          ${metaItems.length ? `<div class="project-detail-meta">${metaItems.map((item) => `<span class="project-detail-chip">${escapeHtml(item)}</span>`).join("")}</div>` : ""}
+          ${project.description ? `<p class="project-detail-description">${escapeHtml(project.description)}</p>` : ""}
+          ${project.bodyHtml.trim() ? `<div class="project-detail-content">${project.bodyHtml}</div>` : ""}
+        </div>
 
-      ${cover ? `<figure class="project-detail-cover"><img src="${escapeHtml(cover)}" alt="${escapeHtml(project.title)}" /></figure>` : ""}
-
-      ${project.bodyHtml.trim() ? `<section class="project-detail-content">${project.bodyHtml}</section>` : ""}
-
-      ${gallery ? `<section class="project-detail-gallery" aria-label="Galeria de ${title}">
+        ${gallery ? `<div class="project-detail-gallery" aria-label="Galeria de ${title}">
           ${gallery}
-      </section>` : ""}
+        </div>` : ""}
+      </section>
     </main>
 
     <footer>
       <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos &lt;3</p>
     </footer>
+    <script src="../../scripts/page-fade.js"></script>
   </body>
 </html>
 `;

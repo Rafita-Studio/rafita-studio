@@ -105,6 +105,24 @@
         font-weight: 400;
         line-height: 1;
         text-transform: lowercase;
+        cursor: pointer;
+        transition:
+          background 180ms ease,
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .projects-filter:hover,
+      .projects-filter:focus-visible,
+      .projects-filter.is-active {
+        background: var(--ink);
+        color: var(--paper);
+        outline: 0;
+      }
+
+      .projects-filter:hover,
+      .projects-filter:focus-visible {
+        transform: rotate(-1.5deg);
       }
 
       @keyframes title-palette {
@@ -295,11 +313,12 @@
           Selección de trabajos de ilustración, identidad, productos y piezas
           gráficas hechas con humor, color y mucho amor <3
         </p>
-        <div class="projects-filters" aria-label="Tipos de proyectos">
-          <span class="projects-filter">branding</span>
-          <span class="projects-filter">ilustración</span>
-          <span class="projects-filter">web</span>
-          <span class="projects-filter">editorial</span>
+        <div class="projects-filters" data-projects-filters aria-label="Tipos de proyectos">
+          <button class="projects-filter is-active" type="button" data-project-filter="all" aria-pressed="true">todos</button>
+          <button class="projects-filter" type="button" data-project-filter="branding" aria-pressed="false">branding</button>
+          <button class="projects-filter" type="button" data-project-filter="ilustración" aria-pressed="false">ilustración</button>
+          <button class="projects-filter" type="button" data-project-filter="web" aria-pressed="false">web</button>
+          <button class="projects-filter" type="button" data-project-filter="editorial" aria-pressed="false">editorial</button>
         </div>
       </section>
 
@@ -392,5 +411,6 @@
     </footer>
 
     <script src="../scripts/projects-gallery.js"></script>
+    <script src="../scripts/page-fade.js"></script>
   </body>
 </html>

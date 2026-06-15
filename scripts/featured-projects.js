@@ -14,12 +14,12 @@
 
   var desktopLayout = {
     top: 120,
-    bottom: 120,
-    rowHeight: 570,
-    minX: 9,
-    maxX: 91,
-    cellPadX: 4,
-    cellPadY: 46,
+    bottom: 190,
+    itemGap: 170,
+    minX: 14,
+    maxX: 86,
+    xJitter: 5,
+    yJitter: 58,
     width: 24,
   };
   var mobileLayout = {
@@ -84,6 +84,55 @@
     return shuffled;
   }
 
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function createDesktopLayout(count, config) {
+    var patternHeight = 1120;
+    var height = Math.max(900, config.top + config.bottom + Math.ceil(count / 5) * patternHeight);
+    var halfWidth = config.width / 2;
+    var bounds = {
+      left: Math.max(config.minX, halfWidth + 4),
+      right: Math.min(config.maxX, 100 - halfWidth - 4),
+      top: config.top,
+      bottom: height - config.bottom - 150,
+    };
+    bounds.width = bounds.right - bounds.left;
+    bounds.height = bounds.bottom - bounds.top;
+
+    var template = [
+      { x: 19, y: 300 },
+      { x: 38, y: 500 },
+      { x: 80, y: 280 },
+      { x: 15, y: 910 },
+      { x: 68, y: 800 },
+    ];
+    var groupTemplates = Array.from({ length: Math.ceil(count / template.length) }, function () {
+      return shuffleItems(template);
+    });
+
+    var positions = Array.from({ length: count }, function (_, index) {
+      var group = Math.floor(index / template.length);
+      var groupTemplate = groupTemplates[group];
+      var point = groupTemplate[index % template.length];
+      var y = config.top + group * patternHeight + point.y;
+      return {
+        x: clamp(point.x + randomBetween(-config.xJitter, config.xJitter), bounds.left, bounds.right).toFixed(2),
+        y: Math.round(clamp(y + randomBetween(-config.yJitter, config.yJitter), bounds.top, bounds.bottom)),
+        w: config.width + "vw",
+        mw: mobileLayout.width + "vw",
+        z: 4 + index,
+      };
+    });
+
+    return {
+      config,
+      positions: shuffleItems(positions),
+      height,
+    };
+  }
+
   function createLayout(count) {
     var isMobile = window.matchMedia("(max-width: 720px)").matches;
     var config = isMobile ? mobileLayout : desktopLayout;
@@ -106,36 +155,7 @@
       };
     }
 
-    var columns = isMobile ? 1 : Math.min(3, Math.max(2, Math.ceil(Math.sqrt(count + 1))));
-    var rows = Math.max(1, Math.ceil(count / columns));
-    var cells = [];
-    var positions = [];
-    var xStep = columns > 1 ? (config.maxX - config.minX) / columns : 0;
-
-    for (var row = 0; row < rows; row++) {
-      for (var column = 0; column < columns; column++) {
-        cells.push({ row, column });
-      }
-    }
-
-    shuffleItems(cells).slice(0, count).forEach(function (cell, index) {
-      var width = config.width;
-      var xMin = isMobile ? config.minX : config.minX + xStep * cell.column + config.cellPadX;
-      var xMax = isMobile ? config.maxX : config.minX + xStep * (cell.column + 1) - config.cellPadX;
-      positions.push({
-        x: randomBetween(xMin, xMax).toFixed(2),
-        y: Math.round(config.top + cell.row * config.rowHeight + randomBetween(config.cellPadY, config.rowHeight - config.cellPadY)),
-        w: width + "vw",
-        mw: mobileLayout.width + "vw",
-        z: 4 + index,
-      });
-    });
-
-    return {
-      config,
-      positions,
-      height: Math.max(720, config.top + rows * config.rowHeight + config.bottom - 70),
-    };
+    return createDesktopLayout(count, config);
   }
 
   function renderThumb(project, index, positions) {

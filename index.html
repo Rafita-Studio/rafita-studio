@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rafita Studio</title>
     <link id="dynamic-favicon" rel="icon" type="image/png" sizes="128x128" href="assets/stickers/Recurso 21.png" />
+    <script src="scripts/favicon.js"></script>
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
+    <link rel="stylesheet" href="styles/menu.css" />
     <style>
       *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      /* Evita viudas: titulos balanceados y parrafos sin palabras sueltas al final */
+      h1, h2, h3, h4, h5, h6 {
+        text-wrap: balance;
+      }
+
+      p, li, figcaption, blockquote {
+        text-wrap: pretty;
+      }
 
       body {
         overflow-y: auto;
@@ -22,7 +33,7 @@
 
       body.page-loaded {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
         transition:
           opacity 700ms ease,
           transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -94,89 +105,6 @@
         transform: translateY(-0.72em);
       }
 
-      .hero-info {
-        position: absolute;
-        top: clamp(18px, 3vw, 42px);
-        right: clamp(18px, 3vw, 42px);
-        z-index: 6;
-      }
-
-      .hero-info-star {
-        appearance: none;
-        border: 2px solid #363636;
-        border-radius: 999px;
-        background: #ecebe6;
-        color: #363636;
-        font-family: "liebling", sans-serif;
-        font-weight: 700;
-        font-size: clamp(17px, 1.8vw, 26px);
-        line-height: 1;
-        padding: 10px 16px 12px;
-        cursor: pointer;
-        box-shadow: 0 10px 22px rgba(45, 38, 42, 0.08);
-        transition:
-          background 220ms ease,
-          border-color 220ms ease,
-          color 220ms ease,
-          transform 220ms ease;
-      }
-
-      .hero-info:hover .hero-info-star,
-      .hero-info.bio-open .hero-info-star {
-        background: #ffffff;
-        border-color: #ff9418;
-        color: #ff9418;
-        transform: rotate(-2deg) scale(1.04);
-      }
-
-      .hero-info.bio-open ~ .hero-logo {
-        transform: translate(var(--hero-logo-x), calc(var(--hero-logo-y) + clamp(70px, 12vh, 130px))) rotate(-2deg);
-      }
-
-      .hero-bio-blob {
-        position: absolute;
-        top: calc(100% + 14px);
-        right: 0;
-        width: min(620px, calc(100vw - 36px));
-        padding: 42px 52px 48px 66px;
-        background: transparent;
-        color: #2f2f2f;
-        font-family: "liebling", sans-serif;
-        font-weight: 500;
-        font-size: clamp(17px, 2vw, 28px);
-        line-height: 1.02;
-        opacity: 0;
-        transform: translateY(-8px) rotate(-4deg) scale(0.92);
-        transform-origin: 90% 0;
-        pointer-events: none;
-        transition:
-          opacity 240ms ease,
-          transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
-      }
-
-      .hero-bio-blob::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        border-radius: 22px;
-        background: #ffbcf2;
-        clip-path: polygon(4% 15%, 18% 7%, 52% 4%, 82% 8%, 98% 19%, 95% 47%, 99% 72%, 82% 91%, 52% 96%, 16% 90%, 3% 70%, 6% 38%);
-        filter: drop-shadow(0 22px 28px rgba(45, 38, 42, 0.16));
-      }
-
-      .hero-info.bio-open .hero-bio-blob {
-        opacity: 1;
-        transform: translateY(0) rotate(-4deg) scale(1);
-        pointer-events: auto;
-      }
-
-      .hero-bio-blob a {
-        color: inherit;
-        font-weight: 700;
-        text-decoration: underline;
-      }
-
       .hover-letter {
         display: inline-block;
         transition: color 160ms ease, transform 160ms ease;
@@ -205,22 +133,6 @@
           --hero-logo-x: -2vw;
           font-size: clamp(76px, 24vw, 150px);
         }
-
-        .hero-info {
-          top: 16px;
-          right: 18px;
-        }
-
-        .hero-bio-blob {
-          width: min(420px, calc(100vw - 28px));
-          padding: 34px 34px 38px 46px;
-          font-size: clamp(17px, 5vw, 24px);
-          line-height: 1.02;
-        }
-
-        .hero-info.bio-open ~ .hero-logo {
-          transform: translate(var(--hero-logo-x), calc(var(--hero-logo-y) + 92px)) rotate(-2deg);
-        }
       }
 
       /* ══════════════════════════════════════════
@@ -229,14 +141,12 @@
 
       #catalog-scroll {
         position: relative;
-        height: 138vh;
         background: #ecebe6;
         overflow: clip;
       }
 
       .catalog-stage {
-        position: sticky;
-        top: 0;
+        position: relative;
         height: 86vh;
         display: flex;
         align-items: center;
@@ -280,7 +190,6 @@
       }
 
       @media (max-width: 720px) {
-        #catalog-scroll { height: 130vh; }
         .catalog-stage {
           height: 70vh;
           align-items: flex-start;
@@ -403,7 +312,6 @@
         width: 100%;
         max-width: 1480px;
         margin: 0 auto;
-        border-top: 2px solid rgba(54, 54, 54, 0.42);
         padding-top: clamp(26px, 3.6vw, 54px);
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 400;
@@ -487,157 +395,134 @@
          ══════════════════════════════════════════ */
 
       #featured-projects {
+        --strip-cell: clamp(220px, 23vw, 400px);
+        --strip-stroke: 1.5px;
         position: relative;
         z-index: 3;
-        margin-top: clamp(0px, 1vw, 20px);
         background: #ecebe6;
         color: #363636;
-        padding: clamp(8px, 1.4vw, 18px) 0 clamp(18px, 3vw, 42px);
+        padding: clamp(24px, 4vw, 64px) 0 clamp(36px, 5vw, 72px);
         overflow: clip;
-        overflow-clip-margin: 12px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       }
 
-      .featured-projects-inner {
-        --featured-height: 840px;
+      .featured-strips {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .featured-strip {
+        overflow: hidden;
+        border-top: var(--strip-stroke) solid #363636;
+        border-bottom: var(--strip-stroke) solid #363636;
+      }
+
+      .featured-strip + .featured-strip {
+        margin-top: calc(var(--strip-stroke) * -1);
+      }
+
+      .featured-strip-track {
+        display: flex;
+        width: max-content;
+        animation: featured-strip-move var(--strip-duration, 60s) linear infinite;
+        will-change: transform;
+      }
+
+      .featured-strip:nth-child(even) .featured-strip-track {
+        animation-direction: reverse;
+      }
+
+      .featured-strip:hover .featured-strip-track,
+      .featured-strip:focus-within .featured-strip-track {
+        animation-play-state: paused;
+      }
+
+      @keyframes featured-strip-move {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+
+      .featured-project-cell {
         position: relative;
-        width: 100%;
-        max-width: none;
-        min-height: var(--featured-height);
-        margin: 0 auto;
-      }
-
-      .featured-projects-stage {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-      }
-
-      .featured-project-thumb {
-        --x: 50%;
-        --y: 120px;
-        --w: 25vw;
-        position: absolute;
-        left: var(--x);
-        top: var(--y);
-        z-index: var(--z, 2);
-        display: block;
-        width: clamp(190px, var(--w), 430px);
-        aspect-ratio: 4 / 5;
+        flex: 0 0 auto;
+        width: var(--strip-cell);
+        aspect-ratio: 1 / 1;
+        border-right: var(--strip-stroke) solid #363636;
+        background: transparent;
         color: #363636;
         text-decoration: none;
-        opacity: 1;
-        transform: translate(-50%, -50%);
-        filter: drop-shadow(0 5px 5px rgba(54, 54, 54, 0.18));
-        transition:
-          filter 180ms ease,
-          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+        transition: background-color 260ms ease;
       }
 
-      .featured-project-thumb img {
+      .featured-project-cell:hover,
+      .featured-project-cell:focus-visible {
+        background: var(--cell-color, #ff9418);
+        outline: none;
+      }
+
+      .featured-project-media {
+        position: absolute;
+        top: 42%;
+        left: 50%;
+        width: 44%;
+        aspect-ratio: 1 / 1;
+        transform: translate(-50%, -50%) scale(1);
+        transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+
+      .featured-project-media img {
         display: block;
         width: 100%;
         height: 100%;
-        border: 2px solid rgba(54, 54, 54, 0.12);
-        background: #ecebe6;
         object-fit: cover;
+        background: #ffffff;
       }
 
-      .featured-project-thumb:hover,
-      .featured-project-thumb:focus-visible {
-        outline: 0;
-        transform: translate(-50%, -50%) scale(1.035);
-        filter: drop-shadow(0 15px 14px rgba(54, 54, 54, 0.25));
+      .featured-project-cell:hover .featured-project-media,
+      .featured-project-cell:focus-visible .featured-project-media {
+        transform: translate(-50%, -50%) scale(1.41);
       }
 
-      .featured-project-thumb:hover img,
-      .featured-project-thumb:focus-visible img {
-        border-color: #ff9418;
-      }
-
-      .featured-project-caption {
+      .featured-project-meta {
         position: absolute;
-        left: 10px;
-        right: 10px;
-        bottom: 9px;
+        left: clamp(14px, 1.4vw, 22px);
+        right: clamp(14px, 1.4vw, 22px);
+        bottom: clamp(14px, 1.4vw, 22px);
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        gap: 8px;
-        color: #ffffff;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: clamp(13px, 1.05vw, 18px);
-        line-height: 1;
-        text-transform: lowercase;
-        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.54);
-        opacity: 0;
-        transition: opacity 180ms ease;
+        gap: 12px;
+        font-size: clamp(13px, 1vw, 17px);
+        line-height: 1.15;
       }
 
-      .featured-project-thumb:hover .featured-project-caption,
-      .featured-project-thumb:focus-visible .featured-project-caption {
-        opacity: 1;
+      .featured-project-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      @media (prefers-reduced-motion: reduce) {
-        .featured-project-thumb {
-          transition: none;
-        }
-      }
-
-      .featured-projects-all {
-        position: absolute;
-        left: 50%;
-        bottom: clamp(31px, 3vw, 42px);
-        z-index: 20;
-        transform: translateX(-50%);
-        border: 1.5px solid #363636;
-        border-radius: 999px;
-        background: #ecebe6;
-        color: #363636;
-        padding: 10px 18px 12px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: clamp(14px, 1.1vw, 18px);
-        line-height: 1;
-        text-decoration: none;
-        text-transform: lowercase;
-        box-shadow: 0 10px 20px rgba(54, 54, 54, 0.08);
-        transition:
-          border-color 180ms ease,
-          color 180ms ease,
-          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-      }
-
-      .featured-projects-all:hover,
-      .featured-projects-all:focus-visible {
-        color: #ff9418;
-        border-color: currentColor;
-        outline: 0;
-        transform: translateX(-50%) rotate(-1.5deg);
+      .featured-project-year {
+        flex: 0 0 auto;
       }
 
       @media (max-width: 720px) {
         #featured-projects {
-          margin-top: 0;
-          padding: 4px 18px 18px;
+          --strip-cell: 62vw;
+          padding: 18px 0 32px;
         }
 
-        .featured-projects-inner {
-          --featured-height: 720px;
-        }
-
-        .featured-project-thumb {
-          width: clamp(210px, var(--mobile-w, var(--w)), 360px);
-        }
-
-        .featured-project-caption {
-          opacity: 1;
+        .featured-project-meta {
           font-size: 13px;
         }
+      }
 
-        .featured-projects-all {
-          left: 50%;
-          padding: 9px 14px 10px;
-        }
+      @media (prefers-reduced-motion: reduce) {
+        .featured-strip { overflow-x: auto; }
+        .featured-strip-track { animation: none; }
+        .featured-project-media { transition: none; }
       }
 
       /* ══════════════════════════════════════════
@@ -678,24 +563,18 @@
         70% { opacity: 1; transform: translateY(-2px) rotate(8deg) scale(1.16); }
         100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
       }
+
     </style>
   </head>
 
   <body class="page-loading">
+
 
     <!-- ══════════════════════════════════════════
          HERO
          ══════════════════════════════════════════ -->
     <section id="hero">
       <canvas id="sticker-canvas"></canvas>
-      <div class="hero-info">
-        <button class="hero-info-star" type="button" aria-label="Ver bio">about us :)</button>
-        <p class="hero-bio-blob">
-          hola! somos dani y mateo, diseñadores e ilustradores. Amamos a los perritos con nuestra alma!
-          <a href="https://instagram.com/rafita.studio" target="_blank">Rafita Studio</a>
-          es el lugar donde expresamos ese amor mediante dibujitos y muchas otras cosas &lt;3
-        </p>
-      </div>
       <div class="hero-logo" aria-label="Rafita Studio">
         <span class="hero-logo-line" data-hero-scramble="RAFITA"></span>
         <span class="hero-logo-line" data-hero-scramble="STUDIO®"></span>
@@ -744,10 +623,7 @@
     </section>
 
     <section id="featured-projects" class="featured-projects-section" aria-label="Proyectos destacados" hidden>
-      <div class="featured-projects-inner">
-        <div id="featured-projects-stage" class="featured-projects-stage"></div>
-        <a class="featured-projects-all" href="pages/proyectos.html">ver todos los proyectos</a>
-      </div>
+      <div id="featured-projects-strips" class="featured-strips"></div>
     </section>
 
     <section id="link-block" aria-label="Navegacion Rafita Studio">
@@ -776,7 +652,7 @@
     </section>
 
     <footer id="site-footer">
-      <p>rafita studio <span class="copyright-mark" aria-label="copyright">&copy;</span> 2026 hecho con amor, sobretodo amor a los perritos <3</p>
+      <p>rafita studio <span class="copyright-mark" aria-label="copyright">&copy;</span> 2026 hecho con amor, sobretodo amor a los perritos&nbsp;&lt;3</p>
     </footer>
 
     <!-- ══════════════════════════════════════════
@@ -791,6 +667,7 @@
       })();
     </script>
 
+    <script src="scripts/menu.js"></script>
     <script src="scripts/featured-projects.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
@@ -801,8 +678,6 @@
         document.addEventListener("DOMContentLoaded", function () {
           var lines = Array.prototype.slice.call(document.querySelectorAll("[data-hero-scramble]"));
           var logo = document.querySelector(".hero-logo");
-          var heroInfo = document.querySelector(".hero-info");
-          var heroInfoButton = document.querySelector(".hero-info-star");
           var glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*+/#@!?%&<>☻✱";
           var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
 
@@ -877,77 +752,7 @@
             });
           }
 
-          if (heroInfo && heroInfoButton) {
-            heroInfoButton.setAttribute("aria-expanded", "false");
-            heroInfoButton.addEventListener("click", function () {
-              var isOpen = heroInfo.classList.toggle("bio-open");
-              heroInfoButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-            });
-          }
-
-          initStickerFavicons();
           initStickerPhysics();
-
-          function initStickerFavicons() {
-            var favicon = document.getElementById("dynamic-favicon") || document.querySelector('link[rel~="icon"]');
-            var stickers = [
-              "assets/stickers/Recurso 21.png",
-              "assets/stickers/Recurso 22.png",
-              "assets/stickers/Recurso 23.png",
-              "assets/stickers/Recurso 24.png",
-              "assets/stickers/Recurso 25.png",
-              "assets/stickers/Recurso 26.png"
-            ];
-            var canvas = document.createElement("canvas");
-            var ctx = canvas.getContext("2d");
-            var images = [];
-            var index = 0;
-            var angle = 0;
-
-            if (!favicon) {
-              favicon = document.createElement("link");
-              favicon.id = "dynamic-favicon";
-              favicon.rel = "icon";
-              favicon.type = "image/png";
-              document.head.appendChild(favicon);
-            }
-            favicon.setAttribute("sizes", "128x128");
-
-            canvas.width = 128;
-            canvas.height = 128;
-
-            function updateFavicon(img) {
-              var size = 118;
-              var center = canvas.width / 2;
-              var wobble = Math.sin(angle) * 0.14;
-              ctx.clearRect(0, 0, canvas.width, canvas.height);
-              ctx.save();
-              ctx.translate(center, center);
-              ctx.rotate(wobble);
-              ctx.drawImage(img, -size / 2, -size / 2, size, size);
-              ctx.restore();
-              favicon.href = canvas.toDataURL("image/png");
-            }
-
-            function rotateFavicon() {
-              if (!images.length) return;
-              angle += 0.9;
-              updateFavicon(images[index % images.length]);
-              index++;
-            }
-
-            stickers.forEach(function (src) {
-              var img = new Image();
-              img.onload = function () {
-                images.push(img);
-                if (images.length === 1) {
-                  rotateFavicon();
-                  setInterval(rotateFavicon, 650);
-                }
-              };
-              img.src = src;
-            });
-          }
 
           function initStickerPhysics() {
             var hero = document.getElementById("hero");
@@ -1220,7 +1025,9 @@
 
             (function renderStickers() {
               requestAnimationFrame(renderStickers);
-              drawStickers();
+              var menuOpen = document.body.classList.contains("menu-open");
+              runner.enabled = !menuOpen;
+              if (!menuOpen) drawStickers();
             })();
 
             hero.addEventListener("pointermove", function (event) {
@@ -1308,13 +1115,13 @@
 
           function updateCatalog() {
             var rect = section.getBoundingClientRect();
-            var startOffset = window.innerHeight * 0.78;
-            var travel = section.offsetHeight + window.innerHeight * 0.12;
+            var startOffset = window.innerHeight * 0.9;
+            var travel = window.innerHeight * 1.5;
             var progress = travel > 0 ? clamp((startOffset - rect.top) / travel, 0, 1) : 1;
             var isMobile = window.matchMedia("(max-width: 720px)").matches;
             var layerOrder = [0, 2, 4, 6, 1, 3, 5, 7];
-            var finalStart = (cards.length - 1) * (isMobile ? 0.026 : 0.032);
-            var finalDuration = isMobile ? 0.34 : 0.38;
+            var finalStart = (cards.length - 1) * (isMobile ? 0.018 : 0.022);
+            var finalDuration = isMobile ? 0.26 : 0.3;
             catalogReady = progress >= finalStart + finalDuration * 0.92;
             section.classList.toggle("catalog-ready", catalogReady);
 
@@ -1323,8 +1130,8 @@
               var fromRotate = parseFloat(styles.getPropertyValue("--from-rotate")) || 0;
               var toRotate = parseFloat(styles.getPropertyValue("--rotate")) || 0;
               var stageIndex = layerOrder.indexOf(index);
-              var start = isMobile ? stageIndex * 0.026 : stageIndex * 0.032;
-              var duration = isMobile ? 0.34 : 0.38;
+              var start = isMobile ? stageIndex * 0.018 : stageIndex * 0.022;
+              var duration = isMobile ? 0.26 : 0.3;
               var raw = clamp((progress - start) / duration, 0, 1);
               var local = easeOutBack(raw);
               var settle = smoothstep(raw);
@@ -1557,6 +1364,7 @@
         });
       })();
     </script>
+
 
     <!-- Footer -->
     <script>

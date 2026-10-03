@@ -4,8 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Nosotros — Rafita Studio</title>
+    <link id="dynamic-favicon" rel="icon" type="image/png" sizes="128x128" href="../assets/stickers/Recurso 21.png" />
+    <script src="../scripts/favicon.js"></script>
     <link rel="stylesheet" href="https://use.typekit.net/iic6jga.css" />
     <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/menu.css" />
     <style>
       :root {
         --paper: #ecebe6;
@@ -60,15 +63,19 @@
         transform: rotate(var(--link-hover-rotate, -2deg));
       }
 
-      .about-hero {
-        position: relative;
-        width: min(1320px, calc(100% - clamp(36px, 8vw, 132px)));
+      .about-layout {
+        width: min(1480px, calc(100% - clamp(36px, 10vw, 164px)));
         margin: 0 auto;
-        padding: clamp(48px, 8vw, 104px) 0 clamp(54px, 8vw, 112px);
+        padding: clamp(36px, 6vw, 84px) 0 clamp(64px, 9vw, 128px);
         display: grid;
-        grid-template-columns: minmax(0, 1.22fr) minmax(260px, 380px);
-        gap: clamp(34px, 7vw, 92px);
-        align-items: center;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+        gap: clamp(32px, 5vw, 88px);
+        align-items: start;
+      }
+
+      .about-side {
+        position: sticky;
+        top: clamp(24px, 4vw, 56px);
       }
 
       .about-title {
@@ -76,10 +83,9 @@
         --title-y: 0px;
         --title-rotate: 0deg;
         margin: 0;
-        max-width: 760px;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 400;
-        font-size: clamp(48px, 8.8vw, 128px);
+        font-size: clamp(44px, 5vw, 92px);
         line-height: 0.88;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -88,13 +94,6 @@
         transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
         animation: title-palette 8s steps(8, end) infinite;
         will-change: transform;
-      }
-
-      .about-intro {
-        max-width: 860px;
-        margin: clamp(24px, 3.2vw, 42px) 0 0;
-        font-size: clamp(19px, 2vw, 28px);
-        line-height: 1.12;
       }
 
       @keyframes title-palette {
@@ -109,24 +108,90 @@
         100% { color: var(--orange); }
       }
 
+      .about-index {
+        margin: clamp(28px, 3.4vw, 48px) 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: clamp(16px, 1.3vw, 20px);
+        line-height: 1.4;
+      }
+
+      .about-link {
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+        transition:
+          color 180ms ease,
+          transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .about-link:hover,
+      .about-link:focus-visible {
+        color: var(--link-hover-color, var(--orange));
+        transform: rotate(var(--link-hover-rotate, -2deg));
+        outline: none;
+      }
+
+      .about-content {
+        font-size: clamp(17px, 1.45vw, 22px);
+        line-height: 1.28;
+      }
+
+      .about-label {
+        margin: 0;
+        font-size: inherit;
+        font-weight: 700;
+      }
+
+      .about-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(24px, 4vw, 56px);
+        margin-top: clamp(20px, 2.4vw, 34px);
+      }
+
+      .about-columns p {
+        margin: 0;
+      }
+
       .about-media {
-        align-self: center;
+        width: 60%;
+        margin: clamp(48px, 7vw, 104px) auto;
       }
 
-      .about-video-shell {
-        position: relative;
-        width: min(100%, 380px);
-        margin-left: auto;
-      }
-
-      .about-video-shell video {
+      .about-media img {
         display: block;
         width: 100%;
-        aspect-ratio: 0.72;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 2px solid var(--ink);
-        box-shadow: 0 16px 28px rgba(45, 38, 42, 0.1);
+        height: auto;
+      }
+
+      .about-block {
+        padding: 0;
+        scroll-margin-top: 32px;
+      }
+
+      .about-list {
+        margin: clamp(20px, 2.4vw, 34px) 0 0;
+        padding: 0 0 0 0.5em;
+        list-style: none;
+      }
+
+      .about-list li::before {
+        content: "– ";
+      }
+
+      .about-cta {
+        display: block;
+        width: fit-content;
+        margin: clamp(28px, 3.4vw, 52px) 0 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        font-size: clamp(44px, 6.6vw, 124px);
+        line-height: 0.92;
+        text-transform: uppercase;
+        white-space: nowrap;
+        transform-origin: 0 100%;
+        scroll-margin-top: 32px;
       }
 
       .about-page footer {
@@ -139,14 +204,16 @@
       }
 
       @media (max-width: 920px) {
-        .about-hero {
+        .about-layout {
           grid-template-columns: 1fr;
-          align-items: start;
         }
 
-        .about-video-shell {
-          width: min(70vw, 360px);
-          margin: 10px 0 0;
+        .about-side {
+          position: static;
+        }
+
+        .about-index {
+          display: none;
         }
       }
 
@@ -155,22 +222,27 @@
           margin: 20px 18px 0;
         }
 
-        .about-hero {
+        .about-layout {
           width: calc(100% - 36px);
-          padding: 42px 0 58px;
-          gap: 34px;
+          padding: 32px 0 64px;
+          gap: 28px;
         }
 
         .about-title {
           font-size: clamp(50px, 16vw, 86px);
         }
 
-        .about-intro {
-          font-size: clamp(19px, 5.5vw, 26px);
+        .about-columns {
+          grid-template-columns: 1fr;
+          gap: 16px;
         }
 
-        .about-video-shell {
-          width: min(82vw, 320px);
+        .about-media {
+          width: 100%;
+        }
+
+        .about-cta {
+          font-size: 10vw;
         }
       }
     </style>
@@ -181,40 +253,64 @@
       <a class="about-home" href="../index.html" aria-label="Volver al inicio">
         <svg viewBox="0 0 32 32" aria-hidden="true">
           <path d="M15.18 4.16a1.25 1.25 0 0 1 1.64 0l12.55 10.96a1.28 1.28 0 0 1 .12 1.8l-.82.94a1.28 1.28 0 0 1-1.8.12L16 8.49 5.13 17.98a1.28 1.28 0 0 1-1.8-.12l-.82-.94a1.28 1.28 0 0 1 .12-1.8L15.18 4.16Z" />
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.8 16.15 16 8.1l9.2 8.05V27a1.4 1.4 0 0 1-1.4 1.4h-6.25v-5.9a3.55 3.55 0 0 0-7.1 0v5.9H8.2A1.4 1.4 0 0 1 6.8 27V16.15Z" />
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.8 16.15 16 8.1l9.2 8.05V27a1.4 1.4 0 0 1-1.4 1.4h-5.3v-4.2a2.5 2.5 0 0 0-5 0v4.2H8.2A1.4 1.4 0 0 1 6.8 27V16.15Z" />
           <path d="M22.5 6.6a1.25 1.25 0 0 1 1.25-1.25h2.15a1.25 1.25 0 0 1 1.25 1.25v7.86L22.5 10.4V6.6Z" />
         </svg>
       </a>
-      <section class="about-hero" aria-labelledby="about-title">
-        <div class="about-copy">
+      <div class="about-layout">
+        <aside class="about-side">
           <h1 class="about-title" id="about-title">nosotros</h1>
-          <p class="about-intro">
-            Somos Dani y Mateo, diseñadores e ilustradores. Hacemos dibujitos,
-            productos y piezas gráficas para celebrar a los perritos como se
-            merecen: con humor, ternura y mucho color.
-          </p>
-        </div>
+          <ul class="about-index">
+            <li><a class="about-link" href="#sobre">sobre rafita studio</a></li>
+            <li><a class="about-link" href="#participaciones">participaciones</a></li>
+            <li><a class="about-link" href="#colaboremos">colaboremos</a></li>
+          </ul>
+        </aside>
 
-        <div class="about-media">
-          <div class="about-video-shell">
-            <video autoplay muted loop playsinline>
-              <source src="../assets/Rafita Pokemon Card.mp4" type="video/mp4" />
-              Tu navegador no soporta la reproducción de video.
-            </video>
-          </div>
+        <div class="about-content">
+          <section class="about-block" id="sobre" aria-labelledby="about-title">
+            <p class="about-label">sobre rafita studio&nbsp;<span aria-hidden="true">☻</span></p>
+            <div class="about-columns">
+              <p>
+                Somos Dani y Mateo, diseñadores e ilustradores. Hacemos dibujitos,
+                productos y piezas gráficas para celebrar a los perritos como se
+                merecen: con humor, ternura y mucho color.
+              </p>
+              <p>
+                Amamos a los perritos con nuestra alma. Rafita Studio es el lugar
+                donde expresamos ese amor mediante dibujitos y muchas otras cosas&nbsp;&lt;3
+              </p>
+            </div>
+          </section>
+
+          <figure class="about-media">
+            <img src="../assets/images/sillyassdoggie.png" alt="Afiche de Rafita Studio: un perrito tocando guitarra eléctrica, con el texto this silly dog just dropped the hardest music album of all time" />
+          </figure>
+
+          <section class="about-block" id="participaciones">
+            <h2 class="about-label">rafita studio ha participado en:</h2>
+            <ul class="about-list">
+              <li><strong>Somos Pública</strong></li>
+              <li><strong>Monoraro</strong></li>
+              <li><strong>Feria Format</strong></li>
+              <li><strong>Culta Fest</strong></li>
+            </ul>
+            <a class="about-link about-cta" id="colaboremos" href="contact.html">colaboremos <span aria-hidden="true">☺</span></a>
+          </section>
+
         </div>
-      </section>
+      </div>
 
     </main>
 
     <footer>
-      <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos &lt;3</p>
+      <p>rafita studio © 2026 hecho con amor, sobretodo amor a los perritos&nbsp;&lt;3</p>
     </footer>
 
     <script>
       (function () {
         document.addEventListener("DOMContentLoaded", function () {
-          var items = Array.prototype.slice.call(document.querySelectorAll(".about-home"));
+          var items = Array.prototype.slice.call(document.querySelectorAll(".about-home, .about-link"));
           var title = document.querySelector(".about-title");
           var palette = ["#ff9418","#66b6e9","#099947","#f193c9","#ff3122","#ffc21a","#0d73c8","#5833a3"];
 
@@ -254,6 +350,7 @@
         });
       })();
     </script>
+    <script src="../scripts/menu.js"></script>
     <script src="../scripts/page-fade.js"></script>
   </body>
 </html>

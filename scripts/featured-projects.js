@@ -12,27 +12,6 @@
     { title: "Kiosco", slug: "kiosco", year: 2024, category: "producto", cover: "assets/catalogo/10.png" },
   ];
 
-  var desktopLayout = {
-    top: 120,
-    bottom: 190,
-    itemGap: 170,
-    minX: 14,
-    maxX: 86,
-    xJitter: 5,
-    yJitter: 58,
-    width: 24,
-  };
-  var mobileLayout = {
-    top: 230,
-    bottom: 150,
-    rowHeight: 440,
-    minX: 50,
-    maxX: 50,
-    cellPadX: 0,
-    cellPadY: 32,
-    width: 78,
-  };
-
   function sortProjects(a, b) {
     var aOrder = Number(a.order);
     var bOrder = Number(b.order);
@@ -69,152 +48,102 @@
     return project.title || project.category || "Proyecto Rafita Studio";
   }
 
-  function randomBetween(min, max) {
-    return min + Math.random() * (max - min);
+  var palette = ["#ff9418", "#66b6e9", "#099947", "#f193c9", "#ff3122", "#ffc21a", "#0d73c8", "#ffbcf2"];
+  var stripCount = 3;
+  var minCellsPerStrip = 8;
+  var secondsPerCell = 7;
+
+  function pickColor() {
+    return palette[Math.floor(Math.random() * palette.length)];
   }
 
-  function shuffleItems(items) {
-    var shuffled = items.slice();
-    for (var index = shuffled.length - 1; index > 0; index--) {
-      var swapIndex = Math.floor(Math.random() * (index + 1));
-      var current = shuffled[index];
-      shuffled[index] = shuffled[swapIndex];
-      shuffled[swapIndex] = current;
-    }
-    return shuffled;
-  }
-
-  function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-  }
-
-  function createDesktopLayout(count, config) {
-    var patternHeight = 1120;
-    var height = Math.max(900, config.top + config.bottom + Math.ceil(count / 5) * patternHeight);
-    var halfWidth = config.width / 2;
-    var bounds = {
-      left: Math.max(config.minX, halfWidth + 4),
-      right: Math.min(config.maxX, 100 - halfWidth - 4),
-      top: config.top,
-      bottom: height - config.bottom - 150,
-    };
-    bounds.width = bounds.right - bounds.left;
-    bounds.height = bounds.bottom - bounds.top;
-
-    var template = [
-      { x: 19, y: 300 },
-      { x: 38, y: 500 },
-      { x: 80, y: 280 },
-      { x: 15, y: 910 },
-      { x: 68, y: 800 },
-    ];
-    var groupTemplates = Array.from({ length: Math.ceil(count / template.length) }, function () {
-      return shuffleItems(template);
-    });
-
-    var positions = Array.from({ length: count }, function (_, index) {
-      var group = Math.floor(index / template.length);
-      var groupTemplate = groupTemplates[group];
-      var point = groupTemplate[index % template.length];
-      var y = config.top + group * patternHeight + point.y;
-      return {
-        x: clamp(point.x + randomBetween(-config.xJitter, config.xJitter), bounds.left, bounds.right).toFixed(2),
-        y: Math.round(clamp(y + randomBetween(-config.yJitter, config.yJitter), bounds.top, bounds.bottom)),
-        w: config.width + "vw",
-        mw: mobileLayout.width + "vw",
-        z: 4 + index,
-      };
-    });
-
-    return {
-      config,
-      positions: shuffleItems(positions),
-      height,
-    };
-  }
-
-  function createLayout(count) {
-    var isMobile = window.matchMedia("(max-width: 720px)").matches;
-    var config = isMobile ? mobileLayout : desktopLayout;
-
-    if (isMobile) {
-      var mobilePositions = Array.from({ length: count }, function (_, index) {
-        return {
-          x: "50.00",
-          y: config.top + index * config.rowHeight,
-          w: config.width + "vw",
-          mw: config.width + "vw",
-          z: 4 + index,
-        };
-      });
-
-      return {
-        config,
-        positions: mobilePositions,
-        height: Math.max(620, config.top + Math.max(0, count - 1) * config.rowHeight + config.bottom + 170),
-      };
-    }
-
-    return createDesktopLayout(count, config);
-  }
-
-  function renderThumb(project, index, positions) {
-    var position = positions[index];
+  function renderCell(project, isClone) {
     var link = document.createElement("a");
-    link.className = "featured-project-thumb";
+    link.className = "featured-project-cell";
     link.href = projectHref(project);
-    link.setAttribute("aria-label", "Proyecto destacado " + (project.title || "Rafita Studio"));
-    link.style.setProperty("--x", position.x + "%");
-    link.style.setProperty("--y", position.y + "px");
-    link.style.setProperty("--w", position.w);
-    link.style.setProperty("--mobile-w", position.mw);
-    link.style.setProperty("--z", position.z);
+    link.style.setProperty("--cell-color", pickColor());
+    if (isClone) {
+      link.setAttribute("aria-hidden", "true");
+      link.tabIndex = -1;
+    }
+    link.addEventListener("mouseenter", function () {
+      link.style.setProperty("--cell-color", pickColor());
+    });
 
+    var media = document.createElement("span");
+    media.className = "featured-project-media";
     var image = document.createElement("img");
     image.src = localAssetPath(project.cover);
-    image.alt = coverAlt(project);
+    image.alt = isClone ? "" : coverAlt(project);
     image.loading = "lazy";
-    link.appendChild(image);
+    image.decoding = "async";
+    media.appendChild(image);
+    link.appendChild(media);
 
-    var caption = document.createElement("span");
-    caption.className = "featured-project-caption";
+    var meta = document.createElement("span");
+    meta.className = "featured-project-meta";
 
-    var title = document.createElement("span");
-    title.textContent = project.title || "Proyecto";
-    caption.appendChild(title);
+    var name = document.createElement("span");
+    name.className = "featured-project-name";
+    name.textContent = project.title || "Proyecto";
+    meta.appendChild(name);
 
     var year = document.createElement("span");
-    year.textContent = project.year || project.category || "";
-    caption.appendChild(year);
+    year.className = "featured-project-year";
+    year.textContent = project.year || "";
+    meta.appendChild(year);
 
-    link.appendChild(caption);
+    link.appendChild(meta);
     return link;
   }
 
-  function renderProjects(section, inner, stage, projects) {
-    var source = projects.length > 0 ? projects : fallbackProjects.slice(0, 5);
+  function stripItems(projects, stripIndex) {
+    // Cada tira parte en un punto distinto de la lista para que no se vean iguales
+    var offset = Math.floor((projects.length / stripCount) * stripIndex);
+    var count = Math.max(projects.length, minCellsPerStrip);
+    var items = [];
+    for (var i = 0; i < count; i++) {
+      items.push(projects[(offset + i) % projects.length]);
+    }
+    return items;
+  }
+
+  function renderProjects(section, container, projects) {
+    var source = projects.length > 0 ? projects : fallbackProjects;
     var visibleProjects = source.filter(function (project) {
       return project && project.cover;
     });
 
     if (visibleProjects.length === 0) return;
 
-    var layout = createLayout(visibleProjects.length);
-    stage.innerHTML = "";
-    inner.style.setProperty("--featured-height", Math.round(layout.height) + "px");
-    visibleProjects.forEach(function (project, index) {
-      stage.appendChild(renderThumb(project, index, layout.positions));
-    });
+    container.innerHTML = "";
+    for (var stripIndex = 0; stripIndex < stripCount; stripIndex++) {
+      var items = stripItems(visibleProjects, stripIndex);
+      var strip = document.createElement("div");
+      strip.className = "featured-strip";
+      var track = document.createElement("div");
+      track.className = "featured-strip-track";
+      track.style.setProperty("--strip-duration", (items.length * secondsPerCell + stripIndex * 6) + "s");
+
+      // Se duplica la secuencia para que el loop sea continuo (translateX -50%)
+      [false, true].forEach(function (isClone) {
+        items.forEach(function (project) {
+          track.appendChild(renderCell(project, isClone));
+        });
+      });
+
+      strip.appendChild(track);
+      container.appendChild(strip);
+    }
 
     section.hidden = false;
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     var section = document.querySelector(".featured-projects-section");
-    var inner = document.querySelector(".featured-projects-inner");
-    var stage = document.getElementById("featured-projects-stage");
+    var container = document.getElementById("featured-projects-strips");
 
-    if (!section || !inner || !stage) return;
+    if (!section || !container) return;
 
     fetch("./data/projects.json", { cache: "no-cache" })
       .then(function (response) {
@@ -228,10 +157,10 @@
             }).sort(sortProjects)
           : [];
 
-        renderProjects(section, inner, stage, featured);
+        renderProjects(section, container, featured);
       })
       .catch(function () {
-        renderProjects(section, inner, stage, []);
+        renderProjects(section, container, []);
       });
   });
 })();

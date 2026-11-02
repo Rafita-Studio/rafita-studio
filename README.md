@@ -102,3 +102,5 @@ npm run build
 El sitio esta pensado para publicarse en GitHub Pages como sitio estatico. El workflow `.github/workflows/pages.yml` ejecuta `npm run build` en cada push a `main` para regenerar `data/projects.json` y las paginas individuales antes de publicar.
 
 Mantener rutas relativas ayuda a que funcione tanto en local como publicado. En produccion con `https://rafita-studio.cl/`, las rutas absolutas tipo `/assets/images/uploads/archivo.jpg` funcionan desde la raiz del dominio.
+
+<!-- prueba de commit -->

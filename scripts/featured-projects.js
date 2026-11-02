@@ -1,15 +1,15 @@
 (function () {
   var fallbackProjects = [
-    { title: "Digital Doggies", slug: "digital-doggies", year: 2026, category: "print", cover: "assets/catalogo/A4-digitaldoggies.png" },
-    { title: "Perritos A4", slug: "perritos-a4", year: 2026, category: "ilustracion", cover: "assets/catalogo/A4_dogs.png" },
-    { title: "Sticker Club", slug: "sticker-club", year: 2026, category: "stickers", cover: "assets/catalogo/sticker_01.png" },
-    { title: "Aurora", slug: "aurora", year: 2025, category: "identidad", cover: "assets/images/RS_aurora_fondo.png" },
-    { title: "Doggies Pack", slug: "doggies-pack", year: 2025, category: "pack", cover: "assets/images/trabajos_new-04.jpg" },
-    { title: "Rafita Prints", slug: "rafita-prints", year: 2025, category: "prints", cover: "assets/images/trabajos_new-05.jpg" },
-    { title: "Mini Posters", slug: "mini-posters", year: 2025, category: "poster", cover: "assets/images/trabajos_new-06.jpg" },
-    { title: "Perrito Azul", slug: "perrito-azul", year: 2024, category: "ilustracion", cover: "assets/catalogo/08.jpg" },
-    { title: "Amistad", slug: "amistad", year: 2024, category: "ilustracion", cover: "assets/catalogo/09.jpg" },
-    { title: "Kiosco", slug: "kiosco", year: 2024, category: "producto", cover: "assets/catalogo/10.png" },
+    { title: "Digital Doggies", slug: "digital-doggies", year: 2026, category: "print", cover: "assets/catalogo/A4-digitaldoggies.webp" },
+    { title: "Perritos A4", slug: "perritos-a4", year: 2026, category: "ilustracion", cover: "assets/catalogo/A4_dogs.webp" },
+    { title: "Sticker Club", slug: "sticker-club", year: 2026, category: "stickers", cover: "assets/catalogo/sticker_01.webp" },
+    { title: "Aurora", slug: "aurora", year: 2025, category: "identidad", cover: "assets/images/RS_aurora_fondo.webp" },
+    { title: "Doggies Pack", slug: "doggies-pack", year: 2025, category: "pack", cover: "assets/images/trabajos_new-04.webp" },
+    { title: "Rafita Prints", slug: "rafita-prints", year: 2025, category: "prints", cover: "assets/images/trabajos_new-05.webp" },
+    { title: "Mini Posters", slug: "mini-posters", year: 2025, category: "poster", cover: "assets/images/trabajos_new-06.webp" },
+    { title: "Perrito Azul", slug: "perrito-azul", year: 2024, category: "ilustracion", cover: "assets/catalogo/08.webp" },
+    { title: "Amistad", slug: "amistad", year: 2024, category: "ilustracion", cover: "assets/catalogo/09.webp" },
+    { title: "Kiosco", slug: "kiosco", year: 2024, category: "producto", cover: "assets/catalogo/10.webp" },
   ];
 
   function sortProjects(a, b) {
